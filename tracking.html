@@ -233,6 +233,30 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
         <span class="chip chip-blue">Auto-generated from readings</span>
       </div>
 
+      <!-- DATE RANGE FILTER -->
+      <div class="card" style="margin-bottom:20px;"><div class="card-body" style="padding:16px 24px;">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <span style="font-weight:500;font-size:14px;color:var(--text-secondary);">Date Range:</span>
+          <div class="form-group" style="margin:0;flex-direction:row;align-items:center;gap:8px;">
+            <label style="margin:0;white-space:nowrap;">From</label>
+            <input type="date" id="filterFrom" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Roboto',sans-serif;">
+          </div>
+          <div class="form-group" style="margin:0;flex-direction:row;align-items:center;gap:8px;">
+            <label style="margin:0;white-space:nowrap;">To</label>
+            <input type="date" id="filterTo" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Roboto',sans-serif;">
+          </div>
+          <button class="btn btn-primary" style="padding:8px 20px;" onclick="applyFilter()">Apply</button>
+          <button class="btn btn-secondary" style="padding:8px 16px;" onclick="resetFilter()">Reset</button>
+          <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="setQuickRange(30)">30 days</button>
+            <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="setQuickRange(90)">3 months</button>
+            <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="setQuickRange(365)">1 year</button>
+            <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="setQuickRange('all')">All</button>
+          </div>
+        </div>
+        <div id="filterInfo" style="margin-top:8px;font-size:12px;color:var(--text-secondary);"></div>
+      </div></div>
+
       <div class="card"><div class="card-body">
         <h3>Blood Sugar — Daily Trend</h3>
         <div class="chart-container"><canvas id="chartDaily"></canvas></div>
@@ -369,6 +393,43 @@ Chart.defaults.color = '#5F6368';
 // STATE
 let readings = [];
 let dailyChart, bpChart, weeklyChart;
+let filterFrom = '', filterTo = '';
+
+function applyFilter() {
+  filterFrom = document.getElementById('filterFrom').value;
+  filterTo = document.getElementById('filterTo').value;
+  updateCharts();
+  const info = document.getElementById('filterInfo');
+  const filtered = getFilteredReadings();
+  info.textContent = `Showing ${filtered.length} of ${readings.length} readings` +
+    (filterFrom ? ` from ${filterFrom}` : '') + (filterTo ? ` to ${filterTo}` : '');
+}
+
+function resetFilter() {
+  filterFrom = ''; filterTo = '';
+  document.getElementById('filterFrom').value = '';
+  document.getElementById('filterTo').value = '';
+  document.getElementById('filterInfo').textContent = '';
+  updateCharts();
+}
+
+function setQuickRange(days) {
+  if (days === 'all') { resetFilter(); return; }
+  const to = new Date();
+  const from = new Date();
+  from.setDate(from.getDate() - days);
+  document.getElementById('filterFrom').value = from.toISOString().split('T')[0];
+  document.getElementById('filterTo').value = to.toISOString().split('T')[0];
+  applyFilter();
+}
+
+function getFilteredReadings() {
+  return readings.filter(r => {
+    if (filterFrom && r.date < filterFrom) return false;
+    if (filterTo && r.date > filterTo) return false;
+    return true;
+  });
+}
 
 // Set default date/time
 document.getElementById('readingDate').value = new Date().toISOString().split('T')[0];
@@ -587,7 +648,8 @@ function initCharts() {
 
 function updateCharts() {
   // Daily glucose chart — average per type per date
-  const glucoseReadings = readings.filter(r=>['fasting','postmeal','random'].includes(r.type));
+  const filtered = getFilteredReadings();
+  const glucoseReadings = filtered.filter(r=>['fasting','postmeal','random'].includes(r.type));
   const dates = [...new Set(glucoseReadings.map(r=>r.date))].sort();
   function avgForDate(d, t) {
     const vals = glucoseReadings.filter(x=>x.date===d&&x.type===t).map(x=>x.value);
@@ -606,7 +668,7 @@ function updateCharts() {
   dailyChart.update();
 
   // BP chart
-  const bpReadings = readings.filter(r=>r.type==='bp');
+  const bpReadings = filtered.filter(r=>r.type==='bp');
   const bpDates = [...new Set(bpReadings.map(r=>r.date))].sort();
   bpChart.data.labels = bpDates;
   bpChart.data.datasets[0].data = bpDates.map(d => { const r = bpReadings.find(x=>x.date===d); return r?r.value:null; });
