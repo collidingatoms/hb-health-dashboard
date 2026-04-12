@@ -1,0 +1,399 @@
+{
+  "patient": {
+    "name": "HB",
+    "gender": "Male",
+    "bloodGroup": "B Rh Positive",
+    "dobYear": 1984,
+    "conditions": ["Type 2 Diabetes Mellitus", "Hypothyroidism", "Dyslipidemia"],
+    "note": "DM diagnosis approx 2006 per eye clinic records (20 years as of 2026)"
+  },
+  "reports": [
+    {"date": "2019-01-06", "lab": "HCG Apex / LFS Healthcare", "city": "Mumbai", "age": 34, "type": "Comprehensive Full Body Checkup"},
+    {"date": "2019-12-01", "lab": "Thyrocare", "city": "Mumbai", "age": 35, "type": "Aarogyam 1.4 + Elements 22 + HBA + Hemogram"},
+    {"date": "2020-05-04", "lab": "Suburban Diagnostics / ITDOSE", "city": "Mumbai", "age": 36, "type": "Urine Routine"},
+    {"date": "2020-09-13", "lab": "Thyrocare", "city": "Mumbai", "age": 36, "type": "Aarogyam 1.4 + Elements 22 + HBA + Hemogram"},
+    {"date": "2020-12-17", "lab": "ITDOSE Infosystems", "city": "Mumbai", "age": 36, "type": "Comprehensive Full Body Check"},
+    {"date": "2021-04-28", "lab": "ITDOSE Infosystems", "city": "Mumbai", "age": 37, "type": "Comprehensive Full Body Check"},
+    {"date": "2023-04-03", "lab": "Tata 1mg", "city": "Mumbai", "age": 38, "type": "Comprehensive Platinum Full Body Checkup"},
+    {"date": "2024-07-08", "lab": "Tata 1mg", "city": "Delhi", "age": 39, "type": "Advanced Tax Saver Health Check"},
+    {"date": "2025-08-28", "lab": "Tata 1mg", "city": "Mumbai", "age": 41, "type": "Comprehensive Platinum Full Body Checkup"}
+  ],
+  "eyeExam": {
+    "date": "2026-03-28",
+    "clinic": "Belle Vue Eye Clinic",
+    "doctor": "Dr. Swati Pandey",
+    "city": "Gurgaon",
+    "findings": {
+      "dmDuration": "20 years",
+      "peripheralPigmentation": true,
+      "notes": "Go illumined vision 3E few months. Last eye check Jun 2025 Gurgaon. TPHI normal. CIDP FR. Peripheral pigmentation. CD 0.6-0.7. OCT/SND/HVF recommended."
+    }
+  },
+  "testDates": ["2019-01-06", "2019-12-01", "2020-09-13", "2020-12-17", "2021-04-28", "2023-04-03", "2024-07-08", "2025-08-28"],
+  "diabetes": {
+    "hba1c": {
+      "values": [6.2, 5.9, 8.0, 6.8, 6.2, 14.1, 11.9, 13.9],
+      "unit": "%",
+      "refLow": 4.0,
+      "refHigh": 5.6,
+      "diabeticThreshold": 6.5,
+      "targetForDiabetics": 7.0
+    },
+    "fastingGlucose": {
+      "values": [127, null, 157.8, 114, 122, 319, 310, 310],
+      "unit": "mg/dL",
+      "refLow": 70,
+      "refHigh": 99
+    },
+    "averageBloodGlucose": {
+      "values": [131.2, 123, 183, 148.46, 131.24, 357.97, 294.83, null],
+      "unit": "mg/dL",
+      "refHigh": 120
+    },
+    "microalbuminUrine": {
+      "dates": ["2020-12-17", "2021-04-28", "2023-04-03", "2025-08-28"],
+      "values": [17.0, null, 124.6, 38.6],
+      "unit": "mg/L",
+      "refHigh": 20
+    },
+    "microalbuminCreatinineRatio": {
+      "dates": ["2020-12-17", "2021-04-28", "2023-04-03", "2025-08-28"],
+      "values": [11.49, 10.0, 154.48, 60.72],
+      "unit": "mg/g",
+      "refHigh": 30
+    },
+    "urineGlucose": {
+      "dates": ["2019-01-06", "2020-12-17", "2023-04-03", "2025-08-28"],
+      "values": ["Negative", "Negative", "+++", "+++"]
+    },
+    "fructosamine": {
+      "dates": ["2019-12-01", "2020-09-13"],
+      "values": [175.6, 300.7],
+      "unit": "µmol/L",
+      "refHigh": 286
+    },
+    "insulinFasting": {
+      "dates": ["2020-09-13"],
+      "values": [14.1],
+      "unit": "µU/mL",
+      "refLow": 2.6,
+      "refHigh": 24.9
+    },
+    "bloodKetone": {
+      "dates": ["2019-12-01", "2020-09-13"],
+      "values": [4.5, 1.9],
+      "unit": "mg/dL",
+      "refLow": 0.21,
+      "refHigh": 2.81
+    }
+  },
+  "thyroid": {
+    "tsh": {
+      "values": [5.03, 2.78, 1.98, 1.08, null, 5.721, 9.298, 62.696],
+      "unit": "uIU/mL",
+      "refLow": 0.55,
+      "refHigh": 4.78
+    },
+    "t3Total": {
+      "values": [0.96, null, null, 0.73, 0.73, 0.57, 0.52, 0.56],
+      "unit": "ng/mL",
+      "refLow": 0.60,
+      "refHigh": 1.81
+    },
+    "t4Total": {
+      "values": [84.70, null, null, 7.0, 7.7, 6.2, 6.3, 2.9],
+      "unit": "µg/dL",
+      "refLow": 4.5,
+      "refHigh": 12.6,
+      "note": "Jan 2019 value 84.70 ng/mL in different units (ref 52-127), normalized to ~7.5 µg/dL"
+    },
+    "freeT4": {
+      "dates": ["2025-08-28"],
+      "values": [0.69],
+      "unit": "ng/dL",
+      "refLow": 0.83,
+      "refHigh": 1.76
+    },
+    "freeT3": {
+      "dates": ["2025-08-28"],
+      "values": [2.26],
+      "unit": "pg/mL",
+      "refLow": 2.3,
+      "refHigh": 4.2
+    }
+  },
+  "lipids": {
+    "totalCholesterol": {
+      "values": [169, 170, 177, 157, 176, 171, 190, 198],
+      "unit": "mg/dL",
+      "refHigh": 200
+    },
+    "hdl": {
+      "values": [33, 27, 32, 23, 30, 27.3, 27.8, 34],
+      "unit": "mg/dL",
+      "refLow": 40,
+      "note": "Persistently critically low"
+    },
+    "ldl": {
+      "values": [99.6, 132, 123, 99, 115, 96.5, 106.4, 123],
+      "unit": "mg/dL",
+      "refHigh": 100
+    },
+    "triglycerides": {
+      "values": [119, 122, 214, 177, 156, 236, 279, 203],
+      "unit": "mg/dL",
+      "refHigh": 150
+    },
+    "vldl": {
+      "values": [23.8, 24.4, 42.8, 35, 31, 47.2, 55.8, 41],
+      "unit": "mg/dL",
+      "refHigh": 30
+    },
+    "nonHdl": {
+      "values": [null, 143.4, 145.3, 134, 146, 143.7, 162.2, 164],
+      "unit": "mg/dL",
+      "refHigh": 130
+    },
+    "cholHdlRatio": {
+      "values": [5.1, 6.4, 5.6, 6.8, 5.9, 6.26, 6.83, 5.8],
+      "unit": "Ratio",
+      "refHigh": 4.5
+    }
+  },
+  "liver": {
+    "sgot": {
+      "values": [18, 21.1, 49.96, 27, 20, 33, 17, 19],
+      "unit": "U/L",
+      "refHigh": 34
+    },
+    "sgpt": {
+      "values": [25, 28.7, 82.2, 48, 32, 42, 30, 22],
+      "unit": "U/L",
+      "refHigh": 49
+    },
+    "alkalinePhosphatase": {
+      "values": [79, 116.6, 121.6, 131, 99, 158, 155, 148],
+      "unit": "U/L",
+      "refHigh": 129
+    },
+    "ggt": {
+      "values": [31, 26.8, 41, 23, 23, 32, 26, 29],
+      "unit": "U/L",
+      "refHigh": 73
+    },
+    "bilirubinTotal": {
+      "values": [0.42, 0.46, 0.63, 0.5, 0.6, 0.52, 0.68, 0.66],
+      "unit": "mg/dL",
+      "refHigh": 1.2
+    },
+    "albumin": {
+      "values": [4.4, 4.7, 4.41, 4.8, 4.7, 4.8, 4.55, 4.79],
+      "unit": "g/dL",
+      "refLow": 3.2,
+      "refHigh": 4.8
+    },
+    "totalProtein": {
+      "values": [6.8, 7.8, 7.69, 8.1, 7.7, 7.8, 7.55, 7.66],
+      "unit": "g/dL",
+      "refLow": 5.7,
+      "refHigh": 8.2
+    }
+  },
+  "kidney": {
+    "creatinine": {
+      "values": [0.80, 0.75, 0.85, 0.80, 0.87, 0.94, 0.81, 0.95],
+      "unit": "mg/dL",
+      "refLow": 0.7,
+      "refHigh": 1.3
+    },
+    "uricAcid": {
+      "values": [6.2, 7.0, 7.57, 8.5, 6.5, 7.0, 4.9, 3.2],
+      "unit": "mg/dL",
+      "refLow": 3.5,
+      "refHigh": 7.2
+    },
+    "bun": {
+      "values": [null, 10.05, null, 10.0, null, 13.0, 12.0, null],
+      "unit": "mg/dL",
+      "refLow": 9,
+      "refHigh": 23
+    },
+    "egfr": {
+      "values": [118, 119, null, null, null, null, null, null],
+      "unit": "mL/min/1.73m²",
+      "refLow": 90
+    },
+    "sodium": {
+      "values": [143, 137.4, 140.2, 141, 138, 134, 138, 134],
+      "unit": "mmol/L",
+      "refLow": 136,
+      "refHigh": 145
+    },
+    "potassium": {
+      "values": [4.9, null, null, null, null, 4.5, 4.7, 4.86],
+      "unit": "mmol/L",
+      "refLow": 3.5,
+      "refHigh": 5.1
+    },
+    "chloride": {
+      "values": [109, 103, null, 108, 106, 103, 100, 97.3],
+      "unit": "mmol/L",
+      "refLow": 98,
+      "refHigh": 107
+    },
+    "calcium": {
+      "values": [8.8, 9.24, 9.63, 8.9, 10.0, 8.81, 8.54, 9.5],
+      "unit": "mg/dL",
+      "refLow": 8.5,
+      "refHigh": 10.3
+    }
+  },
+  "vitamins": {
+    "vitaminD": {
+      "values": [27.8, 16.63, 24.98, 21.7, 28, 17.57, 28.43, 76.7],
+      "unit": "ng/mL",
+      "refLow": 30,
+      "refHigh": 100,
+      "deficiencyThreshold": 20,
+      "insufficiencyThreshold": 30
+    },
+    "vitaminB12": {
+      "values": [728, 808, null, 955, 474, 433, 378, 688],
+      "unit": "pg/mL",
+      "refLow": 211,
+      "refHigh": 911
+    },
+    "folicAcid": {
+      "dates": ["2023-04-03"],
+      "values": [12.93],
+      "unit": "ng/mL",
+      "refLow": 5.38
+    }
+  },
+  "iron": {
+    "ironSerum": {
+      "values": [null, 51, 80.5, 62, 89, 76.1, 81, 76],
+      "unit": "µg/dL",
+      "refLow": 65,
+      "refHigh": 175
+    },
+    "tibc": {
+      "values": [null, 350, 332.1, 282, 269, 378.2, 287.8, 331],
+      "unit": "µg/dL",
+      "refLow": 250,
+      "refHigh": 460
+    },
+    "ferritin": {
+      "dates": ["2020-09-13", "2023-04-03", "2024-07-08", "2025-08-28"],
+      "values": [294.8, 603.9, 431.1, 588.6],
+      "unit": "ng/mL",
+      "refLow": 22,
+      "refHigh": 322
+    }
+  },
+  "inflammatory": {
+    "esr": {
+      "values": [16, null, null, 30, 9, 54, 11, 27],
+      "unit": "mm/hr",
+      "refHigh": 10
+    },
+    "crpQuantitative": {
+      "dates": ["2023-04-03", "2024-07-08"],
+      "values": ["<4.0", "<4"],
+      "unit": "mg/L",
+      "refHigh": 10
+    },
+    "hsCrp": {
+      "dates": ["2019-12-01", "2023-04-03", "2025-08-28"],
+      "values": [3.1, 1.69, 0.81],
+      "unit": "mg/L",
+      "refHigh": 3.0
+    },
+    "homocysteine": {
+      "dates": ["2019-12-01", "2023-04-03", "2025-08-28"],
+      "values": [7.9, 14.83, 13.29],
+      "unit": "µmol/L",
+      "refHigh": 14.9
+    }
+  },
+  "cardiac": {
+    "lipoproteinA": {
+      "dates": ["2019-12-01", "2020-09-13", "2023-04-03", "2024-07-08", "2025-08-28"],
+      "values": [5.2, 7, 9.68, 13.27, 10.10],
+      "unit": "mg/dL",
+      "refHigh": 30
+    },
+    "apoA1": {
+      "dates": ["2019-12-01", "2020-09-13", "2023-04-03", "2024-07-08", "2025-08-28"],
+      "values": [89, 107, 77, 96, 102],
+      "unit": "mg/dL",
+      "refLow": 79,
+      "refHigh": 169
+    },
+    "apoB": {
+      "dates": ["2019-12-01", "2020-09-13", "2023-04-03", "2024-07-08", "2025-08-28"],
+      "values": [109, 107, 88, 100, 106],
+      "unit": "mg/dL",
+      "refLow": 46,
+      "refHigh": 174
+    },
+    "apoBtoA1Ratio": {
+      "dates": ["2019-12-01", "2020-09-13", "2023-04-03", "2024-07-08", "2025-08-28"],
+      "values": [1.2, 1.0, 1.14, 1.04, 1.04],
+      "unit": "Ratio"
+    }
+  },
+  "cbc": {
+    "hemoglobin": {
+      "values": [null, 14.6, 15.1, 14.2, 14.6, 15, 14, 14.5],
+      "unit": "g/dL",
+      "refLow": 13,
+      "refHigh": 17
+    },
+    "rbc": {
+      "values": [null, 5.43, null, 5.17, 5.63, 5.58, 5.35, 5.23],
+      "unit": "10^6/µL",
+      "refLow": 4.5,
+      "refHigh": 5.5
+    },
+    "plateletCount": {
+      "values": [null, 218, 252, 182, 224, 206, 158, 187],
+      "unit": "10^3/µL",
+      "refLow": 150,
+      "refHigh": 410
+    },
+    "wbc": {
+      "values": [null, 5.52, null, 4.8, 5.1, 5.76, 4.86, 4.37],
+      "unit": "10^3/µL",
+      "refLow": 4,
+      "refHigh": 10
+    },
+    "neutrophils": {
+      "values": [null, 46.6, null, 38, 34, 45, 38.4, 34],
+      "unit": "%",
+      "refLow": 40,
+      "refHigh": 80,
+      "note": "Persistently low - relative neutropenia"
+    }
+  },
+  "reproductive": {
+    "testosterone": {
+      "dates": ["2019-12-01", "2020-09-13", "2025-08-28"],
+      "values": [279.3, 250.94, 296.06],
+      "unit": "ng/dL",
+      "refLow": 240,
+      "refHigh": 871
+    }
+  },
+  "toxicElements": {
+    "date": "2019-12-01",
+    "results": {
+      "arsenic": {"value": 0.67, "unit": "µg/L", "refHigh": 5, "status": "normal"},
+      "cadmium": {"value": 0.23, "unit": "µg/L", "refHigh": 1.5, "status": "normal"},
+      "mercury": {"value": 0.62, "unit": "µg/L", "refHigh": 5, "status": "normal"},
+      "lead": {"value": 21.66, "unit": "µg/L", "refHigh": 150, "status": "normal"},
+      "selenium": {"value": 184.12, "unit": "µg/L", "refLow": 60, "refHigh": 340, "status": "normal"},
+      "manganese": {"value": 10.39, "unit": "µg/L", "refLow": 7.1, "refHigh": 20, "status": "normal"}
+    }
+  }
+}

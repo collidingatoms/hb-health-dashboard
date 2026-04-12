@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HB Health Dashboard — Blood Work</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+:root {
+  --bg: #F8F9FA; --surface: #FFFFFF; --text: #202124; --text-secondary: #5F6368;
+  --border: #E8EAED; --blue: #1A73E8; --green: #34A853; --red: #EA4335;
+  --yellow: #FBBC04; --purple: #A142F4; --orange: #FA903E;
+  --blue-bg: #E8F0FE; --green-bg: #E6F4EA; --red-bg: #FCE8E6;
+  --yellow-bg: #FEF7E0; --purple-bg: #F3E8FD;
+  --shadow: 0 1px 3px rgba(60,64,67,0.12); --shadow-hover: 0 4px 12px rgba(60,64,67,0.15);
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Roboto', 'Google Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+h1,h2,h3,h4 { font-family: 'Google Sans', 'Roboto', sans-serif; }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 32px; }
+.nav-brand { font-family: 'Google Sans'; font-weight: 700; font-size: 18px; color: var(--blue); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+.nav-brand span { background: var(--red); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+.nav-links { display: flex; gap: 4px; }
+.nav-links a { padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 500; color: var(--text-secondary); transition: all 0.2s; }
+.nav-links a:hover { background: var(--blue-bg); color: var(--blue); }
+.nav-links a.active { background: var(--blue-bg); color: var(--blue); }
+
+/* LAYOUT */
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+.page-header { margin-bottom: 32px; }
+.page-header h1 { font-size: 28px; margin-bottom: 4px; }
+.page-header p { color: var(--text-secondary); font-size: 15px; }
+
+/* SUMMARY CARDS */
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.summary-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border-left: 4px solid var(--border); }
+.summary-card.critical { border-left-color: var(--red); }
+.summary-card.warning { border-left-color: var(--yellow); }
+.summary-card.ok { border-left-color: var(--green); }
+.summary-card .label { font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+.summary-card .value { font-family: 'Roboto Mono', monospace; font-size: 28px; font-weight: 700; margin: 4px 0; }
+.summary-card .value.critical { color: var(--red); }
+.summary-card .value.warning { color: var(--orange); }
+.summary-card .value.ok { color: var(--green); }
+.summary-card .ref { font-size: 12px; color: var(--text-secondary); }
+.summary-card .trend { font-size: 12px; margin-top: 4px; }
+.summary-card .trend.up-bad { color: var(--red); }
+.summary-card .trend.down-good { color: var(--green); }
+
+/* CHART SECTIONS */
+.section { margin-bottom: 40px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.section-chip { padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 500; }
+.chip-red { background: var(--red-bg); color: var(--red); }
+.chip-yellow { background: var(--yellow-bg); color: #E37400; }
+.chip-green { background: var(--green-bg); color: var(--green); }
+.chip-blue { background: var(--blue-bg); color: var(--blue); }
+.chip-purple { background: var(--purple-bg); color: var(--purple); }
+.section h2 { font-size: 20px; }
+
+.card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+.card-body { padding: 24px; }
+.chart-container { position: relative; height: 300px; margin-bottom: 16px; }
+.chart-container.hero { height: 350px; }
+
+/* DIAGNOSIS */
+.diagnosis { background: var(--bg); border-radius: 8px; padding: 16px 20px; margin-top: 16px; border-left: 3px solid var(--blue); }
+.diagnosis h4 { font-size: 14px; color: var(--blue); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.diagnosis p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+.diagnosis.critical { border-left-color: var(--red); }
+.diagnosis.critical h4 { color: var(--red); }
+.diagnosis.warning { border-left-color: var(--orange); }
+.diagnosis.warning h4 { color: var(--orange); }
+
+/* CHART GRID */
+.chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; }
+@media(max-width:600px) { .chart-grid { grid-template-columns: 1fr; } }
+
+/* FOOTER */
+footer { text-align: center; padding: 32px 24px; color: var(--text-secondary); font-size: 13px; border-top: 1px solid var(--border); margin-top: 40px; }
+footer a { color: var(--blue); text-decoration: none; }
+
+/* DATA TABLE */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+.data-table th { background: var(--bg); padding: 8px 12px; text-align: left; font-weight: 500; color: var(--text-secondary); border-bottom: 2px solid var(--border); }
+.data-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-family: 'Roboto Mono', monospace; }
+.data-table td.high { color: var(--red); font-weight: 500; }
+.data-table td.low { color: var(--orange); font-weight: 500; }
+.data-table td.normal { color: var(--green); }
+
+/* RESPONSIVE */
+@media(max-width:768px) {
+  .nav-inner { flex-direction: column; gap: 8px; }
+  .container { padding: 16px; }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid { grid-template-columns: 1fr; }
+  .chart-container { height: 250px; }
+  .chart-container.hero { height: 280px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">HB Health <span>DASHBOARD</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Blood Work</a>
+      <a href="diabetes.html">Diabetes & Complications</a>
+      <a href="tracking.html">Daily Tracking</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Blood Work Dashboard</h1>
+    <p>9 reports across 7 years — Jan 2019 to Aug 2025 | Last updated: Aug 28, 2025</p>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-grid" id="summaryCards"></div>
+
+  <!-- HERO CHARTS -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Key Metrics</h2>
+      <span class="section-chip chip-red">Requires Attention</span>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h3>HbA1c — Glycated Hemoglobin</h3>
+        <div class="chart-container hero"><canvas id="chartHba1c"></canvas></div>
+        <div class="diagnosis critical">
+          <h4>&#9888; Expert Assessment</h4>
+          <p><strong>Severe uncontrolled diabetes.</strong> HbA1c has been dangerously elevated since Apr 2023, peaking at 14.1%. The brief period of good control (6.2–6.8% in late 2020 to Apr 2021) proves you CAN bring this down — but something derailed after 2021 (likely medication non-compliance or lifestyle changes during the move to Delhi). Current 13.9% translates to an average blood glucose of ~350 mg/dL, which causes active damage to blood vessels, nerves, kidneys, and eyes every single day. ADA target for diabetics is &lt;7%. This is the single most important number to fix — everything else (thyroid, lipids, kidney damage) cascades from here.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h3>Fasting Blood Glucose</h3>
+        <div class="chart-container hero"><canvas id="chartFasting"></canvas></div>
+        <div class="diagnosis critical">
+          <h4>&#9888; Expert Assessment</h4>
+          <p><strong>Fasting glucose stuck at 310 mg/dL for 2+ years.</strong> Normal fasting is under 100 mg/dL; diabetic management target is 80–130 mg/dL. Your glucose has been 3x the normal limit since Apr 2023. The brief dip to 114 mg/dL in Dec 2020 shows medication was working at that time. Glucose at 310+ means the pancreas is severely struggling to produce enough insulin, or insulin resistance is extreme, or both. Combined with urine glucose +++ (sugar spilling into urine), this indicates the kidneys are being overwhelmed. Immediate medication review and titration with an endocrinologist is non-negotiable.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h3>TSH — Thyroid Stimulating Hormone</h3>
+        <div class="chart-container hero"><canvas id="chartTSH"></canvas></div>
+        <div class="diagnosis critical">
+          <h4>&#9888; Expert Assessment</h4>
+          <p><strong>TSH at 62.7 — this is severe hypothyroidism and a medical emergency-level reading.</strong> Normal TSH is 0.55–4.78 uIU/mL. Your TSH has exploded from 9.3 (Jul 2024) to 62.7 (Aug 2025), a 6.7x increase in 13 months. This means your thyroid is barely functioning — confirmed by Free T4 at 0.69 (below 0.83 minimum) and Free T3 at 2.26 (below 2.3 minimum). Severe hypothyroidism worsens everything: it raises cholesterol, causes insulin resistance (making diabetes harder to control), causes fatigue, weight gain, brain fog, and depression. T3 has been consistently low since 2023. You need levothyroxine (or dose increase if already prescribed) immediately, with recheck in 6–8 weeks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIPID PANEL -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Lipid Panel</h2>
+      <span class="section-chip chip-red">High Risk</span>
+    </div>
+    <div class="chart-grid">
+      <div class="card"><div class="card-body">
+        <h3>Total Cholesterol &amp; LDL</h3>
+        <div class="chart-container"><canvas id="chartCholLDL"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>HDL (Good Cholesterol)</h3>
+        <div class="chart-container"><canvas id="chartHDL"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Triglycerides</h3>
+        <div class="chart-container"><canvas id="chartTrig"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Cholesterol:HDL Ratio</h3>
+        <div class="chart-container"><canvas id="chartCholRatio"></canvas></div>
+      </div></div>
+    </div>
+    <div class="diagnosis critical">
+      <h4>&#9888; Expert Assessment — Lipid Panel</h4>
+      <p><strong>Atherogenic dyslipidemia — the classic diabetic lipid pattern.</strong> HDL has been critically low (23–34 mg/dL) across ALL 8 tests over 7 years — never once reaching the minimum 40 mg/dL. This is the single biggest cardiovascular risk factor after the diabetes itself. Triglycerides consistently elevated (203–279 in recent years), peaking at 279 in Jul 2024. LDL appears borderline but this masks the real danger: with triglycerides this high, LDL particles are small and dense (the most atherogenic type). The Cholesterol:HDL ratio of 5.8–6.8 indicates very high cardiovascular risk (target is &lt;4.5). Combined with uncontrolled diabetes, this lipid profile puts you at &gt;20% 10-year cardiovascular event risk. Statin therapy is strongly indicated. The hypothyroidism is also actively raising your cholesterol — fixing thyroid levels should help lipids improve.</p>
+    </div>
+  </div>
+
+  <!-- THYROID PANEL -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Thyroid Panel</h2>
+      <span class="section-chip chip-red">Critical</span>
+    </div>
+    <div class="chart-grid">
+      <div class="card"><div class="card-body">
+        <h3>T3 Total</h3>
+        <div class="chart-container"><canvas id="chartT3"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>T4 Total</h3>
+        <div class="chart-container"><canvas id="chartT4"></canvas></div>
+      </div></div>
+    </div>
+    <div class="diagnosis critical">
+      <h4>&#9888; Expert Assessment — Thyroid</h4>
+      <p><strong>Progressive thyroid failure.</strong> T3 has dropped from 0.96 (Jan 2019) to 0.56 (Aug 2025) — below the 0.60 minimum since Apr 2023. T4 crashed from ~7.5 to 2.9 µg/dL (well below the 4.5 minimum). The thyroid was borderline in 2019 (TSH 5.03), briefly normalized in 2020-2021, then started failing. This pattern suggests autoimmune thyroiditis (Hashimoto's) — the most common cause in India. The interplay between uncontrolled diabetes and hypothyroidism creates a vicious cycle: high blood sugar damages thyroid function, and low thyroid hormones worsen insulin resistance. Both must be treated simultaneously.</p>
+    </div>
+  </div>
+
+  <!-- LIVER PANEL -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Liver Function</h2>
+      <span class="section-chip chip-yellow">Monitor</span>
+    </div>
+    <div class="chart-grid">
+      <div class="card"><div class="card-body">
+        <h3>SGOT &amp; SGPT (Liver Enzymes)</h3>
+        <div class="chart-container"><canvas id="chartLiverEnz"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Alkaline Phosphatase</h3>
+        <div class="chart-container"><canvas id="chartALP"></canvas></div>
+      </div></div>
+    </div>
+    <div class="diagnosis warning">
+      <h4>&#9888; Expert Assessment — Liver</h4>
+      <p><strong>Intermittent liver stress, likely NAFLD (Non-Alcoholic Fatty Liver Disease).</strong> The Sep 2020 spike (SGOT 50, SGPT 82) is classic for fatty liver flare — correlates with HbA1c hitting 8% and triglycerides at 214. Liver enzymes have normalized since, but Alkaline Phosphatase has been persistently elevated (148–158 U/L vs ref &lt;129) since 2023. In the context of severe hypothyroidism, elevated ALP can also indicate bone metabolism issues. Albumin and bilirubin are consistently normal, which is reassuring — no signs of chronic liver damage yet. However, uncontrolled diabetes is the #1 driver of NAFLD progression to fibrosis. Get a FibroScan or liver ultrasound to assess current liver fat and stiffness.</p>
+    </div>
+  </div>
+
+  <!-- KIDNEY PANEL -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Kidney Function</h2>
+      <span class="section-chip chip-yellow">Early Warning</span>
+    </div>
+    <div class="chart-grid">
+      <div class="card"><div class="card-body">
+        <h3>Creatinine</h3>
+        <div class="chart-container"><canvas id="chartCreatinine"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Uric Acid</h3>
+        <div class="chart-container"><canvas id="chartUricAcid"></canvas></div>
+      </div></div>
+    </div>
+    <div class="diagnosis warning">
+      <h4>&#9888; Expert Assessment — Kidney</h4>
+      <p><strong>Creatinine is still normal (0.95) but microalbuminuria tells the real story.</strong> Microalbumin/Creatinine ratio spiked to 154 mg/g in Apr 2023 (normal &lt;30, clinical albuminuria &gt;300) — this is Stage A2 diabetic kidney disease. It improved to 60.7 in Aug 2025, but is still 2x the threshold. The kidneys are leaking protein because chronically high blood sugar damages the glomerular filtration membranes. Urine glucose +++ confirms the kidneys are overwhelmed. If HbA1c stays above 10%, this WILL progress to frank proteinuria and eventual kidney function decline. ACE inhibitor or ARB medication (like Ramipril or Losartan) should be started — they protect kidneys independent of blood pressure. Sodium has been borderline low (134) in recent tests, worth monitoring.</p>
+    </div>
+  </div>
+
+  <!-- VITAMINS & IRON -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Vitamins &amp; Iron Studies</h2>
+      <span class="section-chip chip-green">Improving</span>
+    </div>
+    <div class="chart-grid">
+      <div class="card"><div class="card-body">
+        <h3>Vitamin D</h3>
+        <div class="chart-container"><canvas id="chartVitD"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Vitamin B12</h3>
+        <div class="chart-container"><canvas id="chartB12"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Ferritin</h3>
+        <div class="chart-container"><canvas id="chartFerritin"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Iron Serum</h3>
+        <div class="chart-container"><canvas id="chartIron"></canvas></div>
+      </div></div>
+    </div>
+    <div class="diagnosis">
+      <h4>&#128200; Expert Assessment — Vitamins &amp; Iron</h4>
+      <p><strong>Vitamin D is the one bright spot — finally sufficient at 76.7 ng/mL</strong> after being deficient/insufficient for 6 years (16.6–28.4 range). Whatever supplementation you started is working — keep it going. B12 fluctuates but is within range. <strong>Ferritin is consistently elevated</strong> (431–604 ng/mL vs ref &lt;322). In the context of uncontrolled diabetes, high ferritin is a marker of chronic inflammation and insulin resistance — not necessarily iron overload. However, elevated ferritin can also indicate NAFLD. Iron serum is normal-to-borderline, and TIBC is normal, suggesting the high ferritin is inflammatory rather than hemochromatosis. Still, this warrants monitoring — if it keeps climbing, a Transferrin Saturation check can rule out true iron overload.</p>
+    </div>
+  </div>
+
+  <!-- INFLAMMATORY MARKERS -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Inflammatory &amp; Cardiac Markers</h2>
+      <span class="section-chip chip-blue">Moderate Risk</span>
+    </div>
+    <div class="chart-grid">
+      <div class="card"><div class="card-body">
+        <h3>ESR</h3>
+        <div class="chart-container"><canvas id="chartESR"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Homocysteine</h3>
+        <div class="chart-container"><canvas id="chartHomocysteine"></canvas></div>
+      </div></div>
+    </div>
+    <div class="diagnosis">
+      <h4>&#128200; Expert Assessment — Inflammation</h4>
+      <p><strong>Chronic low-grade inflammation pattern.</strong> ESR spiked to 54 in Apr 2023 (the same test showing HbA1c 14.1%) — high blood sugar drives systemic inflammation. hsCRP has actually improved from 3.1 to 0.81, which is encouraging for cardiac risk. Homocysteine was elevated at 14.83 in 2023 but has come down to 13.29. The ESR of 27 in the latest test is still elevated (ref &lt;10), consistent with the uncontrolled diabetes and thyroid issues driving ongoing inflammation. Controlling blood sugar and thyroid should bring ESR down naturally.</p>
+    </div>
+  </div>
+
+  <!-- CBC -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Complete Blood Count</h2>
+      <span class="section-chip chip-blue">Mostly Normal</span>
+    </div>
+    <div class="chart-grid">
+      <div class="card"><div class="card-body">
+        <h3>Hemoglobin</h3>
+        <div class="chart-container"><canvas id="chartHb"></canvas></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h3>Platelet Count</h3>
+        <div class="chart-container"><canvas id="chartPlatelets"></canvas></div>
+      </div></div>
+    </div>
+    <div class="diagnosis">
+      <h4>&#128200; Expert Assessment — CBC</h4>
+      <p><strong>Hemoglobin and platelets are stable and normal.</strong> Hemoglobin consistently 14–15 g/dL (healthy range). Platelets dropped to 158 in Jul 2024 but recovered to 187 — still normal. One consistent finding: <strong>relative neutropenia</strong> with neutrophils running 34–38% (ref 40–80%) and lymphocytes elevated at 42–51%. This inverted N:L ratio has been present since 2019 and is worth flagging to your doctor, though in the context of South Asian genetics and chronic metabolic disease, it may be a benign variant. No signs of anemia or blood disorders.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>HB Health Dashboard &mdash; Data from 9 blood work reports (Jan 2019 – Aug 2025)</p>
+  <p style="margin-top:4px;">This dashboard is for personal health tracking only. Not a substitute for medical advice. Consult your endocrinologist.</p>
+</footer>
+
+<script>
+// DATA
+const labels = ['Jan 19','Dec 19','Sep 20','Dec 20','Apr 21','Apr 23','Jul 24','Aug 25'];
+const labelsFull = ['06-Jan-2019','01-Dec-2019','13-Sep-2020','17-Dec-2020','28-Apr-2021','03-Apr-2023','08-Jul-2024','28-Aug-2025'];
+
+// Chart defaults
+Chart.defaults.font.family = "'Roboto', 'Google Sans', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#5F6368';
+Chart.defaults.plugins.tooltip.backgroundColor = '#202124';
+Chart.defaults.plugins.tooltip.cornerRadius = 8;
+Chart.defaults.plugins.tooltip.padding = 12;
+
+function makeRefBand(ctx, refLow, refHigh, chart) {
+  return {
+    id: 'refBand',
+    beforeDraw(chart) {
+      const {ctx, chartArea: {left, right, top, bottom}, scales: {y}} = chart;
+      if(refLow !== null && refHigh !== null) {
+        const yTop = y.getPixelForValue(refHigh);
+        const yBot = y.getPixelForValue(refLow);
+        ctx.save();
+        ctx.fillStyle = 'rgba(52,168,83,0.07)';
+        ctx.fillRect(left, Math.max(yTop, top), right-left, Math.min(yBot, bottom) - Math.max(yTop, top));
+        ctx.restore();
+      }
+    }
+  };
+}
+
+function createLineChart(canvasId, datasets, yConfig, refLow, refHigh, customLabels) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  const plugins = [];
+  if(refLow !== null || refHigh !== null) {
+    plugins.push({
+      id: 'refBand_'+canvasId,
+      beforeDraw(chart) {
+        const {ctx, chartArea, scales: {y}} = chart;
+        if(!chartArea) return;
+        const {left, right, top, bottom} = chartArea;
+        ctx.save();
+        ctx.fillStyle = 'rgba(52,168,83,0.08)';
+        const yT = refHigh !== null ? Math.max(y.getPixelForValue(refHigh), top) : top;
+        const yB = refLow !== null ? Math.min(y.getPixelForValue(refLow), bottom) : bottom;
+        ctx.fillRect(left, yT, right-left, yB - yT);
+        ctx.restore();
+      }
+    });
+  }
+  return new Chart(ctx, {
+    type: 'line',
+    data: { labels: customLabels || labels, datasets: datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: datasets.length > 1, position: 'top', labels: { usePointStyle: true, padding: 16 }},
+        tooltip: {
+          callbacks: {
+            title: function(items) { return labelsFull[items[0].dataIndex] || items[0].label; }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: Object.assign({ grid: { color: '#E8EAED' }}, yConfig || {})
+      },
+      elements: { point: { radius: 5, hoverRadius: 7 }, line: { tension: 0.3 }}
+    },
+    plugins: plugins
+  });
+}
+
+function ds(label, data, color, fill) {
+  return {
+    label: label,
+    data: data,
+    borderColor: color,
+    backgroundColor: fill || color + '20',
+    borderWidth: 2.5,
+    pointBackgroundColor: color,
+    fill: !!fill
+  };
+}
+
+// SUMMARY CARDS
+const summaryHTML = [
+  {label:'HbA1c', value:'13.9%', cls:'critical', ref:'Target: <7%', trend:'↑ from 11.9%', trendCls:'up-bad'},
+  {label:'Fasting Glucose', value:'310', cls:'critical', ref:'Target: 80-130 mg/dL', trend:'No change (310 since Jul 24)', trendCls:'up-bad'},
+  {label:'TSH', value:'62.7', cls:'critical', ref:'Normal: 0.55-4.78', trend:'↑ 574% from 9.3', trendCls:'up-bad'},
+  {label:'HDL', value:'34', cls:'critical', ref:'Target: >40 mg/dL', trend:'↑ slight from 28', trendCls:'up-bad'},
+  {label:'Vitamin D', value:'76.7', cls:'ok', ref:'Sufficient: 30-100', trend:'↑ from 28.4', trendCls:'down-good'},
+  {label:'Creatinine', value:'0.95', cls:'ok', ref:'Normal: 0.7-1.3', trend:'Stable', trendCls:''},
+  {label:'Ferritin', value:'589', cls:'warning', ref:'Normal: 22-322', trend:'↑ from 431', trendCls:'up-bad'},
+  {label:'Microalbumin/Cr', value:'60.7', cls:'warning', ref:'Normal: <30', trend:'↓ from 154', trendCls:'down-good'},
+].map(c => `<div class="summary-card ${c.cls}">
+  <div class="label">${c.label}</div>
+  <div class="value ${c.cls}">${c.value}</div>
+  <div class="ref">${c.ref}</div>
+  <div class="trend ${c.trendCls}">${c.trend}</div>
+</div>`).join('');
+document.getElementById('summaryCards').innerHTML = summaryHTML;
+
+// HERO CHARTS
+createLineChart('chartHba1c', [
+  ds('HbA1c (%)', [6.2,5.9,8.0,6.8,6.2,14.1,11.9,13.9], '#EA4335'),
+  {label:'ADA Target (7%)', data: Array(8).fill(7), borderColor:'#34A853', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false},
+  {label:'Diabetic Threshold (6.5%)', data: Array(8).fill(6.5), borderColor:'#FBBC04', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false}
+], {min:4, max:16}, 4, 5.6);
+
+createLineChart('chartFasting', [
+  ds('Fasting Glucose (mg/dL)', [127,null,157.8,114,122,319,310,310], '#EA4335'),
+  {label:'Normal Upper (99)', data: Array(8).fill(99), borderColor:'#34A853', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false},
+  {label:'Diabetic Target (130)', data: Array(8).fill(130), borderColor:'#FBBC04', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false}
+], {min:50, max:350}, 70, 99);
+
+createLineChart('chartTSH', [
+  ds('TSH (uIU/mL)', [5.03,2.78,1.98,1.08,null,5.721,9.298,62.696], '#A142F4'),
+  {label:'Upper Normal (4.78)', data: Array(8).fill(4.78), borderColor:'#34A853', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:0, max:70}, 0.55, 4.78);
+
+// LIPID CHARTS
+createLineChart('chartCholLDL', [
+  ds('Total Cholesterol', [169,170,177,157,176,171,190,198], '#1A73E8'),
+  ds('LDL', [99.6,132,123,99,115,96.5,106.4,123], '#EA4335'),
+  {label:'LDL Target (<100)', data: Array(8).fill(100), borderColor:'#34A853', borderWidth:1.5, borderDash:[5,3], pointRadius:0, fill:false}
+], {min:50, max:220}, null, null);
+
+createLineChart('chartHDL', [
+  ds('HDL (mg/dL)', [33,27,32,23,30,27.3,27.8,34], '#FA903E'),
+  {label:'Minimum (40)', data: Array(8).fill(40), borderColor:'#34A853', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:15, max:50}, 40, 65);
+
+createLineChart('chartTrig', [
+  ds('Triglycerides (mg/dL)', [119,122,214,177,156,236,279,203], '#FBBC04'),
+  {label:'Normal (<150)', data: Array(8).fill(150), borderColor:'#34A853', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:50, max:300}, null, 150);
+
+createLineChart('chartCholRatio', [
+  ds('Cholesterol:HDL Ratio', [5.1,6.4,5.6,6.8,5.9,6.26,6.83,5.8], '#A142F4'),
+  {label:'Target (<4.5)', data: Array(8).fill(4.5), borderColor:'#34A853', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:3, max:8}, null, 4.5);
+
+// THYROID CHARTS
+createLineChart('chartT3', [
+  ds('T3 Total (ng/mL)', [0.96,null,null,0.73,0.73,0.57,0.52,0.56], '#A142F4'),
+  {label:'Lower Normal (0.60)', data: Array(8).fill(0.60), borderColor:'#EA4335', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:0.3, max:1.2}, 0.60, 1.81);
+
+createLineChart('chartT4', [
+  ds('T4 Total (µg/dL)', [null,null,null,7.0,7.7,6.2,6.3,2.9], '#1A73E8'),
+  {label:'Lower Normal (4.5)', data: Array(8).fill(4.5), borderColor:'#EA4335', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:0, max:14}, 4.5, 12.6, ['Jan 19','Dec 19','Sep 20','Dec 20','Apr 21','Apr 23','Jul 24','Aug 25']);
+
+// LIVER CHARTS
+createLineChart('chartLiverEnz', [
+  ds('SGOT', [18,21.1,49.96,27,20,33,17,19], '#1A73E8'),
+  ds('SGPT', [25,28.7,82.2,48,32,42,30,22], '#EA4335'),
+  {label:'SGOT Upper (34)', data: Array(8).fill(34), borderColor:'#1A73E8', borderWidth:1, borderDash:[4,4], pointRadius:0, fill:false},
+  {label:'SGPT Upper (49)', data: Array(8).fill(49), borderColor:'#EA4335', borderWidth:1, borderDash:[4,4], pointRadius:0, fill:false}
+], {min:0, max:90}, null, null);
+
+createLineChart('chartALP', [
+  ds('ALP (U/L)', [79,116.6,121.6,131,99,158,155,148], '#FA903E'),
+  {label:'Upper Normal (129)', data: Array(8).fill(129), borderColor:'#EA4335', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:50, max:180}, 46, 129);
+
+// KIDNEY CHARTS
+createLineChart('chartCreatinine', [
+  ds('Creatinine (mg/dL)', [0.80,0.75,0.85,0.80,0.87,0.94,0.81,0.95], '#1A73E8'),
+  {label:'Upper Normal (1.3)', data: Array(8).fill(1.3), borderColor:'#EA4335', borderWidth:1.5, borderDash:[5,3], pointRadius:0, fill:false}
+], {min:0.5, max:1.5}, 0.7, 1.3);
+
+createLineChart('chartUricAcid', [
+  ds('Uric Acid (mg/dL)', [6.2,7.0,7.57,8.5,6.5,7.0,4.9,3.2], '#A142F4'),
+  {label:'Upper Normal (7.2)', data: Array(8).fill(7.2), borderColor:'#EA4335', borderWidth:1.5, borderDash:[5,3], pointRadius:0, fill:false}
+], {min:2, max:10}, 3.5, 7.2);
+
+// VITAMIN CHARTS
+createLineChart('chartVitD', [
+  ds('Vitamin D (ng/mL)', [27.8,16.63,24.98,21.7,28,17.57,28.43,76.7], '#FBBC04'),
+  {label:'Sufficient (30)', data: Array(8).fill(30), borderColor:'#34A853', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false},
+  {label:'Deficiency (<20)', data: Array(8).fill(20), borderColor:'#EA4335', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false}
+], {min:0, max:90}, 30, 100);
+
+createLineChart('chartB12', [
+  ds('Vitamin B12 (pg/mL)', [728,808,null,955,474,433,378,688], '#34A853'),
+  {label:'Lower Normal (211)', data: Array(8).fill(211), borderColor:'#EA4335', borderWidth:1.5, borderDash:[5,3], pointRadius:0, fill:false}
+], {min:100, max:1000}, 211, 911);
+
+// FERRITIN & IRON
+const ferritinLabels = ['Sep 20','Apr 23','Jul 24','Aug 25'];
+createLineChart('chartFerritin', [
+  ds('Ferritin (ng/mL)', [294.8,603.9,431.1,588.6], '#EA4335'),
+  {label:'Upper Normal (322)', data: [322,322,322,322], borderColor:'#FBBC04', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:0, max:700}, 22, 322, ferritinLabels);
+
+createLineChart('chartIron', [
+  ds('Iron (µg/dL)', [null,51,80.5,62,89,76.1,81,76], '#1A73E8'),
+  {label:'Lower Normal (65)', data: Array(8).fill(65), borderColor:'#FBBC04', borderWidth:1.5, borderDash:[5,3], pointRadius:0, fill:false}
+], {min:30, max:180}, 65, 175);
+
+// INFLAMMATORY CHARTS
+createLineChart('chartESR', [
+  ds('ESR (mm/hr)', [16,null,null,30,9,54,11,27], '#FA903E'),
+  {label:'Normal (<10)', data: Array(8).fill(10), borderColor:'#34A853', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:0, max:60}, null, 10);
+
+const homoLabels = ['Dec 19','Apr 23','Aug 25'];
+createLineChart('chartHomocysteine', [
+  ds('Homocysteine (µmol/L)', [7.9,14.83,13.29], '#A142F4'),
+  {label:'Upper Normal (14.9)', data: [14.9,14.9,14.9], borderColor:'#EA4335', borderWidth:2, borderDash:[6,4], pointRadius:0, fill:false}
+], {min:5, max:18}, null, 14.9, homoLabels);
+
+// CBC CHARTS
+createLineChart('chartHb', [
+  ds('Hemoglobin (g/dL)', [null,14.6,15.1,14.2,14.6,15,14,14.5], '#34A853'),
+], {min:12, max:17}, 13, 17);
+
+createLineChart('chartPlatelets', [
+  ds('Platelets (10³/µL)', [null,218,252,182,224,206,158,187], '#1A73E8'),
+  {label:'Lower Normal (150)', data: Array(8).fill(150), borderColor:'#FBBC04', borderWidth:1.5, borderDash:[5,3], pointRadius:0, fill:false}
+], {min:100, max:300}, 150, 410);
+</script>
+</body>
+</html>

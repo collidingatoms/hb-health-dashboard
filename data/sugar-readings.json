@@ -1,0 +1,1816 @@
+{
+  "source": "Extracted from Blood Sugar Readings.xlsx and Blood Sugar Readings Old.xlsx",
+  "totalReadings": 292,
+  "dateRange": {
+    "from": "2015-05-16",
+    "to": "2023-05-03"
+  },
+  "readings": [
+    {
+      "date": "2015-05-16",
+      "time": "03:00",
+      "type": "Random",
+      "value": 86,
+      "remarks": "Late Night shivering, woken out of sleep,   Shaky hands, heart sinking feeling.  Had 4 Parle Marie Biscuits and 2 spoons of sugar"
+    },
+    {
+      "date": "2015-05-16",
+      "time": "03:15",
+      "type": "Random",
+      "value": 158,
+      "remarks": "Late Night shivering, woken out of sleep,   Shaky hands, heart sinking feeling.  Had 4 Parle Marie Biscuits and 2 spoons of sugar"
+    },
+    {
+      "date": "2015-05-16",
+      "time": "21:10",
+      "type": "Pre Dinner",
+      "value": 240,
+      "remarks": "Late Night shivering, woken out of sleep,   Shaky hands, heart sinking feeling.  Had 4 Parle Marie Biscuits and 2 spoons of sugar"
+    },
+    {
+      "date": "2015-05-16",
+      "time": "23:50",
+      "type": "Post Dinner",
+      "value": 105,
+      "remarks": "Late Night shivering, woken out of sleep,   Shaky hands, heart sinking feeling.  Had 4 Parle Marie Biscuits and 2 spoons of sugar"
+    },
+    {
+      "date": "2015-05-17",
+      "time": "10:25",
+      "type": "Pre Breakfast",
+      "value": 222
+    },
+    {
+      "date": "2015-05-17",
+      "time": "12:55",
+      "type": "Pre Lunch",
+      "value": 251
+    },
+    {
+      "date": "2015-05-17",
+      "time": "16:10",
+      "type": "Post Lunch",
+      "value": 232
+    },
+    {
+      "date": "2015-05-17",
+      "time": "20:30",
+      "type": "Pre Dinner",
+      "value": 207
+    },
+    {
+      "date": "2015-05-18",
+      "time": "07:50",
+      "type": "Pre Breakfast",
+      "value": 182
+    },
+    {
+      "date": "2015-05-18",
+      "time": "19:40",
+      "type": "Pre Dinner",
+      "value": 233
+    },
+    {
+      "date": "2015-05-18",
+      "time": "23:50",
+      "type": "Post Dinner",
+      "value": 277
+    },
+    {
+      "date": "2015-05-19",
+      "time": "00:05",
+      "type": "Post Dinner",
+      "value": 168,
+      "remarks": "Sugar going low at 4:30 PM.  Took 1 small spoon of sugar."
+    },
+    {
+      "date": "2015-05-19",
+      "time": "08:00",
+      "type": "Pre Breakfast",
+      "value": 204,
+      "remarks": "Sugar going low at 4:30 PM.  Took 1 small spoon of sugar."
+    },
+    {
+      "date": "2015-05-19",
+      "time": "13:05",
+      "type": "Pre Lunch",
+      "value": 164,
+      "remarks": "Sugar going low at 4:30 PM.  Took 1 small spoon of sugar."
+    },
+    {
+      "date": "2015-05-19",
+      "time": "15:30",
+      "type": "Post Lunch",
+      "value": 154,
+      "remarks": "Sugar going low at 4:30 PM.  Took 1 small spoon of sugar."
+    },
+    {
+      "date": "2015-05-19",
+      "time": "16:40",
+      "type": "Random",
+      "value": 151,
+      "remarks": "Sugar going low at 4:30 PM.  Took 1 small spoon of sugar."
+    },
+    {
+      "date": "2015-05-19",
+      "time": "20:40",
+      "type": "Pre Dinner",
+      "value": 246,
+      "remarks": "Sugar going low at 4:30 PM.  Took 1 small spoon of sugar."
+    },
+    {
+      "date": "2015-05-20",
+      "time": "08:15",
+      "type": "Pre Breakfast",
+      "value": 165
+    },
+    {
+      "date": "2015-05-20",
+      "time": "12:30",
+      "type": "Pre Lunch",
+      "value": 197
+    },
+    {
+      "date": "2015-05-20",
+      "time": "15:30",
+      "type": "Post Lunch",
+      "value": 230
+    },
+    {
+      "date": "2015-05-20",
+      "time": "19:25",
+      "type": "Pre Dinner",
+      "value": 201
+    },
+    {
+      "date": "2015-05-20",
+      "time": "23:10",
+      "type": "Post Dinner",
+      "value": 284
+    },
+    {
+      "date": "2015-05-21",
+      "time": "10:00",
+      "type": "Pre Breakfast",
+      "value": 154,
+      "remarks": "Felt shivers, cold hands, shaking hands just before lunch. Ate lunch quick and fast.  Feeling is subsiding slowly."
+    },
+    {
+      "date": "2015-05-21",
+      "time": "13:30",
+      "type": "Pre Lunch",
+      "value": 101,
+      "remarks": "Felt shivers, cold hands, shaking hands just before lunch. Ate lunch quick and fast.  Feeling is subsiding slowly."
+    },
+    {
+      "date": "2015-05-21",
+      "time": "16:00",
+      "type": "Post Lunch",
+      "value": 228,
+      "remarks": "Felt shivers, cold hands, shaking hands just before lunch. Ate lunch quick and fast.  Feeling is subsiding slowly."
+    },
+    {
+      "date": "2015-05-21",
+      "time": "18:20",
+      "type": "Pre Dinner",
+      "value": 214,
+      "remarks": "Felt shivers, cold hands, shaking hands just before lunch. Ate lunch quick and fast.  Feeling is subsiding slowly."
+    },
+    {
+      "date": "2015-05-21",
+      "time": "21:00",
+      "type": "Random",
+      "value": 161,
+      "remarks": "Felt shivers, cold hands, shaking hands just before lunch. Ate lunch quick and fast.  Feeling is subsiding slowly."
+    },
+    {
+      "date": "2015-05-21",
+      "time": "23:15",
+      "type": "Post Dinner",
+      "value": 113,
+      "remarks": "Felt shivers, cold hands, shaking hands just before lunch. Ate lunch quick and fast.  Feeling is subsiding slowly."
+    },
+    {
+      "date": "2015-05-22",
+      "time": "03:40",
+      "type": "Random",
+      "value": 104
+    },
+    {
+      "date": "2015-05-22",
+      "time": "09:55",
+      "type": "Pre Breakfast",
+      "value": 141
+    },
+    {
+      "date": "2015-05-22",
+      "time": "12:40",
+      "type": "Pre Lunch",
+      "value": 189
+    },
+    {
+      "date": "2015-05-22",
+      "time": "21:00",
+      "type": "Pre Dinner",
+      "value": 198
+    },
+    {
+      "date": "2015-05-22",
+      "time": "23:45",
+      "type": "Post Dinner",
+      "value": 239
+    },
+    {
+      "date": "2015-05-23",
+      "time": "00:05",
+      "type": "Post Dinner",
+      "value": 254
+    },
+    {
+      "date": "2015-05-23",
+      "time": "09:10",
+      "type": "Pre Breakfast",
+      "value": 154
+    },
+    {
+      "date": "2015-05-23",
+      "time": "20:00",
+      "type": "Pre Dinner",
+      "value": 132
+    },
+    {
+      "date": "2015-05-24",
+      "time": "01:30",
+      "type": "Post Dinner",
+      "value": 98
+    },
+    {
+      "date": "2015-05-24",
+      "time": "10:30",
+      "type": "Pre Breakfast",
+      "value": 158
+    },
+    {
+      "date": "2015-05-24",
+      "time": "13:45",
+      "type": "Pre Lunch",
+      "value": 114
+    },
+    {
+      "date": "2015-05-24",
+      "time": "16:30",
+      "type": "Post Lunch",
+      "value": 139
+    },
+    {
+      "date": "2015-05-24",
+      "time": "19:45",
+      "type": "Pre Dinner",
+      "value": 166
+    },
+    {
+      "date": "2015-05-25",
+      "time": "00:30",
+      "type": "Post Dinner",
+      "value": 273
+    },
+    {
+      "date": "2015-05-25",
+      "time": "10:00",
+      "type": "Pre Breakfast",
+      "value": 126
+    },
+    {
+      "date": "2015-05-25",
+      "time": "13:00",
+      "type": "Pre Lunch",
+      "value": 141
+    },
+    {
+      "date": "2015-05-25",
+      "time": "16:00",
+      "type": "Post Lunch",
+      "value": 145
+    },
+    {
+      "date": "2015-05-26",
+      "time": "00:15",
+      "type": "Post Dinner",
+      "value": 156,
+      "remarks": "late night 4 am shivers and hunger."
+    },
+    {
+      "date": "2015-05-26",
+      "time": "11:30",
+      "type": "Random",
+      "value": 180,
+      "remarks": "late night 4 am shivers and hunger."
+    },
+    {
+      "date": "2015-05-26",
+      "time": "13:20",
+      "type": "Pre Lunch",
+      "value": 86,
+      "remarks": "late night 4 am shivers and hunger."
+    },
+    {
+      "date": "2015-05-26",
+      "time": "21:45",
+      "type": "Pre Dinner",
+      "value": 169,
+      "remarks": "late night 4 am shivers and hunger."
+    },
+    {
+      "date": "2015-05-27",
+      "time": "00:20",
+      "type": "Post Dinner",
+      "value": 226,
+      "remarks": "Missed morning insulin"
+    },
+    {
+      "date": "2015-05-27",
+      "time": "10:15",
+      "type": "Pre Breakfast",
+      "value": 123,
+      "remarks": "Missed morning insulin"
+    },
+    {
+      "date": "2015-05-27",
+      "time": "12:45",
+      "type": "Pre Lunch",
+      "value": 140,
+      "remarks": "Missed morning insulin"
+    },
+    {
+      "date": "2015-05-27",
+      "time": "15:40",
+      "type": "Post Lunch",
+      "value": 177,
+      "remarks": "Missed morning insulin"
+    },
+    {
+      "date": "2015-05-27",
+      "time": "21:55",
+      "type": "Pre Dinner",
+      "value": 222,
+      "remarks": "Missed morning insulin"
+    },
+    {
+      "date": "2015-05-28",
+      "time": "10:20",
+      "type": "Pre Breakfast",
+      "value": 125
+    },
+    {
+      "date": "2015-05-28",
+      "time": "13:10",
+      "type": "Pre Lunch",
+      "value": 176
+    },
+    {
+      "date": "2015-05-28",
+      "time": "16:00",
+      "type": "Post Lunch",
+      "value": 216
+    },
+    {
+      "date": "2015-05-28",
+      "time": "19:40",
+      "type": "Random",
+      "value": 182
+    },
+    {
+      "date": "2015-05-28",
+      "time": "21:10",
+      "type": "Pre Dinner",
+      "value": 163
+    },
+    {
+      "date": "2015-05-28",
+      "time": "23:40",
+      "type": "Post Dinner",
+      "value": 118
+    },
+    {
+      "date": "2015-05-29",
+      "time": "01:10",
+      "type": "Post Dinner",
+      "value": 120
+    },
+    {
+      "date": "2015-05-29",
+      "time": "10:00",
+      "type": "Pre Breakfast",
+      "value": 117
+    },
+    {
+      "date": "2015-05-29",
+      "time": "13:15",
+      "type": "Pre Lunch",
+      "value": 274
+    },
+    {
+      "date": "2015-05-29",
+      "time": "16:20",
+      "type": "Post Lunch",
+      "value": 118
+    },
+    {
+      "date": "2015-05-29",
+      "time": "21:00",
+      "type": "Pre Dinner",
+      "value": 148
+    },
+    {
+      "date": "2015-05-30",
+      "time": "14:25",
+      "type": "Pre Lunch",
+      "value": 98
+    },
+    {
+      "date": "2015-05-30",
+      "time": "17:40",
+      "type": "Post Lunch",
+      "value": 197
+    },
+    {
+      "date": "2015-05-30",
+      "time": "20:50",
+      "type": "Pre Dinner",
+      "value": 150
+    },
+    {
+      "date": "2015-05-30",
+      "time": "23:30",
+      "type": "Post Dinner",
+      "value": 139
+    },
+    {
+      "date": "2015-05-31",
+      "time": "00:50",
+      "type": "Random",
+      "value": 132,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-05-31",
+      "time": "14:40",
+      "type": "Pre Lunch",
+      "value": 98,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-05-31",
+      "time": "23:15",
+      "type": "Post Dinner",
+      "value": 186,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-01",
+      "time": "08:00",
+      "type": "Pre Breakfast",
+      "value": 120
+    },
+    {
+      "date": "2015-06-01",
+      "time": "12:50",
+      "type": "Pre Lunch",
+      "value": 85
+    },
+    {
+      "date": "2015-06-01",
+      "time": "15:00",
+      "type": "Post Lunch",
+      "value": 207
+    },
+    {
+      "date": "2015-06-01",
+      "time": "21:50",
+      "type": "Pre Dinner",
+      "value": 128
+    },
+    {
+      "date": "2015-06-02",
+      "time": "00:15",
+      "type": "Post Dinner",
+      "value": 181
+    },
+    {
+      "date": "2015-06-02",
+      "time": "09:50",
+      "type": "Pre Dinner",
+      "value": 198
+    },
+    {
+      "date": "2015-06-02",
+      "time": "11:10",
+      "type": "Pre Breakfast",
+      "value": 116
+    },
+    {
+      "date": "2015-06-02",
+      "time": "13:44",
+      "type": "Pre Lunch",
+      "value": 96
+    },
+    {
+      "date": "2015-06-03",
+      "time": "10:00",
+      "type": "Pre Breakfast",
+      "value": 110
+    },
+    {
+      "date": "2015-06-03",
+      "time": "13:50",
+      "type": "Pre Lunch",
+      "value": 88
+    },
+    {
+      "date": "2015-06-03",
+      "time": "20:00",
+      "type": "Pre Dinner",
+      "value": 174
+    },
+    {
+      "date": "2015-06-04",
+      "time": "00:00",
+      "type": "Post Dinner",
+      "value": 79
+    },
+    {
+      "date": "2015-06-04",
+      "time": "13:05",
+      "type": "Pre Lunch",
+      "value": 115
+    },
+    {
+      "date": "2015-06-04",
+      "time": "16:05",
+      "type": "Post Lunch",
+      "value": 91
+    },
+    {
+      "date": "2015-06-04",
+      "time": "20:50",
+      "type": "Pre Dinner",
+      "value": 160
+    },
+    {
+      "date": "2015-06-05",
+      "time": "03:00",
+      "type": "Post Dinner",
+      "value": 102
+    },
+    {
+      "date": "2015-06-05",
+      "time": "13:30",
+      "type": "Pre Lunch",
+      "value": 96
+    },
+    {
+      "date": "2015-06-05",
+      "time": "14:25",
+      "type": "Post Lunch",
+      "value": 192
+    },
+    {
+      "date": "2015-06-06",
+      "time": "03:00",
+      "type": "Post Dinner",
+      "value": 91
+    },
+    {
+      "date": "2015-06-06",
+      "time": "12: 00 am",
+      "type": "Pre Dinner",
+      "value": 179
+    },
+    {
+      "date": "2015-06-06",
+      "time": "13:35",
+      "type": "Pre Lunch",
+      "value": 126
+    },
+    {
+      "date": "2015-06-06",
+      "time": "21:45",
+      "type": "Random",
+      "value": 127
+    },
+    {
+      "date": "2015-06-07",
+      "time": "01:40",
+      "type": "Post Dinner",
+      "value": 92
+    },
+    {
+      "date": "2015-06-07",
+      "time": "14:10",
+      "type": "Pre Lunch",
+      "value": 112
+    },
+    {
+      "date": "2015-06-07",
+      "time": "16:20",
+      "type": "Post Lunch",
+      "value": 267
+    },
+    {
+      "date": "2015-06-07",
+      "time": "18:20",
+      "type": "Random",
+      "value": 128
+    },
+    {
+      "date": "2015-06-07",
+      "time": "19:40",
+      "type": "Pre Dinner",
+      "value": 113
+    },
+    {
+      "date": "2015-06-08",
+      "time": "08:40",
+      "type": "Pre Breakfast",
+      "value": 117
+    },
+    {
+      "date": "2015-06-08",
+      "time": "13:06",
+      "type": "Pre Lunch",
+      "value": 86
+    },
+    {
+      "date": "2015-06-08",
+      "time": "22:40",
+      "type": "Post Dinner",
+      "value": 159
+    },
+    {
+      "date": "2015-06-09",
+      "time": "11:00",
+      "type": "Pre Breakfast",
+      "value": 117
+    },
+    {
+      "date": "2015-06-09",
+      "time": "13:30",
+      "type": "Pre Lunch",
+      "value": 96
+    },
+    {
+      "date": "2015-06-09",
+      "time": "20:00",
+      "type": "Pre Dinner",
+      "value": 166
+    },
+    {
+      "date": "2015-06-10",
+      "time": "01:00",
+      "type": "Post Dinner",
+      "value": 91
+    },
+    {
+      "date": "2015-06-10",
+      "time": "11:23",
+      "type": "Pre Breakfast",
+      "value": 118
+    },
+    {
+      "date": "2015-06-10",
+      "time": "21:00",
+      "type": "Pre Dinner",
+      "value": 154
+    },
+    {
+      "date": "2015-06-11",
+      "time": "00:00",
+      "type": "Post Dinner",
+      "value": 156
+    },
+    {
+      "date": "2015-06-11",
+      "time": "10:24",
+      "type": "Pre Breakfast",
+      "value": 112
+    },
+    {
+      "date": "2015-06-11",
+      "time": "16:30",
+      "type": "Post Lunch",
+      "value": 107
+    },
+    {
+      "date": "2015-06-11",
+      "time": "20:15",
+      "type": "Pre Dinner",
+      "value": 109
+    },
+    {
+      "date": "2015-06-12",
+      "time": "10:50",
+      "type": "Pre Breakfast",
+      "value": 110,
+      "remarks": "Felt low sugar later in evening. Had to eat."
+    },
+    {
+      "date": "2015-06-12",
+      "time": "20:40",
+      "type": "Pre Dinner",
+      "value": 129,
+      "remarks": "Felt low sugar later in evening. Had to eat."
+    },
+    {
+      "date": "2015-06-13",
+      "time": "13:20",
+      "type": "Pre Lunch",
+      "value": 101
+    },
+    {
+      "date": "2015-06-13",
+      "time": "14:20",
+      "type": "Post Lunch",
+      "value": 168
+    },
+    {
+      "date": "2015-06-13",
+      "time": "19:05",
+      "type": "Random",
+      "value": 179
+    },
+    {
+      "date": "2015-06-13",
+      "time": "22:10",
+      "type": "Pre Dinner",
+      "value": 86
+    },
+    {
+      "date": "2015-06-13",
+      "time": "23:40",
+      "type": "Post Dinner",
+      "value": 156
+    },
+    {
+      "date": "2015-06-14",
+      "time": "01:10",
+      "type": "Random",
+      "value": 117,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-14",
+      "time": "02:10",
+      "type": "Random",
+      "value": 144,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-14",
+      "time": "16:45",
+      "type": "Pre Lunch",
+      "value": 95,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-14",
+      "time": "18:00",
+      "type": "Post Lunch",
+      "value": 159,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-14",
+      "time": "21:40",
+      "type": "Pre Dinner",
+      "value": 133,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-15",
+      "time": "01:10",
+      "type": "Pre Lunch",
+      "value": 90
+    },
+    {
+      "date": "2015-06-15",
+      "time": "09:05",
+      "type": "Pre Breakfast",
+      "value": 118
+    },
+    {
+      "date": "2015-06-15",
+      "time": "15:00",
+      "type": "Post Lunch",
+      "value": 140
+    },
+    {
+      "date": "2015-06-15",
+      "time": "22:00",
+      "type": "Post Dinner",
+      "value": 88
+    },
+    {
+      "date": "2015-06-16",
+      "time": "09:10",
+      "type": "Pre Breakfast",
+      "value": 97
+    },
+    {
+      "date": "2015-06-16",
+      "time": "13:50",
+      "type": "Pre Lunch",
+      "value": 70
+    },
+    {
+      "date": "2015-06-16",
+      "time": "16:10",
+      "type": "Post Lunch",
+      "value": 132
+    },
+    {
+      "date": "2015-06-16",
+      "time": "23:40",
+      "type": "Post Dinner",
+      "value": 176
+    },
+    {
+      "date": "2015-06-17",
+      "time": "10:30",
+      "type": "Pre Breakfast",
+      "value": 111
+    },
+    {
+      "date": "2015-06-17",
+      "time": "20:30",
+      "type": "Pre Dinner",
+      "value": 99
+    },
+    {
+      "date": "2015-06-18",
+      "time": "10:45",
+      "type": "Pre Breakfast",
+      "value": 125
+    },
+    {
+      "date": "2015-06-18",
+      "time": "15:00",
+      "type": "Post Lunch",
+      "value": 121
+    },
+    {
+      "date": "2015-06-18",
+      "time": "23:10",
+      "type": "Post Dinner",
+      "value": 114
+    },
+    {
+      "date": "2015-06-19",
+      "time": "02:00",
+      "type": "Random",
+      "value": 78
+    },
+    {
+      "date": "2015-06-19",
+      "time": "11:40",
+      "type": "Pre Breakfast",
+      "value": 114
+    },
+    {
+      "date": "2015-06-19",
+      "time": "22:10",
+      "type": "Post Dinner",
+      "value": 166
+    },
+    {
+      "date": "2015-06-20",
+      "time": "00:10",
+      "type": "Random",
+      "value": 196,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-20",
+      "time": "11:10",
+      "type": "Pre Breakfast",
+      "value": 101,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-20",
+      "time": "22:27",
+      "type": "Post Dinner",
+      "value": 244,
+      "remarks": "took insulin post dinner"
+    },
+    {
+      "date": "2015-06-21",
+      "time": "01:00",
+      "type": "Post Dinner",
+      "value": 85,
+      "remarks": "7:02 PM - 111, 2:25 PM - 261 | consumed sugar"
+    },
+    {
+      "date": "2015-06-21",
+      "time": "01:00",
+      "type": "Random",
+      "value": 85,
+      "remarks": "7:02 PM - 111, 2:25 PM - 261 | consumed sugar"
+    },
+    {
+      "date": "2015-06-21",
+      "time": "02:20",
+      "type": "Random",
+      "value": 101,
+      "remarks": "7:02 PM - 111, 2:25 PM - 261 | consumed sugar"
+    },
+    {
+      "date": "2015-06-21",
+      "time": "09:06",
+      "type": "Pre Breakfast",
+      "value": 119,
+      "remarks": "7:02 PM - 111, 2:25 PM - 261 | consumed sugar"
+    },
+    {
+      "date": "2015-06-21",
+      "time": "14:18",
+      "type": "Pre Lunch",
+      "value": 69,
+      "remarks": "7:02 PM - 111, 2:25 PM - 261 | consumed sugar"
+    },
+    {
+      "date": "2015-06-21",
+      "time": "21:45",
+      "type": "Post Lunch",
+      "value": 125,
+      "remarks": "7:02 PM - 111, 2:25 PM - 261 | consumed sugar"
+    },
+    {
+      "date": "2015-06-21",
+      "time": "23:40",
+      "type": "Pre Dinner",
+      "value": 102,
+      "remarks": "7:02 PM - 111, 2:25 PM - 261 | consumed sugar"
+    },
+    {
+      "date": "2015-06-22",
+      "time": "10:00",
+      "type": "Pre Breakfast",
+      "value": 97
+    },
+    {
+      "date": "2015-06-22",
+      "time": "14:00",
+      "type": "Pre Lunch",
+      "value": 86
+    },
+    {
+      "date": "2015-06-22",
+      "time": "23:40",
+      "type": "Post Dinner",
+      "value": 155
+    },
+    {
+      "date": "2015-06-23",
+      "time": "01:00",
+      "type": "Post Dinner",
+      "value": 136
+    },
+    {
+      "date": "2015-06-23",
+      "time": "10:00",
+      "type": "Pre Breakfast",
+      "value": 112
+    },
+    {
+      "date": "2015-06-24",
+      "time": "01:15",
+      "type": "Random",
+      "value": 95
+    },
+    {
+      "date": "2015-06-24",
+      "time": "13:06",
+      "type": "Pre Breakfast",
+      "value": 104
+    },
+    {
+      "date": "2015-06-24",
+      "time": "15:30",
+      "type": "Pre Lunch",
+      "value": 126
+    },
+    {
+      "date": "2015-06-24",
+      "time": "17:10",
+      "type": "Post Lunch",
+      "value": 102
+    },
+    {
+      "date": "2015-06-24",
+      "time": "21:25",
+      "type": "Pre Dinner",
+      "value": 100
+    },
+    {
+      "date": "2015-06-24",
+      "time": "23:13",
+      "type": "Post Dinner",
+      "value": 125
+    },
+    {
+      "date": "2015-06-25",
+      "time": "00:35",
+      "type": "Post Dinner",
+      "value": 137
+    },
+    {
+      "date": "2015-06-25",
+      "time": "10:20",
+      "type": "Pre Breakfast",
+      "value": 109
+    },
+    {
+      "date": "2015-06-25",
+      "time": "13:10",
+      "type": "Pre Lunch",
+      "value": 107
+    },
+    {
+      "date": "2015-06-25",
+      "time": "15:30",
+      "type": "Post Lunch",
+      "value": 106
+    },
+    {
+      "date": "2015-06-25",
+      "time": "22:00",
+      "type": "Pre Dinner",
+      "value": 114
+    },
+    {
+      "date": "2015-06-26",
+      "time": "03:20",
+      "type": "Random",
+      "value": 79
+    },
+    {
+      "date": "2015-06-26",
+      "time": "12:40",
+      "type": "Pre Lunch",
+      "value": 97
+    },
+    {
+      "date": "2015-06-26",
+      "time": "13:34",
+      "type": "Post Dinner",
+      "value": 144
+    },
+    {
+      "date": "2015-06-26",
+      "time": "15:40",
+      "type": "Post Lunch",
+      "value": 148
+    },
+    {
+      "date": "2015-06-26",
+      "time": "19:50",
+      "type": "Pre Dinner",
+      "value": 88
+    },
+    {
+      "date": "2015-06-27",
+      "time": "05:00",
+      "type": "Random",
+      "value": 84
+    },
+    {
+      "date": "2015-06-27",
+      "time": "10:45",
+      "type": "Pre Breakfast",
+      "value": 112
+    },
+    {
+      "date": "2015-06-27",
+      "time": "23:55",
+      "type": "Post Dinner",
+      "value": 165
+    },
+    {
+      "date": "2015-06-28",
+      "time": "00:10",
+      "type": "Post Dinner",
+      "value": 148
+    },
+    {
+      "date": "2015-06-28",
+      "time": "17:09",
+      "type": "Random",
+      "value": 190
+    },
+    {
+      "date": "2015-06-28",
+      "time": "19:29",
+      "type": "Post Lunch",
+      "value": 107
+    },
+    {
+      "date": "2015-06-28",
+      "time": "20:50",
+      "type": "Pre Dinner",
+      "value": 89
+    },
+    {
+      "date": "2015-06-29",
+      "time": "01:00",
+      "type": "Post Dinner",
+      "value": 156
+    },
+    {
+      "date": "2015-06-29",
+      "time": "11:19",
+      "type": "Pre Breakfast",
+      "value": 97
+    },
+    {
+      "date": "2015-06-29",
+      "time": "13:50",
+      "type": "Pre Lunch",
+      "value": 86
+    },
+    {
+      "date": "2015-06-29",
+      "time": "18:00",
+      "type": "Post Lunch",
+      "value": 89
+    },
+    {
+      "date": "2015-06-29",
+      "time": "20:55",
+      "type": "Pre Dinner",
+      "value": 91
+    },
+    {
+      "date": "2015-06-30",
+      "time": "13:00",
+      "type": "Pre Lunch",
+      "value": 117
+    },
+    {
+      "date": "2015-06-30",
+      "time": "15:15",
+      "type": "Post Lunch",
+      "value": 173
+    },
+    {
+      "date": "2015-06-30",
+      "time": "16:40",
+      "type": "Random",
+      "value": 144
+    },
+    {
+      "date": "2015-06-30",
+      "time": "20:55",
+      "type": "Pre Dinner",
+      "value": 89
+    },
+    {
+      "date": "2015-07-01",
+      "time": "01:04",
+      "type": "Post Dinner",
+      "value": 109
+    },
+    {
+      "date": "2015-07-01",
+      "time": "11:38",
+      "type": "Pre Breakfast",
+      "value": 100
+    },
+    {
+      "date": "2015-07-01",
+      "time": "16:15",
+      "type": "Post Lunch",
+      "value": 112
+    },
+    {
+      "date": "2015-07-01",
+      "time": "21:25",
+      "type": "Pre Dinner",
+      "value": 88
+    },
+    {
+      "date": "2015-07-02",
+      "time": "10:37",
+      "type": "Pre Breakfast",
+      "value": 104
+    },
+    {
+      "date": "2015-07-02",
+      "time": "21:07",
+      "type": "Pre Dinner",
+      "value": 108
+    },
+    {
+      "date": "2015-07-02",
+      "time": "23:20",
+      "type": "Post Dinner",
+      "value": 123
+    },
+    {
+      "date": "2015-07-03",
+      "time": "10:24",
+      "type": "Pre Breakfast",
+      "value": 112
+    },
+    {
+      "date": "2015-07-03",
+      "time": "13:24",
+      "type": "Pre Lunch",
+      "value": 122
+    },
+    {
+      "date": "2015-07-03",
+      "time": "19:40",
+      "type": "Pre Dinner",
+      "value": 168
+    },
+    {
+      "date": "2015-07-04",
+      "time": "01:05",
+      "type": "Post Dinner",
+      "value": 147
+    },
+    {
+      "date": "2015-07-04",
+      "time": "11:25",
+      "type": "Pre Breakfast",
+      "value": 94
+    },
+    {
+      "date": "2015-07-04",
+      "time": "21:50",
+      "type": "Pre Dinner",
+      "value": 86
+    },
+    {
+      "date": "2015-07-05",
+      "time": "10:30",
+      "type": "Pre Breakfast",
+      "value": 89
+    },
+    {
+      "date": "2015-07-05",
+      "time": "20:40",
+      "type": "Pre Dinner",
+      "value": 130
+    },
+    {
+      "date": "2015-07-06",
+      "time": "22:00",
+      "type": "Pre Dinner",
+      "value": 87
+    },
+    {
+      "date": "2015-07-07",
+      "time": "01:00",
+      "type": "Post Dinner",
+      "value": 134
+    },
+    {
+      "date": "2015-07-07",
+      "time": "12:10",
+      "type": "Pre Lunch",
+      "value": 92
+    },
+    {
+      "date": "2015-07-07",
+      "time": "20:30",
+      "type": "Pre Dinner",
+      "value": 108
+    },
+    {
+      "date": "2015-07-08",
+      "time": "01:10",
+      "type": "Post Dinner",
+      "value": 117
+    },
+    {
+      "date": "2015-07-08",
+      "time": "14:10",
+      "type": "Pre Lunch",
+      "value": 84
+    },
+    {
+      "date": "2015-07-09",
+      "time": "10:25",
+      "type": "Pre Breakfast",
+      "value": 116
+    },
+    {
+      "date": "2015-07-09",
+      "time": "23:10",
+      "type": "Post Dinner",
+      "value": 198
+    },
+    {
+      "date": "2015-07-10",
+      "time": "00:30",
+      "type": "Post Dinner",
+      "value": 178
+    },
+    {
+      "date": "2015-07-10",
+      "time": "11:15",
+      "type": "Pre Breakfast",
+      "value": 99
+    },
+    {
+      "date": "2015-07-11",
+      "time": "21:00",
+      "type": "Pre Dinner",
+      "value": 121
+    },
+    {
+      "date": "2015-07-11",
+      "time": "23:40",
+      "type": "Post Dinner",
+      "value": 119
+    },
+    {
+      "date": "2015-07-12",
+      "time": "02:00",
+      "type": "Post Dinner",
+      "value": 91
+    },
+    {
+      "date": "2015-07-12",
+      "time": "13:45",
+      "type": "Pre Lunch",
+      "value": 92
+    },
+    {
+      "date": "2015-07-12",
+      "time": "17:40",
+      "type": "Post Lunch",
+      "value": 86
+    },
+    {
+      "date": "2015-07-12",
+      "time": "19:10",
+      "type": "Random",
+      "value": 121
+    },
+    {
+      "date": "2015-07-12",
+      "time": "20:20",
+      "type": "Pre Dinner",
+      "value": 129
+    },
+    {
+      "date": "2015-07-13",
+      "time": "00:10",
+      "type": "Post Dinner",
+      "value": 176,
+      "remarks": "missed metsmall whole day"
+    },
+    {
+      "date": "2015-07-13",
+      "time": "10:15",
+      "type": "Pre Breakfast",
+      "value": 96,
+      "remarks": "missed metsmall whole day"
+    },
+    {
+      "date": "2015-07-13",
+      "time": "13:00",
+      "type": "Pre Lunch",
+      "value": 122,
+      "remarks": "missed metsmall whole day"
+    },
+    {
+      "date": "2015-07-14",
+      "time": "20:30",
+      "type": "Pre Dinner",
+      "value": 144
+    },
+    {
+      "date": "2015-07-15",
+      "time": "10:30",
+      "type": "Pre Breakfast",
+      "value": 107
+    },
+    {
+      "date": "2015-07-15",
+      "time": "22:20",
+      "type": "Post Dinner",
+      "value": 105
+    },
+    {
+      "date": "2015-07-16",
+      "time": "10:30",
+      "type": "Pre Breakfast",
+      "value": 109
+    },
+    {
+      "date": "2015-07-16",
+      "time": "14:20",
+      "type": "Post Lunch",
+      "value": 143
+    },
+    {
+      "date": "2016-11-01",
+      "time": "22:10",
+      "type": "Pre Dinner",
+      "value": 222
+    },
+    {
+      "date": "2016-11-03",
+      "time": "05:24",
+      "type": "Random",
+      "value": 136
+    },
+    {
+      "date": "2016-11-30",
+      "time": "00:02",
+      "type": "Random",
+      "value": 294
+    },
+    {
+      "date": "2016-11-30",
+      "time": "09:37",
+      "type": "Pre Breakfast",
+      "value": 130
+    },
+    {
+      "date": "2017-02-25",
+      "time": "22:10",
+      "type": "Pre Dinner",
+      "value": 222
+    },
+    {
+      "date": "2017-02-27",
+      "time": "05:24",
+      "type": "Random",
+      "value": 136
+    },
+    {
+      "date": "2017-03-01",
+      "time": "00:03",
+      "type": "Random",
+      "value": 236
+    },
+    {
+      "date": "2017-03-01",
+      "time": "20:05",
+      "type": "Pre Dinner",
+      "value": 205
+    },
+    {
+      "date": "2017-03-02",
+      "time": "00:20",
+      "type": "Random",
+      "value": 270
+    },
+    {
+      "date": "2017-03-04",
+      "time": "21:40",
+      "type": "Pre Dinner",
+      "value": 140
+    },
+    {
+      "date": "2017-03-05",
+      "time": "15:15",
+      "type": "Post Lunch",
+      "value": 174
+    },
+    {
+      "date": "2017-03-05",
+      "time": "21:50",
+      "type": "Pre Dinner",
+      "value": 180
+    },
+    {
+      "date": "2017-03-05",
+      "time": "23:50",
+      "type": "Post Dinner",
+      "value": 183
+    },
+    {
+      "date": "2017-03-06",
+      "time": "21:50",
+      "type": "Pre Dinner",
+      "value": 210
+    },
+    {
+      "date": "2017-03-06",
+      "time": "23:46",
+      "type": "Post Dinner",
+      "value": 286
+    },
+    {
+      "date": "2017-03-07",
+      "time": "20:07",
+      "type": "Pre Dinner",
+      "value": 139,
+      "remarks": "LCHF START"
+    },
+    {
+      "date": "2017-03-07",
+      "time": "23:30",
+      "type": "Post Dinner",
+      "value": 126,
+      "remarks": "LCHF START"
+    },
+    {
+      "date": "2017-03-08",
+      "time": "20:27",
+      "type": "Pre Dinner",
+      "value": 110
+    },
+    {
+      "date": "2017-03-08",
+      "time": "23:06",
+      "type": "Post Dinner",
+      "value": 166
+    },
+    {
+      "date": "2017-03-09",
+      "time": "10:13",
+      "type": "Pre Lunch",
+      "value": 141,
+      "remarks": "missed metsmall whole day"
+    },
+    {
+      "date": "2017-03-09",
+      "time": "18:51",
+      "type": "Random",
+      "value": 116,
+      "remarks": "missed metsmall whole day"
+    },
+    {
+      "date": "2017-03-09",
+      "time": "21:57",
+      "type": "Pre Dinner",
+      "value": 107,
+      "remarks": "missed metsmall whole day"
+    },
+    {
+      "date": "2017-03-09",
+      "time": "23:47",
+      "type": "Post Dinner",
+      "value": 158,
+      "remarks": "missed metsmall whole day"
+    },
+    {
+      "date": "2017-03-11",
+      "time": "00:39",
+      "type": "Post Dinner",
+      "value": 172
+    },
+    {
+      "date": "2017-03-11",
+      "time": "13:41",
+      "type": "Pre Lunch",
+      "value": 149
+    },
+    {
+      "date": "2017-03-12",
+      "time": "02:42",
+      "type": "Random",
+      "value": 125
+    },
+    {
+      "date": "2017-03-12",
+      "time": "15:56",
+      "type": "Post Lunch",
+      "value": 160
+    },
+    {
+      "date": "2017-03-12",
+      "time": "23:26",
+      "type": "Post Dinner",
+      "value": 112
+    },
+    {
+      "date": "2017-03-13",
+      "time": "14:20",
+      "type": "Post Lunch",
+      "value": 127
+    },
+    {
+      "date": "2017-03-13",
+      "time": "20:56",
+      "type": "Pre Dinner",
+      "value": 109
+    },
+    {
+      "date": "2017-03-13",
+      "time": "23:05",
+      "type": "Post Dinner",
+      "value": 129
+    },
+    {
+      "date": "2017-03-14",
+      "time": "22:51",
+      "type": "Post Dinner",
+      "value": 111
+    },
+    {
+      "date": "2017-03-15",
+      "time": "00:08",
+      "type": "Post Dinner",
+      "value": 111
+    },
+    {
+      "date": "2017-03-16",
+      "time": "00:20",
+      "type": "Random",
+      "value": 169
+    },
+    {
+      "date": "2017-03-16",
+      "time": "23:40",
+      "type": "Post Dinner",
+      "value": 148
+    },
+    {
+      "date": "2017-03-17",
+      "time": "22:09",
+      "type": "Pre Dinner",
+      "value": 93
+    },
+    {
+      "date": "2017-03-18",
+      "time": "10:17",
+      "type": "Pre Lunch",
+      "value": 117
+    },
+    {
+      "date": "2017-03-19",
+      "time": "00:00",
+      "type": "Random",
+      "value": 119
+    },
+    {
+      "date": "2017-03-19",
+      "time": "12:01",
+      "type": "Pre Lunch",
+      "value": 154
+    },
+    {
+      "date": "2017-03-20",
+      "time": "00:08",
+      "type": "Random",
+      "value": 129
+    },
+    {
+      "date": "2017-03-20",
+      "time": "23:40",
+      "type": "Post Dinner",
+      "value": 112
+    },
+    {
+      "date": "2017-03-21",
+      "time": "23:40",
+      "type": "Post Dinner",
+      "value": 120
+    },
+    {
+      "date": "2017-03-22",
+      "time": "22:10",
+      "type": "Post Dinner",
+      "value": 108
+    },
+    {
+      "date": "2017-03-23",
+      "time": "23:22",
+      "type": "Post Dinner",
+      "value": 109
+    },
+    {
+      "date": "2017-03-25",
+      "time": "00:30",
+      "type": "Random",
+      "value": 113
+    },
+    {
+      "date": "2017-03-26",
+      "time": "20:30",
+      "type": "Pre Dinner",
+      "value": 173
+    },
+    {
+      "date": "2017-03-26",
+      "time": "23:50",
+      "type": "Post Dinner",
+      "value": 97
+    },
+    {
+      "date": "2017-03-27",
+      "time": "23:00",
+      "type": "Post Dinner",
+      "value": 160
+    },
+    {
+      "date": "2017-03-28",
+      "time": "20:45",
+      "type": "Pre Dinner",
+      "value": 121
+    },
+    {
+      "date": "2017-03-30",
+      "time": "23:00",
+      "type": "Post Dinner",
+      "value": 257
+    },
+    {
+      "date": "2017-03-31",
+      "time": "02:20",
+      "type": "Random",
+      "value": 121
+    },
+    {
+      "date": "2017-04-01",
+      "time": "15:10",
+      "type": "Post Lunch",
+      "value": 120
+    },
+    {
+      "date": "2017-04-03",
+      "time": "00:44",
+      "type": "Random",
+      "value": 129
+    },
+    {
+      "date": "2023-04-10",
+      "time": "09:30",
+      "type": "Pre Breakfast",
+      "value": 288
+    },
+    {
+      "date": "2023-04-10",
+      "time": "12:50",
+      "type": "Pre Lunch",
+      "value": 298
+    },
+    {
+      "date": "2023-04-10",
+      "time": "19:34",
+      "type": "Pre Dinner",
+      "value": 272
+    },
+    {
+      "date": "2023-04-10",
+      "time": "23:45",
+      "type": "Post Dinner",
+      "value": 285
+    },
+    {
+      "date": "2023-04-11",
+      "time": "09:01",
+      "type": "Pre Breakfast",
+      "value": 296
+    },
+    {
+      "date": "2023-04-15",
+      "time": "09:33",
+      "type": "Pre Breakfast",
+      "value": 209
+    },
+    {
+      "date": "2023-04-15",
+      "time": "12:45",
+      "type": "Pre Lunch",
+      "value": 298
+    },
+    {
+      "date": "2023-04-15",
+      "time": "23:50",
+      "type": "Post Dinner",
+      "value": 236
+    },
+    {
+      "date": "2023-04-20",
+      "time": "10:12",
+      "type": "Pre Breakfast",
+      "value": 365
+    },
+    {
+      "date": "2023-04-20",
+      "time": "13:17 PM",
+      "type": "Pre Lunch",
+      "value": 329
+    },
+    {
+      "date": "2023-04-20",
+      "time": "20:30",
+      "type": "Pre Dinner",
+      "value": 239
+    },
+    {
+      "date": "2023-05-03",
+      "time": "13:45",
+      "type": "Pre Lunch",
+      "value": 307
+    }
+  ]
+}

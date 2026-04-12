@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HB Health — Blood Sugar &amp; BP Tracking</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+:root {
+  --bg:#F8F9FA;--surface:#FFF;--text:#202124;--text-secondary:#5F6368;--border:#E8EAED;
+  --blue:#1A73E8;--green:#34A853;--red:#EA4335;--yellow:#FBBC04;--purple:#A142F4;--orange:#FA903E;
+  --blue-bg:#E8F0FE;--green-bg:#E6F4EA;--red-bg:#FCE8E6;--yellow-bg:#FEF7E0;--purple-bg:#F3E8FD;
+  --shadow:0 1px 3px rgba(60,64,67,0.12);--radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Roboto','Google Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+h1,h2,h3,h4{font-family:'Google Sans','Roboto',sans-serif;}
+nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:32px;}
+.nav-brand{font-family:'Google Sans';font-weight:700;font-size:18px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:8px;}
+.nav-brand span{background:var(--red);color:white;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{padding:8px 16px;border-radius:20px;text-decoration:none;font-size:14px;font-weight:500;color:var(--text-secondary);transition:all 0.2s;}
+.nav-links a:hover{background:var(--blue-bg);color:var(--blue);}
+.nav-links a.active{background:var(--blue-bg);color:var(--blue);}
+.container{max-width:1200px;margin:0 auto;padding:24px;}
+.page-header{margin-bottom:32px;}
+.page-header h1{font-size:28px;margin-bottom:4px;}
+.page-header p{color:var(--text-secondary);font-size:15px;}
+.card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px;}
+.card-body{padding:24px;}
+.chart-container{position:relative;height:300px;margin-bottom:16px;}
+.section{margin-bottom:40px;}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.section h2{font-size:20px;}
+.chip{padding:4px 12px;border-radius:16px;font-size:12px;font-weight:500;}
+.chip-blue{background:var(--blue-bg);color:var(--blue);}
+.chip-green{background:var(--green-bg);color:var(--green);}
+.chip-yellow{background:var(--yellow-bg);color:#E37400;}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group label{font-size:13px;font-weight:500;color:var(--text-secondary);}
+.form-group input,.form-group select{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Roboto',sans-serif;transition:border-color 0.2s;}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,115,232,0.1);}
+.btn{padding:10px 24px;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;font-family:'Google Sans','Roboto',sans-serif;}
+.btn-primary{background:var(--blue);color:white;}
+.btn-primary:hover{background:#1557B0;box-shadow:0 2px 8px rgba(26,115,232,0.3);}
+.btn-secondary{background:var(--bg);color:var(--text);border:1px solid var(--border);}
+.btn-secondary:hover{background:var(--border);}
+.btn-row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+
+/* DATA TABLE */
+table.readings{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;}
+table.readings th{background:var(--bg);padding:10px 12px;text-align:left;font-weight:500;color:var(--text-secondary);border-bottom:2px solid var(--border);}
+table.readings td{padding:10px 12px;border-bottom:1px solid var(--border);font-family:'Roboto Mono',monospace;}
+table.readings td.high{color:var(--red);font-weight:500;}
+table.readings td.low{color:var(--orange);font-weight:500;}
+table.readings td.normal{color:var(--green);}
+table.readings tr:hover{background:var(--bg);}
+
+/* STATUS BADGE */
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;}
+.badge-high{background:var(--red-bg);color:var(--red);}
+.badge-low{background:var(--yellow-bg);color:#E37400;}
+.badge-normal{background:var(--green-bg);color:var(--green);}
+
+/* INFO BOX */
+.info-box{background:var(--blue-bg);border-radius:8px;padding:20px;margin:16px 0;border-left:3px solid var(--blue);}
+.info-box h4{color:var(--blue);margin-bottom:8px;font-size:14px;}
+.info-box p,.info-box li{font-size:14px;color:var(--text-secondary);line-height:1.7;}
+.info-box ul{margin-left:20px;margin-top:8px;}
+.info-box.warning{background:var(--yellow-bg);border-left-color:var(--orange);}
+.info-box.warning h4{color:var(--orange);}
+.info-box code{background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-family:'Roboto Mono',monospace;font-size:13px;}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:40px;text-align:center;cursor:pointer;transition:all 0.3s;margin:16px 0;}
+.upload-zone:hover{border-color:var(--blue);background:var(--blue-bg);}
+.upload-zone .icon{font-size:36px;margin-bottom:12px;color:var(--text-secondary);}
+.upload-zone p{color:var(--text-secondary);font-size:14px;}
+.upload-zone .formats{font-size:12px;color:var(--text-secondary);margin-top:8px;}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:0;}
+.tab{padding:10px 20px;font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size:13px;border-top:1px solid var(--border);margin-top:40px;}
+@media(max-width:768px){.nav-inner{flex-direction:column;gap:8px;}.container{padding:16px;}.form-grid{grid-template-columns:1fr 1fr;}.chart-container{height:250px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">HB Health <span>DASHBOARD</span></a>
+    <div class="nav-links">
+      <a href="index.html">Blood Work</a>
+      <a href="diabetes.html">Diabetes & Complications</a>
+      <a href="tracking.html" class="active">Daily Tracking</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Blood Sugar &amp; BP Tracking</h1>
+    <p>Daily readings tracker with manual entry and health app import</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('manual')">Manual Entry</div>
+    <div class="tab" onclick="switchTab('import')">Import Data</div>
+    <div class="tab" onclick="switchTab('charts')">Charts &amp; Trends</div>
+    <div class="tab" onclick="switchTab('guide')">Import Guide</div>
+  </div>
+
+  <!-- MANUAL ENTRY TAB -->
+  <div class="tab-panel active" id="tab-manual">
+    <div class="section">
+      <div class="section-header">
+        <h2>Add Reading</h2>
+        <span class="chip chip-blue">Manual Entry</span>
+      </div>
+      <div class="card"><div class="card-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="readingDate" value="">
+          </div>
+          <div class="form-group">
+            <label>Time</label>
+            <input type="time" id="readingTime" value="">
+          </div>
+          <div class="form-group">
+            <label>Reading Type</label>
+            <select id="readingType">
+              <option value="fasting">Fasting Blood Sugar</option>
+              <option value="postmeal">Post-Meal (2hr)</option>
+              <option value="random">Random Blood Sugar</option>
+              <option value="bp">Blood Pressure</option>
+              <option value="weight">Weight</option>
+            </select>
+          </div>
+          <div class="form-group" id="glucoseField">
+            <label>Blood Sugar (mg/dL)</label>
+            <input type="number" id="glucoseValue" placeholder="e.g., 140">
+          </div>
+          <div class="form-group" id="bpFieldSys" style="display:none;">
+            <label>Systolic (mmHg)</label>
+            <input type="number" id="bpSys" placeholder="e.g., 120">
+          </div>
+          <div class="form-group" id="bpFieldDia" style="display:none;">
+            <label>Diastolic (mmHg)</label>
+            <input type="number" id="bpDia" placeholder="e.g., 80">
+          </div>
+          <div class="form-group" id="weightField" style="display:none;">
+            <label>Weight (kg)</label>
+            <input type="number" id="weightValue" placeholder="e.g., 78" step="0.1">
+          </div>
+          <div class="form-group">
+            <label>Notes (optional)</label>
+            <input type="text" id="readingNotes" placeholder="e.g., Before breakfast, after walk">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="addReading()">Add Reading</button>
+          <button class="btn btn-secondary" onclick="exportReadings()">Export CSV</button>
+          <button class="btn btn-secondary" onclick="clearReadings()">Clear All</button>
+        </div>
+      </div></div>
+
+      <!-- READINGS TABLE -->
+      <div class="card"><div class="card-body">
+        <h3>Recent Readings</h3>
+        <div id="readingsTableContainer">
+          <table class="readings">
+            <thead>
+              <tr><th>Date</th><th>Time</th><th>Type</th><th>Value</th><th>Status</th><th>Notes</th></tr>
+            </thead>
+            <tbody id="readingsBody">
+              <tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:32px;">No readings yet. Add your first reading above.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- IMPORT TAB -->
+  <div class="tab-panel" id="tab-import">
+    <div class="section">
+      <div class="section-header">
+        <h2>Import Health Data</h2>
+        <span class="chip chip-green">Bulk Upload</span>
+      </div>
+
+      <div class="card"><div class="card-body">
+        <h3>Upload CSV / JSON File</h3>
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+          <div class="icon">&#128228;</div>
+          <p><strong>Click to upload</strong> or drag and drop</p>
+          <div class="formats">Supports: CSV, JSON, XML (Google Fit export, Apple Health export)</div>
+        </div>
+        <input type="file" id="fileInput" accept=".csv,.json,.xml" style="display:none" onchange="handleFileUpload(event)">
+        <div id="uploadStatus"></div>
+      </div></div>
+
+      <div class="info-box">
+        <h4>&#128220; Expected CSV Format</h4>
+        <p>If you're creating a CSV manually, use this format:</p>
+        <p style="margin-top:8px;"><code>date,time,type,value,value2,notes</code></p>
+        <p style="margin-top:4px;"><code>2026-04-13,07:30,fasting,145,,Before breakfast</code></p>
+        <p><code>2026-04-13,09:30,postmeal,210,,After breakfast</code></p>
+        <p><code>2026-04-13,08:00,bp,130,85,Morning reading</code></p>
+        <p style="margin-top:8px;">Types: <code>fasting</code>, <code>postmeal</code>, <code>random</code>, <code>bp</code>, <code>weight</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS TAB -->
+  <div class="tab-panel" id="tab-charts">
+    <div class="section">
+      <div class="section-header">
+        <h2>Trends &amp; Visualizations</h2>
+        <span class="chip chip-blue">Auto-generated from readings</span>
+      </div>
+
+      <div class="card"><div class="card-body">
+        <h3>Blood Sugar — Daily Trend</h3>
+        <div class="chart-container"><canvas id="chartDaily"></canvas></div>
+        <p style="font-size:13px;color:var(--text-secondary);text-align:center;">Chart populates as you add readings. Target zones shown in green.</p>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <h3>Blood Pressure — Daily Trend</h3>
+        <div class="chart-container"><canvas id="chartBP"></canvas></div>
+        <p style="font-size:13px;color:var(--text-secondary);text-align:center;">Add BP readings to see trends. Target: &lt;130/80 mmHg for diabetics.</p>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <h3>Weekly Averages</h3>
+        <div class="chart-container"><canvas id="chartWeekly"></canvas></div>
+      </div></div>
+
+      <div class="info-box">
+        <h4>&#127919; Your Targets (ADA 2024 Guidelines for Diabetics)</h4>
+        <ul>
+          <li><strong>Fasting Blood Sugar:</strong> 80–130 mg/dL</li>
+          <li><strong>Post-Meal (2hr):</strong> &lt;180 mg/dL</li>
+          <li><strong>Blood Pressure:</strong> &lt;130/80 mmHg</li>
+          <li><strong>HbA1c:</strong> &lt;7% (current: 13.9% — needs to halve)</li>
+          <li><strong>Time in Range (CGM):</strong> &gt;70% between 70–180 mg/dL</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPORT GUIDE TAB -->
+  <div class="tab-panel" id="tab-guide">
+    <div class="section">
+      <div class="section-header">
+        <h2>How to Export from Health Apps</h2>
+        <span class="chip chip-yellow">Setup Guide</span>
+      </div>
+
+      <div class="card"><div class="card-body">
+        <h3>&#127822; Apple Health (iPhone)</h3>
+        <div class="info-box">
+          <h4>Option A — Full Export (Recommended for first-time)</h4>
+          <ul>
+            <li>Open the <strong>Health</strong> app on your iPhone</li>
+            <li>Tap your <strong>profile picture</strong> (top right)</li>
+            <li>Scroll down and tap <strong>"Export All Health Data"</strong></li>
+            <li>This creates a ZIP file containing <code>export.xml</code></li>
+            <li>AirDrop or email the ZIP to your computer</li>
+            <li>Extract the ZIP and upload the <code>export.xml</code> file here</li>
+          </ul>
+          <p style="margin-top:12px;"><strong>Note:</strong> The full export can be large (100MB+). The parser on this page extracts only blood glucose and blood pressure records.</p>
+        </div>
+        <div class="info-box" style="margin-top:12px;">
+          <h4>Option B — Use a Third-Party App for Selective Export</h4>
+          <ul>
+            <li><strong>Health Auto Export</strong> (iOS, free tier): Exports specific data types as CSV. Set it to auto-export blood glucose and BP daily.</li>
+            <li><strong>QS Access</strong> (iOS, free): One-tap CSV export of any Health data category</li>
+            <li>Export as CSV → upload directly to this page</li>
+          </ul>
+        </div>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <h3>&#129302; Google Fit / Google Health Connect (Android)</h3>
+        <div class="info-box">
+          <h4>Option A — Google Takeout (Bulk Export)</h4>
+          <ul>
+            <li>Go to <strong><a href="https://takeout.google.com" target="_blank" style="color:var(--blue);">takeout.google.com</a></strong></li>
+            <li>Click "Deselect all", then check only <strong>"Fit"</strong> (or "Health Connect")</li>
+            <li>Click "Next step" → Choose "Export once" → "Create export"</li>
+            <li>Download the ZIP when ready (usually takes minutes)</li>
+            <li>Inside you'll find JSON files organized by date</li>
+            <li>Upload the relevant JSON files here</li>
+          </ul>
+        </div>
+        <div class="info-box" style="margin-top:12px;">
+          <h4>Option B — Health Connect API (For Developers)</h4>
+          <ul>
+            <li>Android's <strong>Health Connect</strong> app aggregates data from all health apps</li>
+            <li>You can export specific record types via the Health Connect API</li>
+            <li>For non-dev use: apps like <strong>"Health Sync"</strong> can bridge Google Fit → CSV</li>
+          </ul>
+        </div>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <h3>&#128225; Glucometer / CGM Direct Export</h3>
+        <div class="info-box">
+          <h4>If you use a CGM (Continuous Glucose Monitor)</h4>
+          <ul>
+            <li><strong>Freestyle Libre (Abbott):</strong> Use LibreView (libreview.com) → Reports → Export CSV. LibreLink app also syncs automatically.</li>
+            <li><strong>Dexcom G6/G7:</strong> Use Dexcom Clarity app → Export → CSV</li>
+            <li><strong>Manual Glucometer:</strong> Log readings in Google Fit or Apple Health, then export as above. Or enter directly on this page.</li>
+          </ul>
+        </div>
+        <div class="info-box warning" style="margin-top:12px;">
+          <h4>&#128161; Recommendation for You</h4>
+          <p><strong>Given your HbA1c of 13.9%, a CGM (Continuous Glucose Monitor) is strongly recommended.</strong> The Freestyle Libre 2/3 is available in India (~₹2,500–3,500 per 14-day sensor). It gives you 24/7 glucose data, trend arrows, and alerts for highs/lows. The data can be exported as CSV from LibreView and uploaded directly here.</p>
+          <p style="margin-top:8px;">Even a basic glucometer (Accu-Chek, OneTouch) with 4 readings/day (fasting, pre-lunch, pre-dinner, bedtime) gives enough data to spot patterns and adjust diet/medication. The key is consistency — daily readings for at least 2 weeks to establish a baseline.</p>
+        </div>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <h3>&#128260; Automated Sync (Future Enhancement)</h3>
+        <div class="info-box">
+          <h4>Planned: GitHub Actions + Google Fit API</h4>
+          <p>A future enhancement could use a GitHub Actions workflow that runs daily, pulls data from Google Fit via API, and auto-updates the <code>data/readings.json</code> file. This would keep the dashboard always up-to-date without manual exports.</p>
+          <p style="margin-top:8px;"><strong>Technical approach:</strong></p>
+          <ul>
+            <li>Create a Google Cloud project with Fitness API access</li>
+            <li>Store OAuth refresh token as a GitHub Secret</li>
+            <li>A scheduled GitHub Action runs daily, queries the API for new readings</li>
+            <li>Appends new data to <code>data/readings.json</code> and commits</li>
+            <li>GitHub Pages auto-deploys with updated data</li>
+          </ul>
+          <p style="margin-top:8px;">This requires initial setup but then runs hands-free. We can build this as a Phase 2 once the manual flow is working.</p>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>HB Health Dashboard — Daily Tracking</p>
+  <p style="margin-top:4px;">292 historical readings (May 2015 – May 2023) auto-loaded from Excel data. New readings stored in memory — export CSV to save.</p>
+</footer>
+
+<script>
+Chart.defaults.font.family = "'Roboto','Google Sans',sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#5F6368';
+
+// STATE
+let readings = [];
+let dailyChart, bpChart, weeklyChart;
+
+// Set default date/time
+document.getElementById('readingDate').value = new Date().toISOString().split('T')[0];
+document.getElementById('readingTime').value = new Date().toTimeString().slice(0,5);
+
+// Type toggle
+document.getElementById('readingType').addEventListener('change', function() {
+  const t = this.value;
+  document.getElementById('glucoseField').style.display = (t==='bp'||t==='weight') ? 'none' : 'flex';
+  document.getElementById('bpFieldSys').style.display = t==='bp' ? 'flex' : 'none';
+  document.getElementById('bpFieldDia').style.display = t==='bp' ? 'flex' : 'none';
+  document.getElementById('weightField').style.display = t==='weight' ? 'flex' : 'none';
+});
+
+function addReading() {
+  const date = document.getElementById('readingDate').value;
+  const time = document.getElementById('readingTime').value;
+  const type = document.getElementById('readingType').value;
+  const notes = document.getElementById('readingNotes').value;
+  let value, value2;
+
+  if(type === 'bp') {
+    value = parseFloat(document.getElementById('bpSys').value);
+    value2 = parseFloat(document.getElementById('bpDia').value);
+    if(!value || !value2) { alert('Please enter both systolic and diastolic values.'); return; }
+  } else if(type === 'weight') {
+    value = parseFloat(document.getElementById('weightValue').value);
+    if(!value) { alert('Please enter weight.'); return; }
+  } else {
+    value = parseFloat(document.getElementById('glucoseValue').value);
+    if(!value) { alert('Please enter blood sugar value.'); return; }
+  }
+
+  readings.push({date, time, type, value, value2: value2||null, notes});
+  readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
+  renderTable();
+  updateCharts();
+
+  // Clear inputs
+  document.getElementById('glucoseValue').value = '';
+  document.getElementById('bpSys').value = '';
+  document.getElementById('bpDia').value = '';
+  document.getElementById('weightValue').value = '';
+  document.getElementById('readingNotes').value = '';
+}
+
+function getStatus(type, value) {
+  if(type === 'fasting') {
+    if(value < 80) return {text:'Low', cls:'low', badge:'badge-low'};
+    if(value <= 130) return {text:'In Target', cls:'normal', badge:'badge-normal'};
+    if(value <= 180) return {text:'Above Target', cls:'', badge:'badge-high'};
+    return {text:'High', cls:'high', badge:'badge-high'};
+  }
+  if(type === 'postmeal') {
+    if(value < 70) return {text:'Low', cls:'low', badge:'badge-low'};
+    if(value <= 180) return {text:'In Target', cls:'normal', badge:'badge-normal'};
+    return {text:'High', cls:'high', badge:'badge-high'};
+  }
+  if(type === 'random') {
+    if(value < 70) return {text:'Low', cls:'low', badge:'badge-low'};
+    if(value <= 200) return {text:'Normal', cls:'normal', badge:'badge-normal'};
+    return {text:'High', cls:'high', badge:'badge-high'};
+  }
+  if(type === 'bp') return {text: value<130?'Normal':'Elevated', cls: value<130?'normal':'high', badge: value<130?'badge-normal':'badge-high'};
+  return {text:'-', cls:'', badge:''};
+}
+
+const typeLabels = {fasting:'Fasting BS', postmeal:'Post-Meal', random:'Random BS', bp:'Blood Pressure', weight:'Weight'};
+
+function renderTable() {
+  const tbody = document.getElementById('readingsBody');
+  if(readings.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:32px;">No readings yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = readings.map(r => {
+    const s = getStatus(r.type, r.value);
+    const valStr = r.type === 'bp' ? `${r.value}/${r.value2}` : r.type === 'weight' ? `${r.value} kg` : `${r.value} mg/dL`;
+    return `<tr>
+      <td>${r.date}</td><td>${r.time}</td>
+      <td>${typeLabels[r.type]||r.type}</td>
+      <td class="${s.cls}">${valStr}</td>
+      <td><span class="badge ${s.badge}">${s.text}</span></td>
+      <td style="color:var(--text-secondary)">${r.notes||'-'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function exportReadings() {
+  if(readings.length === 0) { alert('No readings to export.'); return; }
+  const csv = 'date,time,type,value,value2,notes\n' +
+    readings.map(r => `${r.date},${r.time},${r.type},${r.value},${r.value2||''},${r.notes||''}`).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `hb-readings-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+
+function clearReadings() {
+  if(confirm('Clear all readings?')) {
+    readings = [];
+    renderTable();
+    updateCharts();
+  }
+}
+
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const status = document.getElementById('uploadStatus');
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    const content = e.target.result;
+    let count = 0;
+
+    if(file.name.endsWith('.csv')) {
+      const lines = content.split('\n').slice(1);
+      lines.forEach(line => {
+        const [date,time,type,value,value2,notes] = line.split(',');
+        if(date && type && value) {
+          readings.push({date:date.trim(),time:(time||'').trim(),type:type.trim(),value:parseFloat(value),value2:value2?parseFloat(value2):null,notes:(notes||'').trim()});
+          count++;
+        }
+      });
+    } else if(file.name.endsWith('.json')) {
+      try {
+        const data = JSON.parse(content);
+        if(Array.isArray(data)) {
+          data.forEach(r => {
+            if(r.date && r.type && r.value) {
+              readings.push({date:r.date,time:r.time||'',type:r.type,value:parseFloat(r.value),value2:r.value2?parseFloat(r.value2):null,notes:r.notes||''});
+              count++;
+            }
+          });
+        }
+      } catch(e) { status.innerHTML = '<p style="color:var(--red);">Error parsing JSON file.</p>'; return; }
+    } else if(file.name.endsWith('.xml')) {
+      // Basic Apple Health XML parser
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(content, 'text/xml');
+      const records = xml.querySelectorAll('Record');
+      records.forEach(r => {
+        const rType = r.getAttribute('type');
+        if(rType === 'HKQuantityTypeIdentifierBloodGlucose') {
+          const val = parseFloat(r.getAttribute('value'));
+          const dt = r.getAttribute('startDate');
+          if(val && dt) {
+            readings.push({date:dt.slice(0,10),time:dt.slice(11,16),type:'random',value:val*18,value2:null,notes:'Apple Health import'});
+            count++;
+          }
+        }
+        if(rType === 'HKQuantityTypeIdentifierBloodPressureSystolic') {
+          const val = parseFloat(r.getAttribute('value'));
+          const dt = r.getAttribute('startDate');
+          if(val && dt) {
+            readings.push({date:dt.slice(0,10),time:dt.slice(11,16),type:'bp',value:val,value2:null,notes:'Apple Health (sys only)'});
+            count++;
+          }
+        }
+      });
+    }
+
+    readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
+    renderTable();
+    updateCharts();
+    status.innerHTML = `<p style="color:var(--green);margin-top:12px;"><strong>${count} readings imported</strong> from ${file.name}</p>`;
+  };
+  reader.readAsText(file);
+}
+
+// CHARTS
+function initCharts() {
+  const dCtx = document.getElementById('chartDaily').getContext('2d');
+  dailyChart = new Chart(dCtx, {
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'Fasting',data:[],borderColor:'#1A73E8',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
+      {label:'Post-Meal',data:[],borderColor:'#EA4335',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
+      {label:'Random',data:[],borderColor:'#A142F4',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
+      {label:'Target Upper (180)',data:[],borderColor:'#34A853',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false},
+      {label:'Target Lower (80)',data:[],borderColor:'#FBBC04',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},
+      scales:{x:{grid:{display:false}},y:{min:50,max:400,grid:{color:'#E8EAED'}}}}
+  });
+
+  const bCtx = document.getElementById('chartBP').getContext('2d');
+  bpChart = new Chart(bCtx, {
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'Systolic',data:[],borderColor:'#EA4335',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
+      {label:'Diastolic',data:[],borderColor:'#1A73E8',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
+      {label:'Sys Target (130)',data:[],borderColor:'#34A853',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false},
+      {label:'Dia Target (80)',data:[],borderColor:'#FBBC04',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},
+      scales:{x:{grid:{display:false}},y:{min:50,max:200,grid:{color:'#E8EAED'}}}}
+  });
+
+  const wCtx = document.getElementById('chartWeekly').getContext('2d');
+  weeklyChart = new Chart(wCtx, {
+    type:'bar',
+    data:{labels:[],datasets:[
+      {label:'Avg Fasting',data:[],backgroundColor:'rgba(26,115,232,0.6)',borderRadius:6},
+      {label:'Avg Post-Meal',data:[],backgroundColor:'rgba(234,67,53,0.6)',borderRadius:6}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},
+      scales:{x:{grid:{display:false}},y:{min:50,max:400,grid:{color:'#E8EAED'}}}}
+  });
+}
+
+function updateCharts() {
+  // Daily glucose chart — average per type per date
+  const glucoseReadings = readings.filter(r=>['fasting','postmeal','random'].includes(r.type));
+  const dates = [...new Set(glucoseReadings.map(r=>r.date))].sort();
+  function avgForDate(d, t) {
+    const vals = glucoseReadings.filter(x=>x.date===d&&x.type===t).map(x=>x.value);
+    return vals.length ? Math.round(vals.reduce((s,v)=>s+v,0)/vals.length) : null;
+  }
+  const fData = dates.map(d => avgForDate(d,'fasting'));
+  const pData = dates.map(d => avgForDate(d,'postmeal'));
+  const rData = dates.map(d => avgForDate(d,'random'));
+
+  dailyChart.data.labels = dates;
+  dailyChart.data.datasets[0].data = fData;
+  dailyChart.data.datasets[1].data = pData;
+  dailyChart.data.datasets[2].data = rData;
+  dailyChart.data.datasets[3].data = dates.map(()=>180);
+  dailyChart.data.datasets[4].data = dates.map(()=>80);
+  dailyChart.update();
+
+  // BP chart
+  const bpReadings = readings.filter(r=>r.type==='bp');
+  const bpDates = [...new Set(bpReadings.map(r=>r.date))].sort();
+  bpChart.data.labels = bpDates;
+  bpChart.data.datasets[0].data = bpDates.map(d => { const r = bpReadings.find(x=>x.date===d); return r?r.value:null; });
+  bpChart.data.datasets[1].data = bpDates.map(d => { const r = bpReadings.find(x=>x.date===d); return r?r.value2:null; });
+  bpChart.data.datasets[2].data = bpDates.map(()=>130);
+  bpChart.data.datasets[3].data = bpDates.map(()=>80);
+  bpChart.update();
+
+  // Weekly
+  const weeks = {};
+  glucoseReadings.forEach(r => {
+    const d = new Date(r.date);
+    const wk = r.date.slice(0,7) + '-W' + Math.ceil(d.getDate()/7);
+    if(!weeks[wk]) weeks[wk] = {fasting:[], postmeal:[]};
+    if(r.type==='fasting') weeks[wk].fasting.push(r.value);
+    if(r.type==='postmeal') weeks[wk].postmeal.push(r.value);
+  });
+  const wkLabels = Object.keys(weeks).sort();
+  weeklyChart.data.labels = wkLabels;
+  weeklyChart.data.datasets[0].data = wkLabels.map(w => {const a=weeks[w].fasting;return a.length?Math.round(a.reduce((s,v)=>s+v,0)/a.length):null;});
+  weeklyChart.data.datasets[1].data = wkLabels.map(w => {const a=weeks[w].postmeal;return a.length?Math.round(a.reduce((s,v)=>s+v,0)/a.length):null;});
+  weeklyChart.update();
+}
+
+// TAB SWITCHING
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab-panel#tab-${name}`).classList.add('active');
+  event.target.classList.add('active');
+}
+
+initCharts();
+
+// LOAD HISTORICAL DATA from Excel-extracted JSON
+fetch('data/sugar-readings.json')
+  .then(r => r.json())
+  .then(data => {
+    if(!data.readings || !data.readings.length) return;
+    const typeMap = {
+      'Pre Breakfast':'fasting', 'Pre Lunch':'random', 'Post Lunch':'postmeal',
+      'Pre Dinner':'random', 'Post Dinner':'postmeal', 'Random':'random'
+    };
+    let count = 0;
+    data.readings.forEach(r => {
+      const mapped = typeMap[r.type] || 'random';
+      readings.push({
+        date: r.date,
+        time: r.time || '',
+        type: mapped,
+        value: r.value,
+        value2: null,
+        notes: (r.remarks ? r.remarks + ' ' : '') + '(' + r.type + ', historical)'
+      });
+      count++;
+    });
+    readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
+    renderTable();
+    updateCharts();
+    console.log(`Loaded ${count} historical readings from Excel data (${data.dateRange.from} to ${data.dateRange.to})`);
+  })
+  .catch(e => console.log('No historical data file found:', e));
+</script>
+</body>
+</html>
