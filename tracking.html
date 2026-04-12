@@ -569,27 +569,58 @@ function handleFileUpload(event) {
         }
       } catch(e) { status.innerHTML = '<p style="color:var(--red);">Error parsing JSON file.</p>'; return; }
     } else if(file.name.endsWith('.xml')) {
-      // Basic Apple Health XML parser
+      // Apple Health XML parser
       const parser = new DOMParser();
       const xml = parser.parseFromString(content, 'text/xml');
       const records = xml.querySelectorAll('Record');
+
+      // Blood Glucose
+      records.forEach(r => {
+        if(r.getAttribute('type') === 'HKQuantityTypeIdentifierBloodGlucose') {
+          let val = parseFloat(r.getAttribute('value'));
+          const unit = r.getAttribute('unit') || '';
+          const dt = r.getAttribute('startDate') || '';
+          if(!val || !dt) return;
+          // Only convert if mmol/L; if already mg/dL, use as-is
+          if(unit.toLowerCase().includes('mmol')) val = Math.round(val * 18);
+          else val = Math.round(val);
+          // Check meal time metadata: 1=before meal (fasting), 2=after meal (postmeal)
+          const mealMeta = r.querySelector('MetadataEntry[key="HKBloodGlucoseMealTime"]');
+          const mealVal = mealMeta ? mealMeta.getAttribute('value') : null;
+          const rType = mealVal === '1' ? 'fasting' : mealVal === '2' ? 'postmeal' : 'random';
+          readings.push({date:dt.slice(0,10), time:dt.slice(11,16), type:rType, value:val, value2:null, notes:'Apple Health'});
+          count++;
+        }
+      });
+
+      // Blood Pressure — pair systolic + diastolic by startDate
+      const sysMap = {}, diaMap = {};
       records.forEach(r => {
         const rType = r.getAttribute('type');
-        if(rType === 'HKQuantityTypeIdentifierBloodGlucose') {
+        const dt = r.getAttribute('startDate') || '';
+        const val = parseFloat(r.getAttribute('value'));
+        if(!val || !dt) return;
+        const key = dt.slice(0,16); // match by date+time
+        if(rType === 'HKQuantityTypeIdentifierBloodPressureSystolic') sysMap[key] = val;
+        if(rType === 'HKQuantityTypeIdentifierBloodPressureDiastolic') diaMap[key] = val;
+      });
+      Object.keys(sysMap).forEach(key => {
+        const sys = sysMap[key];
+        const dia = diaMap[key] || null;
+        readings.push({date:key.slice(0,10), time:key.slice(11,16), type:'bp', value:Math.round(sys), value2:dia?Math.round(dia):null, notes:'Apple Health'});
+        count++;
+      });
+
+      // Body Mass
+      records.forEach(r => {
+        if(r.getAttribute('type') === 'HKQuantityTypeIdentifierBodyMass') {
           const val = parseFloat(r.getAttribute('value'));
-          const dt = r.getAttribute('startDate');
-          if(val && dt) {
-            readings.push({date:dt.slice(0,10),time:dt.slice(11,16),type:'random',value:val*18,value2:null,notes:'Apple Health import'});
-            count++;
-          }
-        }
-        if(rType === 'HKQuantityTypeIdentifierBloodPressureSystolic') {
-          const val = parseFloat(r.getAttribute('value'));
-          const dt = r.getAttribute('startDate');
-          if(val && dt) {
-            readings.push({date:dt.slice(0,10),time:dt.slice(11,16),type:'bp',value:val,value2:null,notes:'Apple Health (sys only)'});
-            count++;
-          }
+          const dt = r.getAttribute('startDate') || '';
+          const unit = r.getAttribute('unit') || '';
+          if(!val || !dt) return;
+          const kg = unit.toLowerCase().includes('lb') ? Math.round(val*0.4536*10)/10 : Math.round(val*10)/10;
+          readings.push({date:dt.slice(0,10), time:dt.slice(11,16), type:'weight', value:kg, value2:null, notes:'Apple Health'});
+          count++;
         }
       });
     }

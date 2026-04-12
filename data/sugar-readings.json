@@ -1,9 +1,9 @@
 {
-  "source": "Extracted from Blood Sugar Readings.xlsx and Blood Sugar Readings Old.xlsx",
-  "totalReadings": 292,
+  "source": "Excel files + Apple Health export",
+  "totalReadings": 402,
   "dateRange": {
     "from": "2015-05-16",
-    "to": "2023-05-03"
+    "to": "2026-01-08"
   },
   "readings": [
     {
@@ -911,13 +911,6 @@
     },
     {
       "date": "2015-06-21",
-      "time": "01:00",
-      "type": "Random",
-      "value": 85,
-      "remarks": "7:02 PM - 111, 2:25 PM - 261 | consumed sugar"
-    },
-    {
-      "date": "2015-06-21",
       "time": "02:20",
       "type": "Random",
       "value": 101,
@@ -1811,6 +1804,783 @@
       "time": "13:45",
       "type": "Pre Lunch",
       "value": 307
+    },
+    {
+      "date": "2023-08-23",
+      "time": "09:00",
+      "type": "Pre Breakfast",
+      "value": 321,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-23",
+      "time": "16:39",
+      "type": "Random",
+      "value": 381,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-24",
+      "time": "10:25",
+      "type": "Pre Breakfast",
+      "value": 279,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-24",
+      "time": "15:25",
+      "type": "Post Meal",
+      "value": 350,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-24",
+      "time": "20:14",
+      "type": "Random",
+      "value": 271,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-24",
+      "time": "22:26",
+      "type": "Post Meal",
+      "value": 286,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-25",
+      "time": "10:47",
+      "type": "Pre Breakfast",
+      "value": 293,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-25",
+      "time": "18:35",
+      "type": "Pre Breakfast",
+      "value": 231,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-27",
+      "time": "10:59",
+      "type": "Pre Breakfast",
+      "value": 292,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-28",
+      "time": "10:09",
+      "type": "Pre Breakfast",
+      "value": 335,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-29",
+      "time": "17:03",
+      "type": "Post Meal",
+      "value": 298,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-30",
+      "time": "06:25",
+      "type": "Pre Breakfast",
+      "value": 360,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-31",
+      "time": "09:40",
+      "type": "Pre Breakfast",
+      "value": 289,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-08-31",
+      "time": "15:28",
+      "type": "Post Meal",
+      "value": 316,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-01",
+      "time": "12:20",
+      "type": "Pre Breakfast",
+      "value": 301,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-01",
+      "time": "16:20",
+      "type": "Post Meal",
+      "value": 285,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-01",
+      "time": "22:41",
+      "type": "Post Meal",
+      "value": 234,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-02",
+      "time": "10:48",
+      "type": "Pre Breakfast",
+      "value": 268,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-03",
+      "time": "19:16",
+      "type": "Pre Breakfast",
+      "value": 219,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-06",
+      "time": "10:12",
+      "type": "Pre Breakfast",
+      "value": 325,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-07",
+      "time": "22:30",
+      "type": "Post Meal",
+      "value": 228,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-08",
+      "time": "10:31",
+      "type": "Pre Breakfast",
+      "value": 239,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-08",
+      "time": "12:30",
+      "type": "Post Meal",
+      "value": 325,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-10",
+      "time": "22:45",
+      "type": "Post Meal",
+      "value": 368,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-11",
+      "time": "10:16",
+      "type": "Pre Breakfast",
+      "value": 269,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-12",
+      "time": "10:29",
+      "type": "Pre Breakfast",
+      "value": 248,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-13",
+      "time": "23:16",
+      "type": "Post Meal",
+      "value": 238,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-14",
+      "time": "12:23",
+      "type": "Post Meal",
+      "value": 257,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-16",
+      "time": "23:45",
+      "type": "Post Meal",
+      "value": 211,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-20",
+      "time": "19:00",
+      "type": "Pre Breakfast",
+      "value": 133,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-23",
+      "time": "10:00",
+      "type": "Pre Breakfast",
+      "value": 124,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-23",
+      "time": "12:34",
+      "type": "Post Meal",
+      "value": 140,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-24",
+      "time": "13:02",
+      "type": "Pre Breakfast",
+      "value": 157,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-24",
+      "time": "16:52",
+      "type": "Post Meal",
+      "value": 182,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-25",
+      "time": "22:53",
+      "type": "Post Meal",
+      "value": 138,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-27",
+      "time": "13:44",
+      "type": "Pre Breakfast",
+      "value": 173,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-27",
+      "time": "18:29",
+      "type": "Post Meal",
+      "value": 222,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-09-29",
+      "time": "12:31",
+      "type": "Post Meal",
+      "value": 222,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-03",
+      "time": "10:06",
+      "type": "Pre Breakfast",
+      "value": 165,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-03",
+      "time": "14:06",
+      "type": "Pre Breakfast",
+      "value": 118,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-03",
+      "time": "19:00",
+      "type": "Post Meal",
+      "value": 153,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-04",
+      "time": "09:16",
+      "type": "Pre Breakfast",
+      "value": 153,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-06",
+      "time": "08:11",
+      "type": "Pre Breakfast",
+      "value": 139,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-09",
+      "time": "07:40",
+      "type": "Pre Breakfast",
+      "value": 146,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-10",
+      "time": "14:00",
+      "type": "Pre Breakfast",
+      "value": 116,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-10",
+      "time": "16:06",
+      "type": "Post Meal",
+      "value": 126,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-13",
+      "time": "09:53",
+      "type": "Pre Breakfast",
+      "value": 122,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-14",
+      "time": "19:24",
+      "type": "Pre Breakfast",
+      "value": 148,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-18",
+      "time": "09:25",
+      "type": "Pre Breakfast",
+      "value": 115,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-18",
+      "time": "12:41",
+      "type": "Post Meal",
+      "value": 105,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-20",
+      "time": "13:57",
+      "type": "Post Meal",
+      "value": 55,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-20",
+      "time": "14:57",
+      "type": "Post Meal",
+      "value": 150,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-21",
+      "time": "00:21",
+      "type": "Post Meal",
+      "value": 219,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-21",
+      "time": "12:13",
+      "type": "Pre Breakfast",
+      "value": 118,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-21",
+      "time": "16:25",
+      "type": "Post Meal",
+      "value": 140,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-21",
+      "time": "19:30",
+      "type": "Pre Breakfast",
+      "value": 130,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-21",
+      "time": "21:05",
+      "type": "Pre Breakfast",
+      "value": 125,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-22",
+      "time": "12:40",
+      "type": "Pre Breakfast",
+      "value": 240,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-10-24",
+      "time": "13:15",
+      "type": "Post Meal",
+      "value": 183,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-01",
+      "time": "16:57",
+      "type": "Post Meal",
+      "value": 160,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-05",
+      "time": "22:19",
+      "type": "Post Meal",
+      "value": 164,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-06",
+      "time": "10:00",
+      "type": "Pre Breakfast",
+      "value": 127,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-07",
+      "time": "09:55",
+      "type": "Pre Breakfast",
+      "value": 127,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-09",
+      "time": "10:09",
+      "type": "Pre Breakfast",
+      "value": 167,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-15",
+      "time": "10:14",
+      "type": "Pre Breakfast",
+      "value": 166,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-18",
+      "time": "00:02",
+      "type": "Post Meal",
+      "value": 171,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-22",
+      "time": "09:17",
+      "type": "Post Meal",
+      "value": 208,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-11-29",
+      "time": "10:41",
+      "type": "Post Meal",
+      "value": 238,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-12-02",
+      "time": "22:15",
+      "type": "Pre Breakfast",
+      "value": 220,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-12-03",
+      "time": "11:03",
+      "type": "Pre Breakfast",
+      "value": 222,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-12-06",
+      "time": "15:21",
+      "type": "Post Meal",
+      "value": 227,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2023-12-30",
+      "time": "15:18",
+      "type": "Post Meal",
+      "value": 306,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-01-25",
+      "time": "05:42",
+      "type": "Pre Breakfast",
+      "value": 316,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-02-06",
+      "time": "18:15",
+      "type": "Post Meal",
+      "value": 388,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-02-25",
+      "time": "10:04",
+      "type": "Pre Breakfast",
+      "value": 239,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-02-25",
+      "time": "20:30",
+      "type": "Pre Breakfast",
+      "value": 195,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-03-01",
+      "time": "10:16",
+      "type": "Pre Breakfast",
+      "value": 177,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-03-25",
+      "time": "19:24",
+      "type": "Post Meal",
+      "value": 323,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-03-26",
+      "time": "08:37",
+      "type": "Pre Breakfast",
+      "value": 334,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-05-07",
+      "time": "08:20",
+      "type": "Pre Breakfast",
+      "value": 320,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-05-08",
+      "time": "08:13",
+      "type": "Pre Breakfast",
+      "value": 327,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-05-08",
+      "time": "18:36",
+      "type": "Pre Breakfast",
+      "value": 315,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-05-10",
+      "time": "08:48",
+      "type": "Pre Breakfast",
+      "value": 301,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-05-12",
+      "time": "15:37",
+      "type": "Pre Breakfast",
+      "value": 256,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-06-18",
+      "time": "14:47",
+      "type": "Post Meal",
+      "value": 289,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-07-07",
+      "time": "14:09",
+      "type": "Post Meal",
+      "value": 298,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-07-18",
+      "time": "23:01",
+      "type": "Post Meal",
+      "value": 255,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-08-27",
+      "time": "16:46",
+      "type": "Post Meal",
+      "value": 305,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-08-30",
+      "time": "12:54",
+      "type": "Pre Breakfast",
+      "value": 272,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-09-15",
+      "time": "17:11",
+      "type": "Post Meal",
+      "value": 219,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-09-15",
+      "time": "17:12",
+      "type": "Post Meal",
+      "value": 219,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2024-09-19",
+      "time": "20:48",
+      "type": "Post Meal",
+      "value": 303,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-02-06",
+      "time": "12:16",
+      "type": "Pre Breakfast",
+      "value": 323,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-02-08",
+      "time": "11:55",
+      "type": "Pre Breakfast",
+      "value": 294,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-02-09",
+      "time": "11:51",
+      "type": "Pre Breakfast",
+      "value": 287,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-02-09",
+      "time": "20:03",
+      "type": "Post Meal",
+      "value": 301,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-02-14",
+      "time": "10:14",
+      "type": "Pre Breakfast",
+      "value": 349,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-02-15",
+      "time": "11:31",
+      "type": "Pre Breakfast",
+      "value": 295,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-02-27",
+      "time": "14:31",
+      "type": "Post Meal",
+      "value": 320,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-06-27",
+      "time": "08:22",
+      "type": "Pre Breakfast",
+      "value": 314,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-06-30",
+      "time": "09:03",
+      "type": "Pre Breakfast",
+      "value": 355,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-08-31",
+      "time": "19:12",
+      "type": "Post Meal",
+      "value": 353,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-09-01",
+      "time": "15:08",
+      "type": "Pre Breakfast",
+      "value": 222,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-09-02",
+      "time": "20:11",
+      "type": "Pre Breakfast",
+      "value": 163,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-09-03",
+      "time": "17:08",
+      "type": "Post Meal",
+      "value": 142,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-09-04",
+      "time": "07:06",
+      "type": "Pre Breakfast",
+      "value": 174,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-09-04",
+      "time": "23:01",
+      "type": "Post Meal",
+      "value": 167,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-09-05",
+      "time": "20:04",
+      "type": "Pre Breakfast",
+      "value": 137,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2025-09-08",
+      "time": "19:20",
+      "type": "Post Meal",
+      "value": 138,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2026-01-07",
+      "time": "21:18",
+      "type": "Pre Breakfast",
+      "value": 159,
+      "remarks": "Apple Health"
+    },
+    {
+      "date": "2026-01-08",
+      "time": "00:01",
+      "type": "Post Meal",
+      "value": 357,
+      "remarks": "Apple Health"
     }
   ]
 }
