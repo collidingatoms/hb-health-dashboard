@@ -395,6 +395,23 @@ let readings = [];
 let dailyChart, bpChart, weeklyChart;
 let filterFrom = '', filterTo = '';
 
+// PERSISTENCE — save manually added readings to localStorage
+function saveManualReadings() {
+  const manual = readings.filter(r => r._manual);
+  try { localStorage.setItem('hb_manual_readings', JSON.stringify(manual)); } catch(e) {}
+}
+function loadManualReadings() {
+  try {
+    const stored = localStorage.getItem('hb_manual_readings');
+    if(stored) {
+      const manual = JSON.parse(stored);
+      manual.forEach(r => { r._manual = true; readings.push(r); });
+      return manual.length;
+    }
+  } catch(e) {}
+  return 0;
+}
+
 function applyFilter() {
   filterFrom = document.getElementById('filterFrom').value;
   filterTo = document.getElementById('filterTo').value;
@@ -463,8 +480,9 @@ function addReading() {
     if(!value) { alert('Please enter blood sugar value.'); return; }
   }
 
-  readings.push({date, time, type, value, value2: value2||null, notes});
+  readings.push({date, time, type, value, value2: value2||null, notes, _manual: true});
   readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
+  saveManualReadings();
   renderTable();
   updateCharts();
 
@@ -552,7 +570,7 @@ function handleFileUpload(event) {
       lines.forEach(line => {
         const [date,time,type,value,value2,notes] = line.split(',');
         if(date && type && value) {
-          readings.push({date:date.trim(),time:(time||'').trim(),type:type.trim(),value:parseFloat(value),value2:value2?parseFloat(value2):null,notes:(notes||'').trim()});
+          readings.push({date:date.trim(),time:(time||'').trim(),type:type.trim(),value:parseFloat(value),value2:value2?parseFloat(value2):null,notes:(notes||'').trim(),_manual:true});
           count++;
         }
       });
@@ -562,7 +580,7 @@ function handleFileUpload(event) {
         if(Array.isArray(data)) {
           data.forEach(r => {
             if(r.date && r.type && r.value) {
-              readings.push({date:r.date,time:r.time||'',type:r.type,value:parseFloat(r.value),value2:r.value2?parseFloat(r.value2):null,notes:r.notes||''});
+              readings.push({date:r.date,time:r.time||'',type:r.type,value:parseFloat(r.value),value2:r.value2?parseFloat(r.value2):null,notes:r.notes||'',_manual:true});
               count++;
             }
           });
@@ -588,7 +606,7 @@ function handleFileUpload(event) {
           const mealMeta = r.querySelector('MetadataEntry[key="HKBloodGlucoseMealTime"]');
           const mealVal = mealMeta ? mealMeta.getAttribute('value') : null;
           const rType = mealVal === '1' ? 'fasting' : mealVal === '2' ? 'postmeal' : 'random';
-          readings.push({date:dt.slice(0,10), time:dt.slice(11,16), type:rType, value:val, value2:null, notes:'Apple Health'});
+          readings.push({date:dt.slice(0,10), time:dt.slice(11,16), type:rType, value:val, value2:null, notes:'Apple Health', _manual:true});
           count++;
         }
       });
@@ -607,7 +625,7 @@ function handleFileUpload(event) {
       Object.keys(sysMap).forEach(key => {
         const sys = sysMap[key];
         const dia = diaMap[key] || null;
-        readings.push({date:key.slice(0,10), time:key.slice(11,16), type:'bp', value:Math.round(sys), value2:dia?Math.round(dia):null, notes:'Apple Health'});
+        readings.push({date:key.slice(0,10), time:key.slice(11,16), type:'bp', value:Math.round(sys), value2:dia?Math.round(dia):null, notes:'Apple Health', _manual:true});
         count++;
       });
 
@@ -619,13 +637,14 @@ function handleFileUpload(event) {
           const unit = r.getAttribute('unit') || '';
           if(!val || !dt) return;
           const kg = unit.toLowerCase().includes('lb') ? Math.round(val*0.4536*10)/10 : Math.round(val*10)/10;
-          readings.push({date:dt.slice(0,10), time:dt.slice(11,16), type:'weight', value:kg, value2:null, notes:'Apple Health'});
+          readings.push({date:dt.slice(0,10), time:dt.slice(11,16), type:'weight', value:kg, value2:null, notes:'Apple Health', _manual:true});
           count++;
         }
       });
     }
 
     readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
+    saveManualReadings();
     renderTable();
     updateCharts();
     status.innerHTML = `<p style="color:var(--green);margin-top:12px;"><strong>${count} readings imported</strong> from ${file.name}</p>`;
@@ -734,6 +753,15 @@ function switchTab(name) {
 
 initCharts();
 
+// LOAD MANUAL READINGS from localStorage (BP, weight, any manually added)
+const manualCount = loadManualReadings();
+if(manualCount) {
+  readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
+  renderTable();
+  updateCharts();
+  console.log(`Restored ${manualCount} manually added readings from localStorage`);
+}
+
 // LOAD HISTORICAL DATA from Excel-extracted JSON
 fetch('data/sugar-readings.json')
   .then(r => r.json())
@@ -741,17 +769,22 @@ fetch('data/sugar-readings.json')
     if(!data.readings || !data.readings.length) return;
     const typeMap = {
       'Pre Breakfast':'fasting', 'Pre Lunch':'random', 'Post Lunch':'postmeal',
-      'Pre Dinner':'random', 'Post Dinner':'postmeal', 'Random':'random'
+      'Pre Dinner':'random', 'Post Dinner':'postmeal', 'Random':'random',
+      'bp':'bp', 'Blood Pressure':'bp', 'weight':'weight', 'Weight':'weight',
+      'fasting':'fasting', 'postmeal':'postmeal', 'random':'random'
     };
     let count = 0;
     data.readings.forEach(r => {
       const mapped = typeMap[r.type] || 'random';
+      // Skip duplicates already loaded from localStorage
+      const isDup = readings.some(x => x.date === r.date && x.value === r.value && Math.abs((x.time||'').localeCompare(r.time||'')) === 0);
+      if(isDup) return;
       readings.push({
         date: r.date,
         time: r.time || '',
         type: mapped,
         value: r.value,
-        value2: null,
+        value2: r.value2 || null,
         notes: (r.remarks ? r.remarks + ' ' : '') + '(' + r.type + ', historical)'
       });
       count++;
