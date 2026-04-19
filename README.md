@@ -2,11 +2,13 @@
 
 Personal blood work tracking dashboard built with vanilla HTML/CSS/JS and Chart.js. Designed for GitHub Pages hosting.
 
+**Last updated:** April 2026 — includes the 15-Apr-2026 Tata 1mg Comprehensive Gold Full Body Checkup (10th blood report on record).
+
 ## Pages
 
-- **index.html** — Blood Work Dashboard with trend charts for all parameters (lipids, thyroid, liver, kidney, vitamins, inflammatory markers, CBC) and expert diagnosis
-- **diabetes.html** — Diabetes & Complications deep-dive with organ-specific risk assessments, trajectory analysis, and priority action plan
-- **tracking.html** — Blood Sugar & BP Tracking with manual entry, file import (Apple Health XML, Google Fit JSON, CGM CSV), and live charts
+- **index.html** — Blood Work Dashboard with trend charts for all parameters (lipids, thyroid, liver, kidney, vitamins, inflammatory markers, CBC, urinalysis, prostate) and expert diagnosis. Reframed as "recovery in progress" following the Apr 2026 report showing major improvements across diabetes, thyroid, and kidney markers.
+- **diabetes.html** — Diabetes & Complications deep-dive with organ-specific risk assessments, trajectory analysis, and a refreshed Apr 2026 action plan (continue-the-momentum framing).
+- **tracking.html** — Blood Sugar & BP Tracking with manual entry, file import (Apple Health XML, Google Fit JSON, CGM CSV), and live charts.
 
 ## Tech Stack
 

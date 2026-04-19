@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HB Health — Diabetes & Complications</title>
+<title>HB Health — Diabetes &amp; Complications</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <style>
@@ -25,9 +25,18 @@ nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1p
 .nav-links a:hover{background:var(--blue-bg);color:var(--blue);}
 .nav-links a.active{background:var(--blue-bg);color:var(--blue);}
 .container{max-width:1200px;margin:0 auto;padding:24px;}
-.page-header{margin-bottom:32px;}
+.page-header{margin-bottom:24px;}
 .page-header h1{font-size:28px;margin-bottom:4px;}
 .page-header p{color:var(--text-secondary);font-size:15px;}
+
+/* RECOVERY BANNER */
+.recovery-banner { background: linear-gradient(135deg, #E6F4EA 0%, #E8F0FE 100%); border-radius: var(--radius); padding: 24px; margin-bottom: 28px; box-shadow: var(--shadow); border-left: 4px solid var(--green); }
+.recovery-banner .rb-title { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.recovery-banner .rb-title h2 { font-size: 20px; color: #1E8E3E; }
+.recovery-banner .rb-pill { background: var(--green); color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+.recovery-banner p { color: var(--text); font-size: 14.5px; }
+.recovery-banner code { font-family: 'Roboto Mono', monospace; font-size: 12.5px; color: var(--text); background: rgba(255,255,255,0.6); padding: 1px 5px; border-radius: 4px; }
+
 .card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px;}
 .card-body{padding:24px;}
 .chart-container{position:relative;height:300px;margin-bottom:16px;}
@@ -39,12 +48,14 @@ nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1p
 .risk-card.danger{border-top-color:var(--red);}
 .risk-card.warning{border-top-color:var(--yellow);}
 .risk-card.ok{border-top-color:var(--green);}
+.risk-card.recovering{border-top-color:var(--blue);}
 .risk-card .icon{font-size:28px;margin-bottom:8px;}
 .risk-card h3{font-size:16px;margin-bottom:4px;}
 .risk-card .status{font-size:13px;font-weight:500;margin-bottom:8px;}
 .risk-card .status.red{color:var(--red);}
 .risk-card .status.yellow{color:var(--orange);}
 .risk-card .status.green{color:var(--green);}
+.risk-card .status.blue{color:var(--blue);}
 .risk-card p{font-size:13px;color:var(--text-secondary);}
 
 /* COMPLICATION SECTIONS */
@@ -64,6 +75,10 @@ nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1p
 .deep-dive h4{font-size:14px;color:var(--blue);margin-bottom:12px;}
 .deep-dive.critical{border-left-color:var(--red);}
 .deep-dive.critical h4{color:var(--red);}
+.deep-dive.warning{border-left-color:var(--orange);}
+.deep-dive.warning h4{color:var(--orange);}
+.deep-dive.recovery{border-left-color:var(--green);}
+.deep-dive.recovery h4{color:var(--green);}
 .deep-dive p,.deep-dive li{font-size:14px;color:var(--text-secondary);line-height:1.8;}
 .deep-dive ul{margin-left:20px;margin-top:8px;}
 .metric-row{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0;}
@@ -72,6 +87,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1p
 .metric-pill.bad strong{color:var(--red);}
 .metric-pill.ok strong{color:var(--green);}
 .metric-pill.warn strong{color:var(--orange);}
+.metric-pill.blue strong{color:var(--blue);}
 
 /* ACTION PLAN */
 .action-plan{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;margin-top:32px;}
@@ -80,12 +96,14 @@ nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1p
 .action-item:last-child{border-bottom:none;}
 .action-num{width:32px;height:32px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;}
 .action-num.urgent{background:var(--red);}
+.action-num.ok{background:var(--green);}
 .action-content h4{font-size:15px;margin-bottom:4px;}
 .action-content p{font-size:13px;color:var(--text-secondary);}
 .action-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;margin-right:6px;}
 .tag-urgent{background:var(--red-bg);color:var(--red);}
 .tag-important{background:var(--yellow-bg);color:#E37400;}
 .tag-routine{background:var(--blue-bg);color:var(--blue);}
+.tag-continue{background:var(--green-bg);color:var(--green);}
 
 /* TIMELINE */
 .timeline{position:relative;padding-left:28px;margin-top:16px;}
@@ -95,6 +113,7 @@ nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1p
 .tl-item.bad::before{border-color:var(--red);background:var(--red-bg);}
 .tl-item.ok::before{border-color:var(--green);background:var(--green-bg);}
 .tl-item.warn::before{border-color:var(--yellow);background:var(--yellow-bg);}
+.tl-item.blue::before{border-color:var(--blue);background:var(--blue-bg);}
 .tl-item .tl-date{font-size:12px;font-weight:500;color:var(--text-secondary);font-family:'Roboto Mono',monospace;}
 .tl-item .tl-text{font-size:14px;margin-top:2px;}
 
@@ -109,7 +128,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
     <a href="index.html" class="nav-brand">HB Health <span>DASHBOARD</span></a>
     <div class="nav-links">
       <a href="index.html">Blood Work</a>
-      <a href="diabetes.html" class="active">Diabetes & Complications</a>
+      <a href="diabetes.html" class="active">Diabetes &amp; Complications</a>
       <a href="tracking.html">Daily Tracking</a>
     </div>
   </div>
@@ -118,7 +137,16 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
 <div class="container">
   <div class="page-header">
     <h1>Diabetes &amp; Complications Assessment</h1>
-    <p>Comprehensive organ-by-organ risk analysis | Based on 7 years of blood work + eye exam data</p>
+    <p>Organ-by-organ risk analysis | Based on 10 blood work reports (Jan 2019 – Apr 2026) + eye exam</p>
+  </div>
+
+  <!-- RECOVERY BANNER -->
+  <div class="recovery-banner">
+    <div class="rb-title">
+      <span class="rb-pill">APR 2026</span>
+      <h2>Risk picture is meaningfully better</h2>
+    </div>
+    <p>Two of the four "HIGH RISK" organ cards from Aug 2025 have downgraded. <strong>Kidneys</strong>: Stage A2 nephropathy has regressed to A1 (microalbumin/Cr <code>60.7 → 23.1</code>). <strong>Thyroid</strong>: TSH <code>62.7 → 13.7</code>, Free T4 back in range. Cardiovascular and eye risk remain elevated pending further HbA1c drops and OCT/HVF completion — but the trajectory has reversed. Keep the current treatment plan running.</p>
   </div>
 
   <!-- RISK DASHBOARD -->
@@ -127,37 +155,37 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
       <div class="icon">&#128065;</div>
       <h3>Eyes (Retinopathy)</h3>
       <div class="status red">HIGH RISK — Active screening</div>
-      <p>Peripheral pigmentation found. 20+ years DM. OCT/HVF recommended.</p>
+      <p>Peripheral pigmentation found (Mar 2026). 20+ years DM. OCT/HVF still pending.</p>
     </div>
-    <div class="risk-card danger">
+    <div class="risk-card recovering">
       <div class="icon">&#129516;</div>
       <h3>Kidneys (Nephropathy)</h3>
-      <div class="status red">STAGE A2 — Moderately increased</div>
-      <p>Microalbumin/Cr ratio: 60.7 mg/g (normal &lt;30). Protein leaking.</p>
+      <div class="status blue">STAGE A1 — Recovered from A2</div>
+      <p>Microalbumin/Cr ratio: 23.1 mg/g (Apr 2026) — back inside normal. Protein leak closed.</p>
     </div>
-    <div class="risk-card danger">
+    <div class="risk-card warning">
       <div class="icon">&#10084;&#65039;</div>
       <h3>Heart (Cardiovascular)</h3>
-      <div class="status red">VERY HIGH RISK</div>
-      <p>HDL critically low. Triglycerides high. Diabetic dyslipidemia pattern.</p>
+      <div class="status yellow">IMPROVING — Still high risk</div>
+      <p>LDL 96 (target met). HDL still 33. Triglycerides 233. Chol:HDL ratio improving.</p>
     </div>
-    <div class="risk-card danger">
+    <div class="risk-card recovering">
       <div class="icon">&#129516;</div>
       <h3>Thyroid</h3>
-      <div class="status red">SEVERE HYPOTHYROIDISM</div>
-      <p>TSH 62.7 — thyroid barely functioning. Worsens all other conditions.</p>
+      <div class="status blue">RECOVERING — Meds working</div>
+      <p>TSH 13.68 (down 78% from 62.7). T3/T4 back in range. One more dose bump likely.</p>
     </div>
     <div class="risk-card warning">
       <div class="icon">&#129516;</div>
       <h3>Nerves (Neuropathy)</h3>
       <div class="status yellow">PROBABLE — Not yet tested</div>
-      <p>With 20 years DM and HbA1c &gt;10%, neuropathy is very likely.</p>
+      <p>With 20 years DM and HbA1c still 11.8%, neuropathy is likely. Monofilament test pending.</p>
     </div>
     <div class="risk-card warning">
       <div class="icon">&#129516;</div>
       <h3>Liver (NAFLD)</h3>
-      <div class="status yellow">MONITOR — ALP elevated</div>
-      <p>Alkaline phosphatase 148 U/L. Prior SGPT spike. FibroScan needed.</p>
+      <div class="status yellow">MONITOR — ALP 151</div>
+      <p>Alkaline phosphatase still elevated. SGOT/SGPT normal. FibroScan still recommended.</p>
     </div>
   </div>
 
@@ -166,11 +194,11 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
     <div class="comp-header" onclick="toggle('diabetesBody',this)">
       <span class="toggle-icon open">&#9654;</span>
       <h2>Diabetes Trajectory — The Full Picture</h2>
-      <span class="comp-chip chip-red">Critical</span>
+      <span class="comp-chip chip-blue">Turning Point</span>
     </div>
     <div class="comp-body" id="diabetesBody">
       <div class="card"><div class="card-body">
-        <h3>HbA1c Journey (2019–2025)</h3>
+        <h3>HbA1c Journey (2019–2026)</h3>
         <div class="chart-container"><canvas id="chartHba1cJourney"></canvas></div>
         <div class="timeline">
           <div class="tl-item warn"><div class="tl-date">Jan 2019</div><div class="tl-text">HbA1c 6.2%, Fasting 127 — <strong>Pre-diabetes / early diabetes.</strong> First red flag. Should have started lifestyle intervention here.</div></div>
@@ -181,19 +209,21 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
           <div class="tl-item bad"><div class="tl-date">Apr 2023</div><div class="tl-text">HbA1c 14.1%, Fasting 319 — <strong>Catastrophic collapse.</strong> 2-year gap in testing. Microalbumin/Cr exploded to 154. ESR hit 54. Something went very wrong between 2021–2023. Likely stopped medication.</div></div>
           <div class="tl-item bad"><div class="tl-date">Jul 2024</div><div class="tl-text">HbA1c 11.9%, Fasting 310 — <strong>Slight improvement but still severe.</strong> TSH starting to climb (9.3). May have resumed partial treatment.</div></div>
           <div class="tl-item bad"><div class="tl-date">Aug 2025</div><div class="tl-text">HbA1c 13.9%, Fasting 310 — <strong>Worsened again.</strong> TSH exploded to 62.7. Thyroid failure now actively sabotaging glucose control. Vicious cycle established.</div></div>
+          <div class="tl-item blue"><div class="tl-date">Apr 2026</div><div class="tl-text">HbA1c 11.8%, Fasting 147 — <strong>Turning point.</strong> First real downward movement in three years. 2.1 point HbA1c drop (biggest single-report improvement ever). Fasting cut in half. TSH down 78%. Kidney leak closed. Ferritin normalized. The vicious cycle has been broken — now stay the course.</div></div>
         </div>
       </div></div>
 
-      <div class="deep-dive critical">
-        <h4>&#128300; Clinical Deep Dive — Diabetes</h4>
-        <p><strong>Diagnosis: Type 2 Diabetes Mellitus, uncontrolled, with complications.</strong></p>
-        <p>Duration: Approximately 20 years per eye clinic records. The data suggests diagnosis likely around 2006 (age ~22), which is unusually young for T2DM and raises the question of whether this could have a LADA (Latent Autoimmune Diabetes in Adults) component. The fasting insulin of 14.1 µU/mL (Sep 2020) was in normal range, suggesting some residual beta-cell function at that time, but the severe hyperglycemia since 2023 indicates progressive beta-cell exhaustion.</p>
-        <p style="margin-top:12px;"><strong>Key concern:</strong> The 2-year gap (Apr 2021 to Apr 2023) is where everything fell apart. HbA1c went from a well-controlled 6.2% to a dangerous 14.1%. This kind of deterioration almost always means medication was stopped. The subsequent inability to bring it below 11.9% even with resumed treatment suggests the disease has progressed — beta-cell reserve is depleted, and the new severe hypothyroidism (TSH 62.7) is pouring fuel on the fire by increasing insulin resistance.</p>
+      <div class="deep-dive recovery">
+        <h4>&#10004; Clinical Deep Dive — Diabetes (Apr 2026)</h4>
+        <p><strong>Diagnosis: Type 2 Diabetes Mellitus, still uncontrolled but improving.</strong></p>
+        <p>Duration: Approximately 20 years per eye clinic records. The data suggests diagnosis likely around 2006 (age ~22), unusually young for T2DM — the LADA (Latent Autoimmune Diabetes in Adults) question remains open. The fasting insulin of 14.1 µU/mL (Sep 2020) was in normal range, suggesting residual beta-cell function at that time. Insulin testing was not repeated in Apr 2026; re-measuring would help clarify whether the current improvement is driven by insulin secretion returning or purely by exogenous medication.</p>
+        <p style="margin-top:12px;"><strong>What changed between Aug 2025 and Apr 2026:</strong> Something in the treatment plan — medication, adherence, thyroid replacement, or a combination — finally started to work. HbA1c dropped 2.1 points (the biggest single-report improvement across eight years of records). Fasting glucose broke out of the 310 plateau down to 147. These kinds of drops are most consistent with a combination of (a) a new or properly dosed glucose-lowering medication, and (b) improved thyroid status reducing insulin resistance. The cascade effect is real: as TSH came down, everything else started responding. This is the window to push harder — the next milestone is HbA1c below 9% and fasting below 130 at the next test.</p>
         <ul>
-          <li><strong>ADA Target HbA1c:</strong> &lt;7% (your current: 13.9% — nearly 2x target)</li>
-          <li><strong>ADA Target Fasting Glucose:</strong> 80–130 mg/dL (your current: 310 mg/dL — 2.4x upper target)</li>
-          <li><strong>Urine Glucose:</strong> +++ (kidneys overwhelmed, spilling sugar)</li>
-          <li><strong>Estimated daily glucose average:</strong> ~350 mg/dL</li>
+          <li><strong>ADA Target HbA1c:</strong> &lt;7% (current: 11.8% — was 13.9% in Aug 2025)</li>
+          <li><strong>ADA Target Fasting Glucose:</strong> 80–130 mg/dL (current: 147 — was 310 in Aug 2025)</li>
+          <li><strong>Urine Glucose:</strong> 3+ (still spilling; will normalize once HbA1c drops further)</li>
+          <li><strong>Urine Ketones:</strong> 2+ (new — was negative Aug 2025; flag to doctor)</li>
+          <li><strong>Average blood glucose (eAG):</strong> ~292 mg/dL (down from ~350)</li>
         </ul>
       </div>
     </div>
@@ -218,10 +248,10 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
         <p style="font-size:14px;color:var(--text-secondary);margin-top:12px;">Examining physician: Dr. Swati Pandey, Senior Consultant Ophthalmology. Patient reported blurred vision for a few months. Last eye check was Jun 2025 in Gurgaon.</p>
       </div></div>
       <div class="deep-dive critical">
-        <h4>&#128300; Clinical Deep Dive — Retinopathy Risk</h4>
-        <p><strong>Peripheral pigmentation is an early sign of diabetic retinopathy.</strong> With 20 years of diabetes and HbA1c consistently above 10% for the last 3 years, retinopathy is virtually guaranteed to some degree. The DCCT trial showed that every 1% reduction in HbA1c reduces retinopathy risk by 35%.</p>
+        <h4>&#9888; Clinical Deep Dive — Retinopathy Risk</h4>
+        <p><strong>Peripheral pigmentation is an early sign of diabetic retinopathy.</strong> With 20 years of diabetes and HbA1c consistently above 10% for the last 3 years (now 11.8%), some degree of retinopathy is virtually certain. The DCCT trial showed every 1% reduction in HbA1c reduces retinopathy risk by 35% — meaning the 2.1-point drop from Aug 2025 to Apr 2026 has already reduced forward risk meaningfully. Still, the eye is the slowest-healing organ, and existing damage does not reverse on its own.</p>
         <p style="margin-top:8px;">The Cup-to-Disc ratio of 0.6–0.7 is borderline — above 0.7 raises concern for glaucoma (which is more common in diabetics). The recommendation for OCT (Optical Coherence Tomography), SND, and HVF (Humphrey Visual Field) is appropriate to assess macular thickness and rule out diabetic macular edema.</p>
-        <p style="margin-top:8px;"><strong>What to do:</strong> Complete the OCT/HVF testing urgently. Annual dilated eye exams are mandatory. If retinopathy is confirmed, laser photocoagulation or anti-VEGF injections may be needed. The single most effective intervention is bringing HbA1c below 8% — this slows progression dramatically.</p>
+        <p style="margin-top:8px;"><strong>What to do:</strong> Complete the OCT/HVF testing — this is the single most overdue action on the dashboard. Annual dilated eye exams are mandatory. If retinopathy is confirmed, laser photocoagulation or anti-VEGF injections may be needed. Keep pushing HbA1c down.</p>
       </div>
     </div>
   </div>
@@ -231,7 +261,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
     <div class="comp-header" onclick="toggle('kidneyBody',this)">
       <span class="toggle-icon open">&#9654;</span>
       <h2>&#129516; Kidneys — Diabetic Nephropathy</h2>
-      <span class="comp-chip chip-red">Stage A2</span>
+      <span class="comp-chip chip-green">Back to A1</span>
     </div>
     <div class="comp-body" id="kidneyBody">
       <div class="card"><div class="card-body">
@@ -242,13 +272,14 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
           <div class="metric-pill ok">Apr 2021: <strong>10.0 mg/g</strong></div>
           <div class="metric-pill bad">Apr 2023: <strong>154.5 mg/g</strong></div>
           <div class="metric-pill warn">Aug 2025: <strong>60.7 mg/g</strong></div>
+          <div class="metric-pill ok">Apr 2026: <strong>23.1 mg/g</strong></div>
         </div>
       </div></div>
-      <div class="deep-dive critical">
-        <h4>&#128300; Clinical Deep Dive — Nephropathy</h4>
-        <p><strong>You have Stage A2 diabetic kidney disease (moderately increased albuminuria).</strong> The kidney story mirrors the diabetes story perfectly: normal in 2020–2021 when diabetes was controlled, then dramatic deterioration when HbA1c spiked.</p>
-        <p style="margin-top:8px;">The microalbumin/creatinine ratio of 154.5 mg/g in Apr 2023 was approaching Stage A3 (macroalbuminuria, &gt;300 mg/g). It improved to 60.7 in Aug 2025 — possibly from partial treatment — but is still 2x normal. Creatinine is stable at 0.95 mg/dL and eGFR was 118–119 when last measured, indicating the kidneys haven't lost filtering capacity yet. This is the critical window — kidney damage is still reversible at this stage.</p>
-        <p style="margin-top:8px;"><strong>Critical actions:</strong> Start ACE inhibitor (Ramipril) or ARB (Losartan/Telmisartan) even if blood pressure is normal — these medications directly protect kidney glomeruli from diabetic damage. Bring HbA1c below 8%. Get urine protein/creatinine ratio rechecked every 3 months. If the ratio climbs above 300, kidney damage becomes much harder to reverse.</p>
+      <div class="deep-dive recovery">
+        <h4>&#10004; Clinical Deep Dive — Nephropathy (Apr 2026)</h4>
+        <p><strong>Stage A2 diabetic kidney disease has regressed to Stage A1.</strong> The kidney story tracks the diabetes story: normal in 2020–2021 during good control, dramatic deterioration when HbA1c spiked (peaking at 154.5 mg/g in Apr 2023), partial recovery in Aug 2025 (60.7), and now — for the first time since Apr 2021 — the microalbumin/creatinine ratio is inside the normal &lt;30 band at 23.08 mg/g.</p>
+        <p style="margin-top:8px;">The underlying microalbumin has dropped from 38.6 to 15.0 mg/L. Creatinine stable at 0.97 mg/dL. BUN:Creatinine ratio 18.6 (normal). Urea 38.5 (normal). Sodium 138 / Potassium 4.72 / Chloride 102 all normal. eGFR not reported in the latest report, but the supporting markers are all consistent with preserved filtering capacity.</p>
+        <p style="margin-top:8px;"><strong>Keep doing this:</strong> Continued HbA1c reduction below 9% should keep the ratio trending down. If an ACE inhibitor (Ramipril) or ARB (Telmisartan/Losartan) is not already on board, this is still the right moment to discuss adding one for ongoing kidney protection — they work independent of blood pressure. Recheck urine microalbumin/Cr with every blood work cycle.</p>
       </div>
     </div>
   </div>
@@ -258,26 +289,26 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
     <div class="comp-header" onclick="toggle('cardioBody',this)">
       <span class="toggle-icon open">&#9654;</span>
       <h2>&#10084;&#65039; Cardiovascular Risk</h2>
-      <span class="comp-chip chip-red">Very High</span>
+      <span class="comp-chip chip-yellow">Improving</span>
     </div>
     <div class="comp-body" id="cardioBody">
       <div class="card"><div class="card-body">
         <h3>Lipid Risk Factors Over Time</h3>
         <div class="chart-container"><canvas id="chartCardioRisk"></canvas></div>
         <div class="metric-row">
-          <div class="metric-pill bad">HDL (latest): <strong>34 mg/dL</strong> (target &gt;40)</div>
-          <div class="metric-pill bad">Triglycerides: <strong>203 mg/dL</strong> (target &lt;150)</div>
-          <div class="metric-pill warn">LDL: <strong>123 mg/dL</strong> (target &lt;70 for diabetics)</div>
-          <div class="metric-pill warn">Non-HDL: <strong>164 mg/dL</strong> (target &lt;100)</div>
-          <div class="metric-pill ok">hsCRP: <strong>0.81 mg/L</strong> (low risk)</div>
-          <div class="metric-pill ok">Lp(a): <strong>10.1 mg/dL</strong> (normal)</div>
+          <div class="metric-pill bad">HDL (Apr 26): <strong>33 mg/dL</strong> (target &gt;40)</div>
+          <div class="metric-pill warn">Triglycerides: <strong>233 mg/dL</strong> (target &lt;150)</div>
+          <div class="metric-pill ok">LDL: <strong>96 mg/dL</strong> (target met)</div>
+          <div class="metric-pill warn">Non-HDL: <strong>143 mg/dL</strong> (target &lt;100)</div>
+          <div class="metric-pill warn">Chol:HDL: <strong>5.3</strong> (target &lt;4.5)</div>
+          <div class="metric-pill ok">LDL:HDL: <strong>2.87</strong> (best-ever)</div>
         </div>
       </div></div>
-      <div class="deep-dive critical">
-        <h4>&#128300; Clinical Deep Dive — Cardiovascular</h4>
-        <p><strong>Your 10-year cardiovascular risk is &gt;20% (very high category per AHA/ACC guidelines).</strong> Risk factors stack: T2DM (20 years), severe dyslipidemia, hypothyroidism, male sex, age 41. The lipid pattern is textbook "diabetic dyslipidemia": low HDL + high triglycerides + normal-appearing LDL that's actually small dense particles (the most dangerous kind).</p>
-        <p style="margin-top:8px;">The good news: hsCRP has improved from 3.1 to 0.81 mg/L (low cardiovascular inflammation), Lp(a) is normal at 10.1, and homocysteine is borderline but manageable. The ApoB/A1 ratio of 1.04 is elevated — ApoB is a better predictor of cardiovascular events than LDL in diabetics.</p>
-        <p style="margin-top:8px;"><strong>Statin therapy is mandatory.</strong> Per ADA 2024 guidelines, ALL diabetics aged 40–75 should be on at least moderate-intensity statin regardless of LDL. For your risk profile, high-intensity statin (Atorvastatin 40–80mg or Rosuvastatin 20–40mg) is indicated. LDL target should be &lt;70 mg/dL. Consider adding fenofibrate for triglycerides if they remain &gt;200 after statin. Fixing thyroid (TSH 62.7 → normal) should also improve lipids significantly.</p>
+      <div class="deep-dive warning">
+        <h4>&#9888; Clinical Deep Dive — Cardiovascular (Apr 2026)</h4>
+        <p><strong>10-year CV risk remains high but several markers have improved.</strong> LDL dropped from 123 to 96 — inside the &lt;100 target for the first time in the record. Total cholesterol down to 176. LDL:HDL ratio at 2.87 is the best on record. Cholesterol:HDL improved from 6.83 peak to 5.3.</p>
+        <p style="margin-top:8px;"><strong>Stubborn issues:</strong> HDL remains 33 — never once at or above 40 in nine blood tests over eight years. Triglycerides 233 (still above 150), non-HDL 143 (still above 100), VLDL 47 (still above 30). This cluster is the classic diabetic dyslipidemia signature and typically resolves only partially until HbA1c is under 8%. hsCRP not repeated this cycle (was 0.81 in Aug 2025 — low CV inflammation). Lp(a) last measured at 10.1 (normal).</p>
+        <p style="margin-top:8px;"><strong>Statin therapy remains indicated</strong> per ADA 2024 guidelines for all diabetics 40–75 regardless of LDL. High-intensity statin targets LDL &lt;70 for high-risk diabetics. Aerobic exercise (150 min/week) and omega-3 supplementation are the two evidence-based moves to raise HDL. ApoB + Lp(a) recheck at the next cycle would help refine the picture.</p>
       </div>
     </div>
   </div>
@@ -287,26 +318,18 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
     <div class="comp-header" onclick="toggle('thyroidBody',this)">
       <span class="toggle-icon open">&#9654;</span>
       <h2>&#129516; Thyroid — The Cascade Effect</h2>
-      <span class="comp-chip chip-red">Severe</span>
+      <span class="comp-chip chip-blue">Recovering</span>
     </div>
     <div class="comp-body" id="thyroidBody">
       <div class="card"><div class="card-body">
-        <h3>TSH Trajectory — Exponential Rise</h3>
+        <h3>TSH Trajectory — From Emergency to Recovering</h3>
         <div class="chart-container"><canvas id="chartTSHDeep"></canvas></div>
       </div></div>
-      <div class="deep-dive critical">
-        <h4>&#128300; Clinical Deep Dive — Hypothyroidism</h4>
-        <p><strong>TSH at 62.7 with Free T4 at 0.69 and Free T3 at 2.26 is overt severe hypothyroidism.</strong> This isn't borderline — the thyroid has essentially stopped producing adequate hormones. The likely cause is Hashimoto's thyroiditis (autoimmune), which is more common in diabetics.</p>
-        <p style="margin-top:8px;"><strong>How this worsens everything:</strong></p>
-        <ul>
-          <li><strong>Diabetes:</strong> Hypothyroidism increases insulin resistance by 30–50%, making glucose control nearly impossible at this TSH level</li>
-          <li><strong>Lipids:</strong> Low thyroid directly raises LDL and triglycerides by slowing hepatic clearance — your lipids cannot normalize until thyroid is treated</li>
-          <li><strong>Energy/Weight:</strong> Severe hypothyroidism causes fatigue, weight gain, constipation, brain fog — all of which make lifestyle changes harder</li>
-          <li><strong>Kidneys:</strong> Hypothyroidism reduces renal blood flow, worsening the kidney stress from diabetes</li>
-          <li><strong>Heart:</strong> Raises cholesterol, increases blood pressure, and can cause pericardial effusion in severe cases</li>
-          <li><strong>Mental Health:</strong> Severe hypothyroidism mimics and worsens depression and anxiety</li>
-        </ul>
-        <p style="margin-top:12px;"><strong>Treatment:</strong> Levothyroxine is the standard treatment. Starting dose is typically 1.6 µg/kg/day. For severe hypothyroidism, start at a lower dose (25–50 µg/day) and titrate up every 4–6 weeks to avoid cardiac stress. Recheck TSH and Free T4 at 6 weeks. Target TSH: 0.5–2.5 uIU/mL. Anti-TPO antibodies should be tested to confirm Hashimoto's.</p>
+      <div class="deep-dive recovery">
+        <h4>&#10004; Clinical Deep Dive — Hypothyroidism (Apr 2026)</h4>
+        <p><strong>Thyroid replacement is working.</strong> TSH has dropped 78% from 62.696 (severe hypothyroidism, Aug 2025) to 13.680 (Apr 2026). T4 Total moved from 2.9 µg/dL (below the 4.5 minimum) to 5.5 µg/dL — back in range. T3 Total from 0.56 (below 0.60) to 0.66 — back in range. Free T4 and Free T3 were not repeated this cycle but should track the Total values upward.</p>
+        <p style="margin-top:8px;">TSH of 13.68 is still above the 4.78 upper limit — the typical levothyroxine recovery pattern. Expect one more dose bump. The underlying cause is still likely Hashimoto's thyroiditis; anti-TPO antibodies would confirm. Exogenous T4 is filling the gap the gland cannot.</p>
+        <p style="margin-top:8px;"><strong>Why this improvement matters for everything else:</strong> Hypothyroidism increases insulin resistance by 30–50%, raises LDL/triglycerides, slows kidney perfusion, and causes fatigue/brain fog. The fact that this is resolving is a big reason HbA1c, fasting glucose, LDL, and kidney function all improved in the same report. <strong>Keep doing what you're doing.</strong> Recheck TSH + Free T4 at 6–8 weeks and titrate the dose until TSH lands in the 0.5–2.5 target zone.</p>
       </div>
     </div>
   </div>
@@ -319,12 +342,12 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
       <span class="comp-chip chip-yellow">Probable — Untested</span>
     </div>
     <div class="comp-body" id="neuroBody">
-      <div class="deep-dive">
+      <div class="deep-dive warning">
         <h4>&#128300; Assessment — Diabetic Neuropathy</h4>
-        <p><strong>With 20 years of diabetes and sustained HbA1c &gt;10%, diabetic peripheral neuropathy is very likely present.</strong> Studies show 50% of diabetics develop neuropathy within 25 years, and the risk increases dramatically with poor glycemic control.</p>
-        <p style="margin-top:8px;">No nerve conduction study (NCS) or monofilament testing data is available in your records. The hypothyroidism compounds the risk — hypothyroid neuropathy can overlap with diabetic neuropathy, causing additional numbness, tingling, and pain in extremities.</p>
-        <p style="margin-top:8px;"><strong>Symptoms to watch for:</strong> Tingling, burning, or numbness in feet/hands (especially at night); loss of sensation to temperature or pain; foot ulcers that don't heal; balance problems; digestive issues (gastroparesis).</p>
-        <p style="margin-top:8px;"><strong>Action:</strong> Request a monofilament test and ankle reflex assessment at your next endocrinologist visit. If symptoms are present, nerve conduction velocity (NCV) testing can confirm the diagnosis. Daily foot inspection is essential to prevent diabetic foot complications. Vitamin B12 at 378–688 pg/mL is adequate but could be optimized to &gt;500 for nerve health, especially if taking Metformin (which depletes B12).</p>
+        <p><strong>With 20 years of diabetes and HbA1c still at 11.8%, diabetic peripheral neuropathy is likely present to some degree.</strong> Studies show 50% of diabetics develop neuropathy within 25 years, and risk rises with poor glycemic control.</p>
+        <p style="margin-top:8px;">No nerve conduction study (NCS) or monofilament testing data is on file. The recent hypothyroidism compounds the risk — hypothyroid neuropathy overlaps with diabetic neuropathy, causing additional numbness/tingling. As TSH normalizes, some nerve symptoms should ease.</p>
+        <p style="margin-top:8px;"><strong>Symptoms to watch for:</strong> Tingling, burning, or numbness in feet/hands (especially at night); loss of temperature/pain sensation; foot ulcers that don't heal; balance problems; digestive issues (gastroparesis).</p>
+        <p style="margin-top:8px;"><strong>Action:</strong> Request a monofilament test and ankle reflex assessment at the next endocrinology visit. If symptoms are present, NCV testing confirms. Daily foot inspection is essential. B12 at 721 pg/mL (Apr 2026) is good for nerve health — keep that level up especially if Metformin is on board (it depletes B12).</p>
       </div>
     </div>
   </div>
@@ -333,50 +356,47 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
   <div class="comp-section">
     <div class="comp-header" onclick="toggle('metabolicBody',this)">
       <span class="toggle-icon open">&#9654;</span>
-      <h2>&#129516; Metabolic Health &amp; Testosterone</h2>
-      <span class="comp-chip chip-yellow">Below Optimal</span>
+      <h2>&#129516; Metabolic Health, Testosterone &amp; Prostate</h2>
+      <span class="comp-chip chip-yellow">Mixed</span>
     </div>
     <div class="comp-body" id="metabolicBody">
       <div class="card"><div class="card-body">
         <div class="metric-row">
           <div class="metric-pill warn">Testosterone (Aug 25): <strong>296 ng/dL</strong></div>
           <div class="metric-pill">Normal range: <strong>240–871 ng/dL</strong></div>
-          <div class="metric-pill warn">Ferritin: <strong>589 ng/mL</strong> (elevated)</div>
-          <div class="metric-pill ok">BMI: <strong>Unknown</strong> — need weight data</div>
+          <div class="metric-pill ok">Ferritin (Apr 26): <strong>263 ng/mL</strong> (normalized)</div>
+          <div class="metric-pill ok">PSA (Apr 26): <strong>0.333 ng/mL</strong> (first test)</div>
+          <div class="metric-pill ok">Rheumatoid Factor: <strong>5.8 IU/mL</strong> (in range)</div>
+          <div class="metric-pill">BMI: <strong>Unknown</strong> — need weight data</div>
         </div>
       </div></div>
       <div class="deep-dive">
-        <h4>&#128300; Assessment — Metabolic Syndrome</h4>
-        <p><strong>Testosterone at 296 ng/dL is technically within range (240–871) but functionally low for a 41-year-old male.</strong> Optimal testosterone for your age would be 450–600 ng/dL. Low testosterone, uncontrolled diabetes, hypothyroidism, and elevated ferritin form a classic metabolic syndrome cluster. Each condition worsens the others:</p>
-        <ul>
-          <li>High blood sugar reduces testosterone production</li>
-          <li>Low testosterone increases insulin resistance</li>
-          <li>Hypothyroidism lowers testosterone and SHBG</li>
-          <li>High ferritin indicates chronic inflammation driving all three</li>
-        </ul>
-        <p style="margin-top:8px;">The encouraging pattern: testosterone was 250 in Sep 2020 during poor control and improved to 296 in Aug 2025. If diabetes and thyroid are brought under control, testosterone should improve naturally. Free testosterone levels would be more informative than total — consider getting this tested.</p>
+        <h4>&#128300; Assessment — Metabolic &amp; Prostate (Apr 2026)</h4>
+        <p><strong>Testosterone at 296 ng/dL (Aug 2025) is within range (240–871) but functionally low for a 41-year-old male.</strong> Not repeated in Apr 2026. Optimal testosterone for your age is 450–600 ng/dL. Low testosterone, previously uncontrolled diabetes, hypothyroidism, and (previously) elevated ferritin formed a classic metabolic syndrome cluster. The good news: ferritin has normalized from 588 to 263, suggesting the chronic inflammation driving all three is easing. A recheck of total + free testosterone at the next cycle would show whether recovering thyroid and diabetes control are pulling testosterone up as expected.</p>
+        <p style="margin-top:8px;"><strong>First-ever PSA 0.333 ng/mL</strong> — well under the 4.0 limit. Prostate is clean. Establishes a baseline; annual or 2-yearly recheck from here.</p>
+        <p style="margin-top:8px;"><strong>First-ever Rheumatoid Factor 5.8 IU/mL</strong> (ref &lt;14) — in range. Was "&lt;3.5" in Aug 2025, so it is now detectable where it was not before. Unlikely clinically significant on its own, but worth a recheck in 6–12 months if joint pain or morning stiffness develops.</p>
       </div>
     </div>
   </div>
 
   <!-- ACTION PLAN -->
   <div class="action-plan">
-    <h2>&#127919; Priority Action Plan</h2>
-    <p style="color:var(--text-secondary);margin-bottom:20px;">Ordered by clinical urgency. The first 3 are immediate — within the next 2 weeks.</p>
+    <h2>&#127919; Priority Action Plan (Apr 2026 Refresh)</h2>
+    <p style="color:var(--text-secondary);margin-bottom:20px;">Reordered for the new recovery context. #1–#3 are continue-the-momentum tasks, #4–#7 are ongoing actions.</p>
 
     <div class="action-item">
-      <div class="action-num urgent">1</div>
+      <div class="action-num ok">1</div>
       <div class="action-content">
-        <h4><span class="action-tag tag-urgent">URGENT</span> Start/Adjust Levothyroxine for Thyroid</h4>
-        <p>TSH 62.7 is a medical emergency. See an endocrinologist within 1 week. Start levothyroxine 25–50 µg/day, titrate up every 4–6 weeks. Test anti-TPO antibodies. Recheck TSH + Free T4 at 6 weeks. This single intervention will improve glucose control, lipids, energy, and mental clarity.</p>
+        <h4><span class="action-tag tag-continue">CONTINUE</span> Keep the current diabetes + thyroid medication plan running</h4>
+        <p>Whatever combination of changes started between Aug 2025 and Apr 2026 is clearly working (HbA1c ↓2.1 pts, TSH ↓78%, kidney leak closed). Do not stop or switch medications without talking to the endocrinologist. Confirm exact current doses and adherence at the next visit.</p>
       </div>
     </div>
 
     <div class="action-item">
       <div class="action-num urgent">2</div>
       <div class="action-content">
-        <h4><span class="action-tag tag-urgent">URGENT</span> Diabetes Medication Review & Titration</h4>
-        <p>HbA1c 13.9% requires aggressive treatment. Current medications need urgent review — likely need combination therapy: Metformin (if tolerated) + SGLT2 inhibitor (Dapagliflozin/Empagliflozin — also protects kidneys and heart) + possibly basal insulin (Glargine/Degludec). GLP-1 receptor agonist (Semaglutide/Liraglutide) is ideal if affordable — addresses glucose, weight, and cardiovascular risk simultaneously.</p>
+        <h4><span class="action-tag tag-urgent">URGENT</span> Thyroid dose titration + 6–8 week recheck</h4>
+        <p>TSH 13.68 is still above the 4.78 upper limit — one more dose bump is likely needed. Book an endocrinology follow-up with TSH + Free T4 at 6–8 weeks. Anti-TPO antibody testing if not already done, to confirm Hashimoto's.</p>
       </div>
     </div>
 
@@ -384,39 +404,39 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
       <div class="action-num urgent">3</div>
       <div class="action-content">
         <h4><span class="action-tag tag-urgent">URGENT</span> Complete Eye Investigations (OCT/HVF)</h4>
-        <p>The Belle Vue Eye Clinic recommended OCT and HVF testing. Schedule within 2 weeks. Peripheral pigmentation with 20 years DM needs immediate characterization to determine if laser/anti-VEGF intervention is needed.</p>
+        <p>Belle Vue Eye Clinic (Mar 2026) recommended OCT and HVF testing after finding peripheral pigmentation. This remains the most overdue item. Schedule within 2 weeks — don't let retinopathy progress silently while everything else improves.</p>
       </div>
     </div>
 
     <div class="action-item">
       <div class="action-num">4</div>
       <div class="action-content">
-        <h4><span class="action-tag tag-important">IMPORTANT</span> Start Statin + ACE Inhibitor/ARB</h4>
-        <p>High-intensity statin (Atorvastatin 40mg or Rosuvastatin 20mg) for cardiovascular protection. ACE inhibitor (Ramipril 2.5–5mg) or ARB (Telmisartan 40mg) for kidney protection. Both are indicated regardless of blood pressure or current lipid levels — they reduce diabetic complications by 25–35%.</p>
+        <h4><span class="action-tag tag-important">IMPORTANT</span> Statin + ACE/ARB confirmation</h4>
+        <p>Per ADA 2024, all diabetics aged 40–75 should be on at least moderate-intensity statin. LDL is now 96 (target &lt;100 met) but CV risk remains elevated — high-intensity statin targeting &lt;70 is reasonable. ACE (Ramipril) or ARB (Telmisartan) for continued kidney protection even though microalbumin/Cr normalized. Verify both are on the current prescription list.</p>
       </div>
     </div>
 
     <div class="action-item">
       <div class="action-num">5</div>
       <div class="action-content">
-        <h4><span class="action-tag tag-important">IMPORTANT</span> Blood Work Recheck in 8–10 Weeks</h4>
-        <p>After starting/adjusting thyroid and diabetes medications: recheck HbA1c, TSH, Free T4, fasting glucose, lipid panel, and microalbumin/creatinine ratio. This is the accountability checkpoint.</p>
+        <h4><span class="action-tag tag-important">IMPORTANT</span> Investigate urine ketones 2+</h4>
+        <p>New finding on the Apr 2026 report (was negative in Aug 2025). Likely benign — fasting duration before the test, lower-carb eating, or rapid weight loss can all cause it. But moderate ketonuria in a diabetic warrants a flag to the endocrinologist. Ask about a capillary ketone check if fasting sugars spike again, to rule out any DKA tendency.</p>
       </div>
     </div>
 
     <div class="action-item">
       <div class="action-num">6</div>
       <div class="action-content">
-        <h4><span class="action-tag tag-important">IMPORTANT</span> Lifestyle Protocol</h4>
-        <p><strong>Diet:</strong> Low glycemic index, moderate carb (100–150g/day), high fiber, emphasize protein at each meal. Avoid white rice, bread, sugar. Increase leafy greens, dal, nuts, eggs. <strong>Exercise:</strong> 150 min/week moderate activity (brisk walking). Even 20 min post-meal walks reduce glucose by 30–40%. <strong>Sleep:</strong> 7–8 hours. Poor sleep worsens insulin resistance. <strong>Stress:</strong> Financial stress affects cortisol → blood sugar. The trading schedule and baby prep are real factors — build sustainable routines.</p>
+        <h4><span class="action-tag tag-important">IMPORTANT</span> Lifestyle Protocol — double down</h4>
+        <p><strong>Diet:</strong> Low GI, moderate carb (100–150g/day), high fiber, protein at every meal. Avoid white rice, bread, sugar. Increase leafy greens, dal, nuts, eggs. <strong>Exercise:</strong> 150 min/week moderate. Even 20 min post-meal walks reduce glucose by 30–40% and are the best HDL raiser. <strong>Sleep:</strong> 7–8 hours — poor sleep worsens insulin resistance. <strong>Stress:</strong> Financial and baby-prep stress affect cortisol → blood sugar. Build sustainable routines.</p>
       </div>
     </div>
 
     <div class="action-item">
       <div class="action-num">7</div>
       <div class="action-content">
-        <h4><span class="action-tag tag-routine">ROUTINE</span> Ongoing Monitoring Schedule</h4>
-        <p><strong>Every 3 months:</strong> HbA1c, fasting glucose, thyroid panel. <strong>Every 6 months:</strong> Complete lipid panel, kidney function, microalbumin/Cr ratio, liver enzymes. <strong>Annually:</strong> Dilated eye exam, foot exam, ECG, FibroScan. <strong>Daily:</strong> Home blood glucose monitoring (fasting + post-meal). <strong>Consider:</strong> CGM (Continuous Glucose Monitor) like Freestyle Libre for real-time tracking.</p>
+        <h4><span class="action-tag tag-routine">ROUTINE</span> Monitoring schedule</h4>
+        <p><strong>Every 3 months:</strong> HbA1c, fasting glucose, TSH, Free T4. <strong>Every 6 months:</strong> Full lipid panel, kidney function + microalbumin/Cr, liver enzymes, CBC. <strong>Annually:</strong> Dilated eye exam, foot exam, ECG, FibroScan or liver ultrasound, PSA, testosterone (total + free), HbA1c &amp; full panel. <strong>Daily:</strong> Home glucose monitoring (fasting + 2 post-meal). <strong>Consider:</strong> CGM (Freestyle Libre) to capture post-meal patterns currently invisible.</p>
       </div>
     </div>
   </div>
@@ -424,7 +444,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
 </div>
 
 <footer>
-  <p>HB Health Dashboard — Diabetes & Complications Assessment</p>
+  <p>HB Health Dashboard — Diabetes &amp; Complications Assessment | Refreshed Apr 2026</p>
   <p style="margin-top:4px;">This analysis is for personal health tracking. Please consult your endocrinologist before making any medication changes.</p>
 </footer>
 
@@ -433,15 +453,15 @@ Chart.defaults.font.family = "'Roboto','Google Sans',sans-serif";
 Chart.defaults.font.size = 12;
 Chart.defaults.color = '#5F6368';
 
-const labels8 = ['Jan 19','Dec 19','Sep 20','Dec 20','Apr 21','Apr 23','Jul 24','Aug 25'];
+const labels9 = ['Jan 19','Dec 19','Sep 20','Dec 20','Apr 21','Apr 23','Jul 24','Aug 25','Apr 26'];
 
 // HbA1c Journey
 new Chart(document.getElementById('chartHba1cJourney'), {
   type:'line',
-  data:{labels:labels8, datasets:[
-    {label:'HbA1c (%)',data:[6.2,5.9,8.0,6.8,6.2,14.1,11.9,13.9],borderColor:'#EA4335',backgroundColor:'rgba(234,67,53,0.1)',borderWidth:3,pointRadius:6,pointBackgroundColor:['#FBBC04','#34A853','#EA4335','#FBBC04','#34A853','#EA4335','#EA4335','#EA4335'],fill:true,tension:0.3},
-    {label:'ADA Target (7%)',data:Array(8).fill(7),borderColor:'#34A853',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false},
-    {label:'Diabetic (6.5%)',data:Array(8).fill(6.5),borderColor:'#FBBC04',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false}
+  data:{labels:labels9, datasets:[
+    {label:'HbA1c (%)',data:[6.2,5.9,8.0,6.8,6.2,14.1,11.9,13.9,11.8],borderColor:'#EA4335',backgroundColor:'rgba(234,67,53,0.1)',borderWidth:3,pointRadius:6,pointBackgroundColor:['#FBBC04','#34A853','#EA4335','#FBBC04','#34A853','#EA4335','#EA4335','#EA4335','#1A73E8'],fill:true,tension:0.3},
+    {label:'ADA Target (7%)',data:Array(9).fill(7),borderColor:'#34A853',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false},
+    {label:'Diabetic (6.5%)',data:Array(9).fill(6.5),borderColor:'#FBBC04',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false}
   ]},
   options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
     plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:16}}},
@@ -452,25 +472,23 @@ new Chart(document.getElementById('chartHba1cJourney'), {
 // Microalbumin
 new Chart(document.getElementById('chartMicroalbumin'), {
   type:'bar',
-  data:{labels:['Dec 2020','Apr 2021','Apr 2023','Aug 2025'], datasets:[
-    {label:'Microalbumin/Cr Ratio (mg/g)',data:[11.49,10.0,154.48,60.72],backgroundColor:['#34A853','#34A853','#EA4335','#FA903E'],borderRadius:8,barThickness:40}
+  data:{labels:['Dec 2020','Apr 2021','Apr 2023','Aug 2025','Apr 2026'], datasets:[
+    {label:'Microalbumin/Cr Ratio (mg/g)',data:[11.49,10.0,154.48,60.72,23.08],backgroundColor:['#34A853','#34A853','#EA4335','#FA903E','#34A853'],borderRadius:8,barThickness:40}
   ]},
   options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},
-      annotation:{annotations:{line1:{type:'line',yMin:30,yMax:30,borderColor:'#EA4335',borderWidth:2,borderDash:[6,4],label:{content:'Normal (<30)',enabled:true}}}}
-    },
+    plugins:{legend:{display:false}},
     scales:{x:{grid:{display:false}},y:{min:0,max:180,grid:{color:'#E8EAED'}}}}
 });
 
 // Cardio Risk
 new Chart(document.getElementById('chartCardioRisk'), {
   type:'line',
-  data:{labels:labels8, datasets:[
-    {label:'HDL',data:[33,27,32,23,30,27.3,27.8,34],borderColor:'#34A853',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
-    {label:'Triglycerides (÷10)',data:[11.9,12.2,21.4,17.7,15.6,23.6,27.9,20.3],borderColor:'#FBBC04',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
-    {label:'LDL',data:[99.6,132,123,99,115,96.5,106.4,123],borderColor:'#EA4335',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
-    {label:'HDL Target (40)',data:Array(8).fill(40),borderColor:'#34A853',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false},
-    {label:'LDL Target (70)',data:Array(8).fill(70),borderColor:'#EA4335',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
+  data:{labels:labels9, datasets:[
+    {label:'HDL',data:[33,27,32,23,30,27.3,27.8,34,33],borderColor:'#34A853',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
+    {label:'Triglycerides (÷10)',data:[11.9,12.2,21.4,17.7,15.6,23.6,27.9,20.3,23.3],borderColor:'#FBBC04',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
+    {label:'LDL',data:[99.6,132,123,99,115,96.5,106.4,123,96],borderColor:'#EA4335',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
+    {label:'HDL Target (40)',data:Array(9).fill(40),borderColor:'#34A853',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false},
+    {label:'LDL Target (70)',data:Array(9).fill(70),borderColor:'#EA4335',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
   ]},
   options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
     plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},
@@ -480,9 +498,9 @@ new Chart(document.getElementById('chartCardioRisk'), {
 // TSH Deep
 new Chart(document.getElementById('chartTSHDeep'), {
   type:'line',
-  data:{labels:labels8, datasets:[
-    {label:'TSH (uIU/mL)',data:[5.03,2.78,1.98,1.08,null,5.721,9.298,62.696],borderColor:'#A142F4',backgroundColor:'rgba(161,66,244,0.1)',borderWidth:3,pointRadius:6,pointBackgroundColor:['#FBBC04','#34A853','#34A853','#34A853',null,'#FBBC04','#EA4335','#EA4335'],fill:true,tension:0.3},
-    {label:'Upper Normal (4.78)',data:Array(8).fill(4.78),borderColor:'#34A853',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}
+  data:{labels:labels9, datasets:[
+    {label:'TSH (uIU/mL)',data:[5.03,2.78,1.98,1.08,null,5.721,9.298,62.696,13.680],borderColor:'#A142F4',backgroundColor:'rgba(161,66,244,0.1)',borderWidth:3,pointRadius:6,pointBackgroundColor:['#FBBC04','#34A853','#34A853','#34A853',null,'#FBBC04','#EA4335','#EA4335','#1A73E8'],fill:true,tension:0.3},
+    {label:'Upper Normal (4.78)',data:Array(9).fill(4.78),borderColor:'#34A853',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}
   ]},
   options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{position:'top',labels:{usePointStyle:true}}},
