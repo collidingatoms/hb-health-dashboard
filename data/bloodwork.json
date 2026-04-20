@@ -532,5 +532,66 @@
       "selenium": {"value": 184.12, "unit": "µg/L", "refLow": 60, "refHigh": 340, "status": "normal"},
       "manganese": {"value": 10.39, "unit": "µg/L", "refLow": 7.1, "refHigh": 20, "status": "normal"}
     }
+  },
+  "eyeScreening": {
+    "date": "2026-03-31",
+    "dateDisplay": "Mar 26",
+    "clinic": "Belle Vue Eye Clinic",
+    "doctor": "Dr Swati Pandey",
+    "testsPerformed": [
+      "OCT Optic Nerve Head (ONH) — both eyes",
+      "OCT Macula (Radial 12x12 mm)",
+      "OCT GCL + IPL thickness",
+      "Humphrey Visual Field 24-2 ZETA Fast — both eyes"
+    ],
+    "testsNotPerformed": [
+      "Intraocular pressure (IOP/tonometry) — not recorded in imaging we have",
+      "Dilated fundus examination for diabetic retinopathy — not done this visit"
+    ],
+    "visualField": {
+      "rightEye": {
+        "meanSensitivity": 29.64,
+        "meanDeviationProbability": -0.22,
+        "patternDeviation": 0.47,
+        "fovea": 32,
+        "ght": "Outside Normal Limits",
+        "interpretation": "Upper-field defect cluster visible; abnormal"
+      },
+      "leftEye": {
+        "meanSensitivity": 30.44,
+        "meanDeviationProbability": -0.24,
+        "patternDeviation": 0.00,
+        "fovea": 32,
+        "ght": "Within Normal Limits",
+        "interpretation": "Essentially clean"
+      }
+    },
+    "opticNerveOCT": {
+      "cupDiscArea": {"right": 0.48, "left": 0.55, "normalRange": "0.10 - 0.40", "status": "elevated"},
+      "cupDiscVertical": {"right": 0.74, "left": 0.76, "status": "elevated"},
+      "cupDiscHorizontal": {"right": 0.68, "left": 0.77, "status": "elevated"},
+      "rimArea": {"right": 1.37, "left": 1.00, "unit": "mm²"},
+      "discArea": {"right": 2.61, "left": 2.22, "unit": "mm²"},
+      "ddls": {"right": 4, "left": 5, "note": "Disc Damage Likelihood Scale — 4-5 suggests moderate likelihood of glaucomatous damage"},
+      "gclIplMean": {"right": 86, "left": 82, "unit": "μm"},
+      "gclIplMinimum": {"right": 50, "left": 23, "unit": "μm", "note": "Left eye focal thinning (23 μm) — watching"},
+      "nflNstinAverage": {"right": 94, "left": 91, "unit": "μm"},
+      "nflSuperior": {"right": 110, "left": 110, "unit": "μm"},
+      "nflInferior": {"right": 98, "left": 98, "unit": "μm"}
+    },
+    "macula": {
+      "centralThickness": {"right": 282, "left": 264, "unit": "μm", "normalRange": "250-300", "status": "normal"},
+      "foveaMinimum": {"right": 230, "left": 218, "unit": "μm", "status": "normal"},
+      "foveaContour": "Preserved in both eyes",
+      "rpeDeformation": "Clean — no drusen, no fluid, no deformation",
+      "diabeticMacularEdema": "None visible"
+    },
+    "impression": "Glaucoma-suspect — under evaluation. Early-stage glaucoma cannot be ruled out. Elevated C/D ratios bilaterally (0.74 R, 0.76 L vertical), right-eye VF outside normal limits, DDLS 4-5. Macula OCT clean — no diabetic macular edema detected on this visit.",
+    "prescription": {
+      "medication": "Tab [name to confirm from Rx] — 1/day × 30 days after food",
+      "plan": "Repeat bilateral Humphrey Visual Field (HVF) after 1 month",
+      "notes": "Dr Pandey confirmed she is still in screening/evaluation phase — no formal diagnosis made yet"
+    },
+    "ledStatus": "in-workup"
   }
 }

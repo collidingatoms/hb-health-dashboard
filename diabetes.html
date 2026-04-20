@@ -146,16 +146,16 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
       <span class="rb-pill">APR 2026</span>
       <h2>Risk picture is meaningfully better</h2>
     </div>
-    <p>Two of the four "HIGH RISK" organ cards from Aug 2025 have downgraded. <strong>Kidneys</strong>: Stage A2 nephropathy has regressed to A1 (microalbumin/Cr <code>60.7 → 23.1</code>). <strong>Thyroid</strong>: TSH <code>62.7 → 13.7</code>, Free T4 back in range. Cardiovascular and eye risk remain elevated pending further HbA1c drops and OCT/HVF completion — but the trajectory has reversed. Keep the current treatment plan running.</p>
+    <p>Two of the four "HIGH RISK" organ cards from Aug 2025 have downgraded. <strong>Kidneys</strong>: Stage A2 nephropathy has regressed to A1 (microalbumin/Cr <code>60.7 → 23.1</code>). <strong>Thyroid</strong>: TSH <code>62.7 → 13.7</code>, Free T4 back in range. <strong>Eyes</strong>: OCT + HVF screening now complete (31-Mar-2026, Dr Swati Pandey) — macula is clean (no diabetic macular edema), but a <em>glaucoma-suspect</em> picture has emerged (elevated C/D ratios, right-eye visual field outside normal limits). Treatment started, 1-month follow-up booked. Cardiovascular risk remains elevated pending further HbA1c drops — but the overall trajectory has reversed. Keep the current treatment plan running.</p>
   </div>
 
   <!-- RISK DASHBOARD -->
   <div class="risk-grid">
-    <div class="risk-card danger">
+    <div class="risk-card warning">
       <div class="icon">&#128065;</div>
-      <h3>Eyes (Retinopathy)</h3>
-      <div class="status red">HIGH RISK — Active screening</div>
-      <p>Peripheral pigmentation found (Mar 2026). 20+ years DM. OCT/HVF still pending.</p>
+      <h3>Eyes (DR + Glaucoma)</h3>
+      <div class="status yellow">WORKUP IN PROGRESS</div>
+      <p>OCT + HVF done 31-Mar-2026. Macula clean (no DME). Glaucoma-suspect — elevated C/D both eyes, R-eye VF outside normal limits. Treatment started. Repeat HVF in 1 month.</p>
     </div>
     <div class="risk-card recovering">
       <div class="icon">&#129516;</div>
@@ -229,30 +229,76 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
     </div>
   </div>
 
-  <!-- EYES -->
+  <!-- EYES — TWO-TRACK: Retinopathy + Glaucoma -->
   <div class="comp-section">
     <div class="comp-header" onclick="toggle('eyesBody',this)">
       <span class="toggle-icon open">&#9654;</span>
-      <h2>&#128065; Eyes — Diabetic Retinopathy</h2>
-      <span class="comp-chip chip-red">High Risk</span>
+      <h2>&#128065; Eyes — Retinopathy + Glaucoma Workup</h2>
+      <span class="comp-chip chip-yellow">Workup in progress</span>
     </div>
     <div class="comp-body" id="eyesBody">
+
+      <!-- Visit summary card -->
       <div class="card"><div class="card-body">
-        <h3>Eye Exam — Belle Vue Eye Clinic, Mar 2026</h3>
+        <h3>Visit Summary — Belle Vue Eye Clinic, 31-Mar-2026</h3>
+        <p style="margin-bottom:12px;">Examining physician: <strong>Dr Swati Pandey</strong>, Senior Consultant Ophthalmology. Tests performed both eyes: OCT Optic Nerve Head (ONH), OCT Macula (radial 12×12 mm), GCL+IPL thickness, Humphrey Visual Field 24-2 ZETA Fast.</p>
         <div class="metric-row">
-          <div class="metric-pill bad">DM Duration: <strong>20 years</strong></div>
-          <div class="metric-pill bad">Peripheral Pigmentation: <strong>Present</strong></div>
-          <div class="metric-pill warn">CD Ratio: <strong>0.6–0.7</strong></div>
-          <div class="metric-pill">Recommended: <strong>OCT, SND, HVF</strong></div>
+          <div class="metric-pill ok">Macula OCT: <strong>No DME</strong></div>
+          <div class="metric-pill warn">C/D vertical: <strong>R 0.74 / L 0.76</strong></div>
+          <div class="metric-pill bad">R-eye VF: <strong>Outside Normal Limits</strong></div>
+          <div class="metric-pill ok">L-eye VF: <strong>Within Normal Limits</strong></div>
+          <div class="metric-pill warn">DDLS: <strong>R 4 / L 5</strong></div>
         </div>
-        <p style="font-size:14px;color:var(--text-secondary);margin-top:12px;">Examining physician: Dr. Swati Pandey, Senior Consultant Ophthalmology. Patient reported blurred vision for a few months. Last eye check was Jun 2025 in Gurgaon.</p>
+        <p style="font-size:14px;color:var(--text-secondary);margin-top:12px;">Dr Pandey noted she is still in the screening/evaluation phase — no formal diagnosis has been issued yet. Treatment: one tablet daily × 30 days (after food). Plan: repeat bilateral HVF after 1 month to confirm or rule out early-stage glaucoma.</p>
       </div></div>
-      <div class="deep-dive critical">
-        <h4>&#9888; Clinical Deep Dive — Retinopathy Risk</h4>
-        <p><strong>Peripheral pigmentation is an early sign of diabetic retinopathy.</strong> With 20 years of diabetes and HbA1c consistently above 10% for the last 3 years (now 11.8%), some degree of retinopathy is virtually certain. The DCCT trial showed every 1% reduction in HbA1c reduces retinopathy risk by 35% — meaning the 2.1-point drop from Aug 2025 to Apr 2026 has already reduced forward risk meaningfully. Still, the eye is the slowest-healing organ, and existing damage does not reverse on its own.</p>
-        <p style="margin-top:8px;">The Cup-to-Disc ratio of 0.6–0.7 is borderline — above 0.7 raises concern for glaucoma (which is more common in diabetics). The recommendation for OCT (Optical Coherence Tomography), SND, and HVF (Humphrey Visual Field) is appropriate to assess macular thickness and rule out diabetic macular edema.</p>
-        <p style="margin-top:8px;"><strong>What to do:</strong> Complete the OCT/HVF testing — this is the single most overdue action on the dashboard. Annual dilated eye exams are mandatory. If retinopathy is confirmed, laser photocoagulation or anti-VEGF injections may be needed. Keep pushing HbA1c down.</p>
+
+      <!-- Track 1: Diabetic Retinopathy -->
+      <div class="deep-dive recovery">
+        <h4>&#10004; Track 1 — Diabetic Retinopathy (DR)</h4>
+        <p><strong>Good news from the 31-Mar-2026 OCT macula scan:</strong> no diabetic macular edema visible in either eye, foveal contour preserved, RPE deformation maps clean, no drusen or subretinal fluid. Central macular thickness is well within the normal 250–300 μm band (R 282 μm, L 264 μm). For a patient with 20 years of diabetes and HbA1c that has lived above 10% for the last three years, this is a better result than expected.</p>
+        <p style="margin-top:8px;"><strong>What this OCT does and doesn't cover:</strong> it is excellent at detecting macular edema and neovascular changes behind the retina, but a formal <em>dilated fundus exam</em> is still the gold standard for staging early non-proliferative diabetic retinopathy (micro-aneurysms, dot-blot hemorrhages, cotton-wool spots). That wasn't done on this visit. Schedule one on the next eye appointment — ideally combined with the 1-month HVF recheck — so the DR side of the picture is fully locked down.</p>
+        <p style="margin-top:8px;"><strong>Forward risk:</strong> the DCCT/UKPDS data says every 1% HbA1c drop cuts retinopathy risk by ~35%. The 2.1-point drop from Aug 2025 → Apr 2026 has already bought meaningful protection. Keep pushing HbA1c below 9% and the next OCT a year from now should still be clean.</p>
       </div>
+
+      <!-- Track 2: Glaucoma-suspect -->
+      <div class="deep-dive warning" style="margin-top:16px;">
+        <h4>&#9888; Track 2 — Glaucoma-suspect (new finding, under evaluation)</h4>
+        <p><strong>The unexpected finding of this visit.</strong> The OCT optic nerve head scan shows bilaterally enlarged cupping: cup-to-disc area ratios of 0.48 (R) and 0.55 (L), both above the 0.10–0.40 normal range. Vertical C/D ratios are 0.74 and 0.76 — clinically elevated. The Disc Damage Likelihood Scale (DDLS) at 4 and 5 suggests moderate likelihood of glaucomatous structural change. In parallel, the Humphrey 24-2 visual field on the right eye returned <strong>GHT: Outside Normal Limits</strong> with a cluster of defects in the upper field; the left eye was clean.</p>
+        <p style="margin-top:8px;"><strong>GCL+IPL thickness:</strong> mean 86 μm (R) and 82 μm (L) — still in range on average, but the minimum thickness on the left eye is only 23 μm, indicating a focal region of ganglion cell loss that's worth rechecking at the 1-month visit.</p>
+        <p style="margin-top:8px;"><strong>Why the screening isn't over yet:</strong> a single VF "outside normal limits" result can be driven by fixation losses, learning effect, or artifact. Dr Pandey is correctly asking for a repeat HVF after a month before committing to a diagnosis. The 30-day tablet she has started will either protect against progression during the observation window or provide supporting evidence when the next VF is read. Until the second HVF is in, this stays on the dashboard as <em>suspect — under evaluation</em>, not confirmed glaucoma.</p>
+        <p style="margin-top:8px;"><strong>What to do:</strong> Complete the 30-day medication course exactly as prescribed, book the repeat bilateral HVF for end-April / early-May, and ask Dr Pandey to add a dilated fundus exam at that visit so the DR screening is formally on the record. If the second HVF is also abnormal, the next step is typically IOP series, gonioscopy, and possibly a 10-2 visual field.</p>
+      </div>
+
+      <!-- Structured findings table -->
+      <div class="card" style="margin-top:16px;"><div class="card-body">
+        <h3>Structured Findings — 31-Mar-2026</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:14px;">
+          <thead>
+            <tr style="background:#F8F9FA;">
+              <th style="text-align:left;padding:10px;border-bottom:1px solid #E8EAED;">Parameter</th>
+              <th style="text-align:left;padding:10px;border-bottom:1px solid #E8EAED;">Right Eye</th>
+              <th style="text-align:left;padding:10px;border-bottom:1px solid #E8EAED;">Left Eye</th>
+              <th style="text-align:left;padding:10px;border-bottom:1px solid #E8EAED;">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Visual Field — Mean Sensitivity</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">29.64 dB</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">30.44 dB</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">~30 normal</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Visual Field — GHT</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#EA4335;">Outside Normal Limits</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#34A853;">Within Normal Limits</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">—</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Visual Field — Fovea</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">32 dB</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">32 dB</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Normal</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Cup/Disc Area</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">0.48 &uarr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">0.55 &uarr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">0.10 – 0.40</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Cup/Disc Vertical</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">0.74 &uarr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">0.76 &uarr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">&lt; 0.7 typical</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>DDLS (Disc Damage)</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">4</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">5</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Higher = more damage</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>NFL Superior</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">110 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">110 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Normal</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>NFL Inferior</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">98 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">98 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Normal</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>GCL+IPL Mean</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">86 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">82 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">~80 normal</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>GCL+IPL Minimum</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">50 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#EA4335;">23 μm &darr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Focal min</td></tr>
+            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Central Macular Thickness</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#34A853;">282 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#34A853;">264 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">250–300</td></tr>
+            <tr><td style="padding:8px 10px;"><strong>Fovea Minimum</strong></td><td style="padding:8px 10px;color:#34A853;">230 μm</td><td style="padding:8px 10px;color:#34A853;">218 μm</td><td style="padding:8px 10px;color:#5F6368;">Normal</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;color:#5F6368;margin-top:12px;"><strong>What's missing from the record:</strong> Intraocular pressure (IOP/tonometry) numbers and a dilated fundus photo. Neither is in the five OCT/VF images on file — request both at the 1-month follow-up for a complete picture.</p>
+      </div></div>
+
     </div>
   </div>
 
@@ -401,10 +447,10 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
     </div>
 
     <div class="action-item">
-      <div class="action-num urgent">3</div>
+      <div class="action-num ok">3</div>
       <div class="action-content">
-        <h4><span class="action-tag tag-urgent">URGENT</span> Complete Eye Investigations (OCT/HVF)</h4>
-        <p>Belle Vue Eye Clinic (Mar 2026) recommended OCT and HVF testing after finding peripheral pigmentation. This remains the most overdue item. Schedule within 2 weeks — don't let retinopathy progress silently while everything else improves.</p>
+        <h4><span class="action-tag tag-continue">CONTINUE</span> Eye workup follow-up with Dr Pandey (glaucoma screening in progress)</h4>
+        <p>OCT (ONH + Macula) and HVF 24-2 are now done at Belle Vue (31-Mar-2026). Macula is clean — no diabetic macular edema, no DR signs on OCT. However, the glaucoma picture is unresolved: C/D vertical elevated at 0.74 R / 0.76 L, DDLS R4 / L5, and the right-eye visual field shows GHT "Outside Normal Limits" with PD 0.47. Dr Pandey is <strong>still screening</strong> (not a confirmed diagnosis) and has prescribed eye drops + a 30-day tablet course. <strong>Next steps:</strong> (a) complete the full 30-day medication course, (b) repeat HVF after 1 month as instructed, (c) at the next visit ask for IOP measurement and a dilated fundus photograph (neither has been done yet — both are essential to close out both the DR and glaucoma workups), (d) request a written provisional diagnosis once the repeat HVF is interpreted.</p>
       </div>
     </div>
 
