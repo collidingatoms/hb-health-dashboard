@@ -588,7 +588,9 @@
     },
     "impression": "Glaucoma-suspect — under evaluation. Early-stage glaucoma cannot be ruled out. Elevated C/D ratios bilaterally (0.74 R, 0.76 L vertical), right-eye VF outside normal limits, DDLS 4-5. Macula OCT clean — no diabetic macular edema detected on this visit.",
     "prescription": {
-      "medication": "Tab [name to confirm from Rx] — 1/day × 30 days after food",
+      "tablet": "Tab Forslin — 1 time/day × 30 days (after food)",
+      "eyeDrops": "Eye Drops TIZTA — 3 times/day, both eyes",
+      "gel": "Gel Cladra — 1 time/day at night, both eyes",
       "plan": "Repeat bilateral Humphrey Visual Field (HVF) after 1 month",
       "notes": "Dr Pandey confirmed she is still in screening/evaluation phase — no formal diagnosis made yet"
     },
