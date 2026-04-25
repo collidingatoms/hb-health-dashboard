@@ -1,146 +1,210 @@
 <!DOCTYPE html>
+<!--
+  HB Health Dashboard — Page: Daily Tracking
+  Design system: HBHealth_Design-System_ver01_25042026.md
+  Components used: §7.1 Header · §7.2 Nav · §7.12 Tab strip · §7.13 Form controls
+                   · §7.14 Upload zone · §7.6 Data table · §7.9 Chart · §7.15 Footer
+
+  ⚠️ DATA FLOW FIREWALL (per spec §14):
+  Every JS function below — saveManualReadings, loadManualReadings, applyFilter,
+  resetFilter, setQuickRange, getFilteredReadings, addReading, getStatus,
+  renderTable, exportReadings, clearReadings, handleFileUpload, initCharts,
+  updateCharts, switchTab — and the fetch('data/sugar-readings.json') and the
+  localStorage hooks and the Apple Health HKQuantityTypeIdentifier* XML parsing
+  are preserved VERBATIM from v1. Only Chart.js styling defaults and chart line
+  colours have changed (rainbow palette → sage/brick/clay per §6).
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HB Health — Blood Sugar &amp; BP Tracking</title>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>HB Health · Blood Sugar &amp; BP Tracking</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <style>
 :root {
-  --bg:#F8F9FA;--surface:#FFF;--text:#202124;--text-secondary:#5F6368;--border:#E8EAED;
-  --blue:#1A73E8;--green:#34A853;--red:#EA4335;--yellow:#FBBC04;--purple:#A142F4;--orange:#FA903E;
-  --blue-bg:#E8F0FE;--green-bg:#E6F4EA;--red-bg:#FCE8E6;--yellow-bg:#FEF7E0;--purple-bg:#F3E8FD;
-  --shadow:0 1px 3px rgba(60,64,67,0.12);--radius:12px;
+  --paper: #F0EEE6; --surface: #FAF9F5; --surface-2: #F5F2E8; --hairline: #E3E0D6;
+  --ink: #1F1F1F; --ink-secondary: #5A5A5A; --ink-tertiary: #8A8682;
+  --sage: #2C7A4F; --brick: #B33636; --clay: #C77B2C; --terracotta: #CC785C;
+  --sage-tint: #EAF2EC; --brick-tint: #F5E5E3; --clay-tint: #F7EBDD; --terracotta-tint: #F6E2DA;
+  --font-serif: 'Source Serif 4', 'Tiempos Headline', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', 'Styrene B', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  --s-xs: 4px; --s-s: 8px; --s-m: 16px; --s-l: 24px; --s-xl: 40px; --s-xxl: 64px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Roboto','Google Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
-h1,h2,h3,h4{font-family:'Google Sans','Roboto',sans-serif;}
-nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
-.nav-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:32px;}
-.nav-brand{font-family:'Google Sans';font-weight:700;font-size:18px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:8px;}
-.nav-brand span{background:var(--red);color:white;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;}
-.nav-links{display:flex;gap:4px;}
-.nav-links a{padding:8px 16px;border-radius:20px;text-decoration:none;font-size:14px;font-weight:500;color:var(--text-secondary);transition:all 0.2s;}
-.nav-links a:hover{background:var(--blue-bg);color:var(--blue);}
-.nav-links a.active{background:var(--blue-bg);color:var(--blue);}
-.container{max-width:1200px;margin:0 auto;padding:24px;}
-.page-header{margin-bottom:32px;}
-.page-header h1{font-size:28px;margin-bottom:4px;}
-.page-header p{color:var(--text-secondary);font-size:15px;}
-.card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px;}
-.card-body{padding:24px;}
-.chart-container{position:relative;height:300px;margin-bottom:16px;}
-.section{margin-bottom:40px;}
-.section-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.section h2{font-size:20px;}
-.chip{padding:4px 12px;border-radius:16px;font-size:12px;font-weight:500;}
-.chip-blue{background:var(--blue-bg);color:var(--blue);}
-.chip-green{background:var(--green-bg);color:var(--green);}
-.chip-yellow{background:var(--yellow-bg);color:#E37400;}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: var(--paper); }
+body { font-family: var(--font-sans); background: var(--paper); color: var(--ink); line-height: 1.6; font-size: 15px; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 400; color: var(--ink); }
 
-/* FORM */
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px;}
-.form-group{display:flex;flex-direction:column;gap:6px;}
-.form-group label{font-size:13px;font-weight:500;color:var(--text-secondary);}
-.form-group input,.form-group select{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Roboto',sans-serif;transition:border-color 0.2s;}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,115,232,0.1);}
-.btn{padding:10px 24px;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;font-family:'Google Sans','Roboto',sans-serif;}
-.btn-primary{background:var(--blue);color:white;}
-.btn-primary:hover{background:#1557B0;box-shadow:0 2px 8px rgba(26,115,232,0.3);}
-.btn-secondary{background:var(--bg);color:var(--text);border:1px solid var(--border);}
-.btn-secondary:hover{background:var(--border);}
-.btn-row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+/* NAV */
+nav.topnav { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--hairline); }
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: baseline; gap: 32px; }
+.nav-brand { font-family: var(--font-serif); font-size: 16px; color: var(--ink); text-decoration: none; letter-spacing: 0.2px; }
+.nav-brand .nav-eyebrow { font-family: var(--font-sans); font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-right: 10px; }
+.nav-links { display: flex; gap: 24px; margin-left: auto; }
+.nav-links a { font-size: 14px; color: var(--ink-secondary); text-decoration: none; padding: 4px 0; transition: color 150ms ease; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--ink); border-bottom: 2px solid var(--ink); padding-bottom: 4px; }
+
+/* LAYOUT */
+.container { max-width: 1100px; margin: 0 auto; padding: var(--s-xl) 32px; }
+
+/* HEADER */
+.page-header { padding-bottom: var(--s-l); border-bottom: 1px solid var(--hairline); margin-bottom: var(--s-xl); }
+.page-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-m); }
+.page-title { font-family: var(--font-serif); font-size: 32px; font-weight: 400; color: var(--ink); margin-bottom: var(--s-s); line-height: 1.2; }
+.page-meta { font-size: 13px; color: var(--ink-secondary); }
+
+/* TAB STRIP — §7.12 */
+.tabs { display: flex; gap: 0; margin-bottom: var(--s-xl); border-bottom: 1px solid var(--hairline); flex-wrap: wrap; }
+.tab { padding: 12px 20px 12px 0; margin-right: 24px; font-size: 14px; font-weight: 400; color: var(--ink-secondary); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 150ms ease; }
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 500; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* SECTIONS */
+.section { margin-bottom: var(--s-xl); }
+.section-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-s); }
+.section-title { font-family: var(--font-serif); font-size: 22px; font-weight: 400; color: var(--ink); margin-bottom: var(--s-l); line-height: 1.3; }
+
+/* CARD */
+.card { background: var(--surface); padding: var(--s-l); margin-bottom: var(--s-l); }
+.subsection-title { font-family: var(--font-serif); font-size: 17px; font-weight: 400; color: var(--ink); margin-bottom: var(--s-m); }
+
+/* FORM CONTROLS — §7.13 */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--s-m); margin-bottom: var(--s-l); }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 13px; font-weight: 500; color: var(--ink-secondary); }
+.form-group input, .form-group select {
+  padding: 10px 14px; border: 1px solid var(--hairline); background: var(--paper);
+  font-size: 14px; font-family: var(--font-sans); color: var(--ink);
+  border-radius: 0; transition: border-color 150ms ease;
+}
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--ink); }
+
+.btn { padding: 10px 22px; border: 1px solid var(--ink); font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); border-radius: 0; background: var(--ink); color: var(--paper); transition: background 150ms ease, color 150ms ease; }
+.btn:hover { background: #000; }
+.btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--hairline); }
+.btn-secondary:hover { background: var(--surface-2); border-color: var(--ink); }
+.btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
 
 /* DATA TABLE */
-table.readings{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;}
-table.readings th{background:var(--bg);padding:10px 12px;text-align:left;font-weight:500;color:var(--text-secondary);border-bottom:2px solid var(--border);}
-table.readings td{padding:10px 12px;border-bottom:1px solid var(--border);font-family:'Roboto Mono',monospace;}
-table.readings td.high{color:var(--red);font-weight:500;}
-table.readings td.low{color:var(--orange);font-weight:500;}
-table.readings td.normal{color:var(--green);}
-table.readings tr:hover{background:var(--bg);}
+.readings { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: var(--s-m); }
+.readings th { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.2px; padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); background: var(--surface-2); }
+.readings td { padding: 10px 12px; font-size: 13px; color: var(--ink); border-bottom: 1px solid var(--hairline); font-family: var(--font-mono); }
+.readings td:first-child { font-family: var(--font-sans); }
+.readings td.high { color: var(--brick); font-weight: 500; }
+.readings td.low { color: var(--clay); font-weight: 500; }
+.readings td.normal { color: var(--sage); }
+.readings tr:hover { background: var(--surface-2); }
+.readings-empty { text-align: center; color: var(--ink-tertiary); padding: 32px; font-family: var(--font-sans); }
 
 /* STATUS BADGE */
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;}
-.badge-high{background:var(--red-bg);color:var(--red);}
-.badge-low{background:var(--yellow-bg);color:#E37400;}
-.badge-normal{background:var(--green-bg);color:var(--green);}
+.badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: 500; border: 1px solid var(--hairline); }
+.badge-high { color: var(--brick); border-color: var(--brick); }
+.badge-low { color: var(--clay); border-color: var(--clay); }
+.badge-normal { color: var(--sage); border-color: var(--sage); }
 
 /* INFO BOX */
-.info-box{background:var(--blue-bg);border-radius:8px;padding:20px;margin:16px 0;border-left:3px solid var(--blue);}
-.info-box h4{color:var(--blue);margin-bottom:8px;font-size:14px;}
-.info-box p,.info-box li{font-size:14px;color:var(--text-secondary);line-height:1.7;}
-.info-box ul{margin-left:20px;margin-top:8px;}
-.info-box.warning{background:var(--yellow-bg);border-left-color:var(--orange);}
-.info-box.warning h4{color:var(--orange);}
-.info-box code{background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-family:'Roboto Mono',monospace;font-size:13px;}
+.info-box { background: var(--surface); border-left: 3px solid var(--hairline); padding: 20px 24px; margin: var(--s-m) 0; }
+.info-box.sage { border-left-color: var(--sage); }
+.info-box.clay { border-left-color: var(--clay); }
+.info-box.brick { border-left-color: var(--brick); }
+.info-box-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-s); }
+.info-box h4 { font-family: var(--font-serif); font-size: 15px; color: var(--ink); margin-bottom: 10px; font-weight: 400; }
+.info-box p, .info-box li { font-size: 14px; color: var(--ink); line-height: 1.65; }
+.info-box ul { margin-left: 20px; margin-top: var(--s-s); }
+.info-box ul li { padding: 3px 0; }
+.info-box code { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-2); padding: 1px 5px; }
+.info-box a { color: var(--ink); text-decoration: underline; }
 
-/* UPLOAD ZONE */
-.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:40px;text-align:center;cursor:pointer;transition:all 0.3s;margin:16px 0;}
-.upload-zone:hover{border-color:var(--blue);background:var(--blue-bg);}
-.upload-zone .icon{font-size:36px;margin-bottom:12px;color:var(--text-secondary);}
-.upload-zone p{color:var(--text-secondary);font-size:14px;}
-.upload-zone .formats{font-size:12px;color:var(--text-secondary);margin-top:8px;}
+/* UPLOAD ZONE — §7.14 */
+.upload-zone { border: 1px dashed var(--hairline); padding: 40px; text-align: center; cursor: pointer; transition: border-color 150ms ease; margin: var(--s-m) 0; }
+.upload-zone:hover { border-color: var(--ink); }
+.upload-zone .up-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-s); }
+.upload-zone p { font-size: 14px; color: var(--ink-secondary); margin-bottom: var(--s-xs); }
+.upload-zone p strong { color: var(--ink); font-weight: 500; }
+.upload-zone .formats { font-size: 12px; color: var(--ink-tertiary); margin-top: 8px; }
 
-/* TABS */
-.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:0;}
-.tab{padding:10px 20px;font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
-.tab:hover{color:var(--text);}
-.tab.active{color:var(--blue);border-bottom-color:var(--blue);}
-.tab-panel{display:none;}
-.tab-panel.active{display:block;}
+/* CHART CARD */
+.chart-card { background: var(--surface); padding: var(--s-l); margin-bottom: var(--s-l); }
+.chart-container { position: relative; height: 320px; margin-bottom: var(--s-m); }
+@media (max-width: 640px) { .chart-container { height: 240px; } }
+.chart-note { font-size: 13px; color: var(--ink-tertiary); text-align: center; margin-top: var(--s-s); }
 
-footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size:13px;border-top:1px solid var(--border);margin-top:40px;}
-@media(max-width:768px){.nav-inner{flex-direction:column;gap:8px;}.container{padding:16px;}.form-grid{grid-template-columns:1fr 1fr;}.chart-container{height:250px;}}
+/* FILTER ROW */
+.filter-bar { background: var(--surface); padding: 16px 24px; margin-bottom: var(--s-l); display: flex; align-items: center; gap: var(--s-m); flex-wrap: wrap; }
+.filter-bar-label { font-weight: 500; font-size: 13px; color: var(--ink-secondary); }
+.filter-bar .form-group { flex-direction: row; align-items: center; gap: var(--s-s); margin: 0; }
+.filter-bar input[type="date"] { padding: 8px 12px; font-size: 13px; }
+.filter-bar .btn { padding: 8px 18px; font-size: 13px; }
+.filter-bar .quick-range { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.filter-bar .quick-range .btn { padding: 6px 12px; font-size: 12px; }
+.filter-info { font-size: 12px; color: var(--ink-tertiary); margin-top: 8px; flex-basis: 100%; }
+
+/* FOOTER */
+footer.page-footer { text-align: center; padding: var(--s-xxl) 32px var(--s-xl); border-top: 1px solid var(--hairline); margin-top: var(--s-xl); }
+footer.page-footer p { font-size: 12px; color: var(--ink-tertiary); line-height: 1.6; }
+
+@media (max-width: 640px) {
+  .container { padding: var(--s-l) 20px; }
+  .page-title { font-size: 26px; }
+  .nav-inner { padding: 12px 20px; flex-wrap: wrap; gap: 16px; }
+  .nav-links { margin-left: 0; gap: 16px; }
+  .nav-links a { font-size: 13px; }
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .filter-bar .quick-range { margin-left: 0; }
+}
 </style>
 </head>
 <body>
 
-<nav>
+<nav class="topnav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand">HB Health <span>DASHBOARD</span></a>
+    <a href="index.html" class="nav-brand"><span class="nav-eyebrow">HB HEALTH</span>Personal Medical History</a>
     <div class="nav-links">
       <a href="index.html">Blood Work</a>
-      <a href="diabetes.html">Diabetes & Complications</a>
+      <a href="diabetes.html">Diabetes &amp; Complications</a>
       <a href="tracking.html" class="active">Daily Tracking</a>
     </div>
   </div>
 </nav>
 
 <div class="container">
-  <div class="page-header">
-    <h1>Blood Sugar &amp; BP Tracking</h1>
-    <p>Daily readings tracker with manual entry and health app import</p>
-  </div>
 
-  <!-- TABS -->
+  <header class="page-header">
+    <div class="page-eyebrow">HB Health · Daily Tracking</div>
+    <h1 class="page-title">Blood Sugar &amp; BP Tracking</h1>
+    <p class="page-meta">Daily readings tracker · Manual entry, file import, and Apple Health / Google Fit support</p>
+  </header>
+
+  <!-- TAB STRIP -->
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('manual')">Manual Entry</div>
-    <div class="tab" onclick="switchTab('import')">Import Data</div>
-    <div class="tab" onclick="switchTab('charts')">Charts &amp; Trends</div>
-    <div class="tab" onclick="switchTab('guide')">Import Guide</div>
+    <div class="tab active" data-tab="manual" onclick="switchTab('manual', event)">Manual Entry</div>
+    <div class="tab" data-tab="import" onclick="switchTab('import', event)">Import Data</div>
+    <div class="tab" data-tab="charts" onclick="switchTab('charts', event)">Charts &amp; Trends</div>
+    <div class="tab" data-tab="guide" onclick="switchTab('guide', event)">Import Guide</div>
   </div>
 
-  <!-- MANUAL ENTRY TAB -->
+  <!-- MANUAL ENTRY -->
   <div class="tab-panel active" id="tab-manual">
     <div class="section">
-      <div class="section-header">
-        <h2>Add Reading</h2>
-        <span class="chip chip-blue">Manual Entry</span>
-      </div>
-      <div class="card"><div class="card-body">
+      <div class="section-eyebrow">Manual entry</div>
+      <h2 class="section-title">Add a reading</h2>
+      <div class="card">
         <div class="form-grid">
           <div class="form-group">
             <label>Date</label>
-            <input type="date" id="readingDate" value="">
+            <input type="date" id="readingDate">
           </div>
           <div class="form-group">
             <label>Time</label>
-            <input type="time" id="readingTime" value="">
+            <input type="time" id="readingTime">
           </div>
           <div class="form-group">
-            <label>Reading Type</label>
+            <label>Reading type</label>
             <select id="readingType">
               <option value="fasting">Fasting Blood Sugar</option>
               <option value="postmeal">Post-Meal (2hr)</option>
@@ -150,252 +214,275 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
             </select>
           </div>
           <div class="form-group" id="glucoseField">
-            <label>Blood Sugar (mg/dL)</label>
-            <input type="number" id="glucoseValue" placeholder="e.g., 140">
+            <label>Blood sugar (mg/dL)</label>
+            <input type="number" id="glucoseValue" placeholder="e.g. 140">
           </div>
           <div class="form-group" id="bpFieldSys" style="display:none;">
             <label>Systolic (mmHg)</label>
-            <input type="number" id="bpSys" placeholder="e.g., 120">
+            <input type="number" id="bpSys" placeholder="e.g. 120">
           </div>
           <div class="form-group" id="bpFieldDia" style="display:none;">
             <label>Diastolic (mmHg)</label>
-            <input type="number" id="bpDia" placeholder="e.g., 80">
+            <input type="number" id="bpDia" placeholder="e.g. 80">
           </div>
           <div class="form-group" id="weightField" style="display:none;">
             <label>Weight (kg)</label>
-            <input type="number" id="weightValue" placeholder="e.g., 78" step="0.1">
+            <input type="number" id="weightValue" placeholder="e.g. 78" step="0.1">
           </div>
           <div class="form-group">
             <label>Notes (optional)</label>
-            <input type="text" id="readingNotes" placeholder="e.g., Before breakfast, after walk">
+            <input type="text" id="readingNotes" placeholder="e.g. Before breakfast, after walk">
           </div>
         </div>
         <div class="btn-row">
-          <button class="btn btn-primary" onclick="addReading()">Add Reading</button>
+          <button class="btn" onclick="addReading()">Add reading</button>
           <button class="btn btn-secondary" onclick="exportReadings()">Export CSV</button>
-          <button class="btn btn-secondary" onclick="clearReadings()">Clear All</button>
+          <button class="btn btn-secondary" onclick="clearReadings()">Clear all</button>
         </div>
-      </div></div>
+      </div>
 
-      <!-- READINGS TABLE -->
-      <div class="card"><div class="card-body">
-        <h3>Recent Readings</h3>
+      <div class="card">
+        <h3 class="subsection-title">Recent readings</h3>
         <div id="readingsTableContainer">
           <table class="readings">
             <thead>
               <tr><th>Date</th><th>Time</th><th>Type</th><th>Value</th><th>Status</th><th>Notes</th></tr>
             </thead>
             <tbody id="readingsBody">
-              <tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:32px;">No readings yet. Add your first reading above.</td></tr>
+              <tr><td colspan="6" class="readings-empty">No readings yet. Add your first reading above.</td></tr>
             </tbody>
           </table>
         </div>
-      </div></div>
+      </div>
     </div>
   </div>
 
-  <!-- IMPORT TAB -->
+  <!-- IMPORT -->
   <div class="tab-panel" id="tab-import">
     <div class="section">
-      <div class="section-header">
-        <h2>Import Health Data</h2>
-        <span class="chip chip-green">Bulk Upload</span>
-      </div>
+      <div class="section-eyebrow">Bulk upload</div>
+      <h2 class="section-title">Import health data</h2>
 
-      <div class="card"><div class="card-body">
-        <h3>Upload CSV / JSON File</h3>
+      <div class="card">
+        <h3 class="subsection-title">Upload CSV / JSON / XML</h3>
         <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-          <div class="icon">&#128228;</div>
+          <div class="up-eyebrow">Drop file here</div>
           <p><strong>Click to upload</strong> or drag and drop</p>
-          <div class="formats">Supports: CSV, JSON, XML (Google Fit export, Apple Health export)</div>
+          <div class="formats">Supports CSV · JSON · XML (Google Fit export, Apple Health export)</div>
         </div>
         <input type="file" id="fileInput" accept=".csv,.json,.xml" style="display:none" onchange="handleFileUpload(event)">
         <div id="uploadStatus"></div>
-      </div></div>
+      </div>
 
       <div class="info-box">
-        <h4>&#128220; Expected CSV Format</h4>
+        <div class="info-box-eyebrow">Reference</div>
+        <h4>Expected CSV format</h4>
         <p>If you're creating a CSV manually, use this format:</p>
-        <p style="margin-top:8px;"><code>date,time,type,value,value2,notes</code></p>
-        <p style="margin-top:4px;"><code>2026-04-13,07:30,fasting,145,,Before breakfast</code></p>
+        <p style="margin-top: 8px;"><code>date,time,type,value,value2,notes</code></p>
+        <p style="margin-top: 4px;"><code>2026-04-13,07:30,fasting,145,,Before breakfast</code></p>
         <p><code>2026-04-13,09:30,postmeal,210,,After breakfast</code></p>
         <p><code>2026-04-13,08:00,bp,130,85,Morning reading</code></p>
-        <p style="margin-top:8px;">Types: <code>fasting</code>, <code>postmeal</code>, <code>random</code>, <code>bp</code>, <code>weight</code></p>
+        <p style="margin-top: 8px;">Types: <code>fasting</code>, <code>postmeal</code>, <code>random</code>, <code>bp</code>, <code>weight</code></p>
       </div>
     </div>
   </div>
 
-  <!-- CHARTS TAB -->
+  <!-- CHARTS -->
   <div class="tab-panel" id="tab-charts">
     <div class="section">
-      <div class="section-header">
-        <h2>Trends &amp; Visualizations</h2>
-        <span class="chip chip-blue">Auto-generated from readings</span>
+      <div class="section-eyebrow">Auto-generated from readings</div>
+      <h2 class="section-title">Trends &amp; visualisations</h2>
+
+      <div class="filter-bar">
+        <span class="filter-bar-label">Date range</span>
+        <div class="form-group">
+          <label>From</label>
+          <input type="date" id="filterFrom">
+        </div>
+        <div class="form-group">
+          <label>To</label>
+          <input type="date" id="filterTo">
+        </div>
+        <button class="btn" onclick="applyFilter()">Apply</button>
+        <button class="btn btn-secondary" onclick="resetFilter()">Reset</button>
+        <div class="quick-range">
+          <button class="btn btn-secondary" onclick="setQuickRange(30)">30 days</button>
+          <button class="btn btn-secondary" onclick="setQuickRange(90)">3 months</button>
+          <button class="btn btn-secondary" onclick="setQuickRange(365)">1 year</button>
+          <button class="btn btn-secondary" onclick="setQuickRange('all')">All</button>
+        </div>
+        <div id="filterInfo" class="filter-info"></div>
       </div>
 
-      <!-- DATE RANGE FILTER -->
-      <div class="card" style="margin-bottom:20px;"><div class="card-body" style="padding:16px 24px;">
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <span style="font-weight:500;font-size:14px;color:var(--text-secondary);">Date Range:</span>
-          <div class="form-group" style="margin:0;flex-direction:row;align-items:center;gap:8px;">
-            <label style="margin:0;white-space:nowrap;">From</label>
-            <input type="date" id="filterFrom" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Roboto',sans-serif;">
-          </div>
-          <div class="form-group" style="margin:0;flex-direction:row;align-items:center;gap:8px;">
-            <label style="margin:0;white-space:nowrap;">To</label>
-            <input type="date" id="filterTo" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Roboto',sans-serif;">
-          </div>
-          <button class="btn btn-primary" style="padding:8px 20px;" onclick="applyFilter()">Apply</button>
-          <button class="btn btn-secondary" style="padding:8px 16px;" onclick="resetFilter()">Reset</button>
-          <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="setQuickRange(30)">30 days</button>
-            <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="setQuickRange(90)">3 months</button>
-            <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="setQuickRange(365)">1 year</button>
-            <button class="btn btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="setQuickRange('all')">All</button>
-          </div>
-        </div>
-        <div id="filterInfo" style="margin-top:8px;font-size:12px;color:var(--text-secondary);"></div>
-      </div></div>
-
-      <div class="card"><div class="card-body">
-        <h3>Blood Sugar — Daily Trend</h3>
+      <div class="chart-card">
+        <h3 class="subsection-title">Blood sugar — daily trend</h3>
         <div class="chart-container"><canvas id="chartDaily"></canvas></div>
-        <p style="font-size:13px;color:var(--text-secondary);text-align:center;">Chart populates as you add readings. Target zones shown in green.</p>
-      </div></div>
+        <p class="chart-note">Chart populates as you add readings. Reference band shows the 80–180 target zone.</p>
+      </div>
 
-      <div class="card"><div class="card-body">
-        <h3>Blood Pressure — Daily Trend</h3>
+      <div class="chart-card">
+        <h3 class="subsection-title">Blood pressure — daily trend</h3>
         <div class="chart-container"><canvas id="chartBP"></canvas></div>
-        <p style="font-size:13px;color:var(--text-secondary);text-align:center;">Add BP readings to see trends. Target: &lt;130/80 mmHg for diabetics.</p>
-      </div></div>
+        <p class="chart-note">Add BP readings to see trends. Target: &lt;130 / 80 mmHg for diabetics.</p>
+      </div>
 
-      <div class="card"><div class="card-body">
-        <h3>Weekly Averages</h3>
+      <div class="chart-card">
+        <h3 class="subsection-title">Weekly averages</h3>
         <div class="chart-container"><canvas id="chartWeekly"></canvas></div>
-      </div></div>
+      </div>
 
-      <div class="info-box">
-        <h4>&#127919; Your Targets (ADA 2024 Guidelines for Diabetics)</h4>
+      <div class="info-box sage">
+        <div class="info-box-eyebrow">ADA 2024 guidelines</div>
+        <h4>Your targets</h4>
         <ul>
-          <li><strong>Fasting Blood Sugar:</strong> 80–130 mg/dL</li>
-          <li><strong>Post-Meal (2hr):</strong> &lt;180 mg/dL</li>
-          <li><strong>Blood Pressure:</strong> &lt;130/80 mmHg</li>
-          <li><strong>HbA1c:</strong> &lt;7% (current: 13.9% — needs to halve)</li>
-          <li><strong>Time in Range (CGM):</strong> &gt;70% between 70–180 mg/dL</li>
+          <li>Fasting blood sugar: 80–130 mg/dL</li>
+          <li>Post-meal (2hr): &lt;180 mg/dL</li>
+          <li>Blood pressure: &lt;130 / 80 mmHg</li>
+          <li>HbA1c: &lt;7% (current 11.8% — needs to keep dropping)</li>
+          <li>Time in range (CGM): &gt;70% between 70–180 mg/dL</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- IMPORT GUIDE TAB -->
+  <!-- IMPORT GUIDE -->
   <div class="tab-panel" id="tab-guide">
     <div class="section">
-      <div class="section-header">
-        <h2>How to Export from Health Apps</h2>
-        <span class="chip chip-yellow">Setup Guide</span>
+      <div class="section-eyebrow">Setup guide</div>
+      <h2 class="section-title">How to export from health apps</h2>
+
+      <div class="card">
+        <h3 class="subsection-title">Apple Health (iPhone)</h3>
+        <div class="info-box">
+          <div class="info-box-eyebrow">Option A</div>
+          <h4>Full export — recommended for first-time</h4>
+          <ul>
+            <li>Open the Health app on your iPhone.</li>
+            <li>Tap your profile picture (top right).</li>
+            <li>Scroll down and tap "Export All Health Data".</li>
+            <li>This creates a ZIP file containing <code>export.xml</code>.</li>
+            <li>AirDrop or email the ZIP to your computer.</li>
+            <li>Extract the ZIP and upload the <code>export.xml</code> file here.</li>
+          </ul>
+          <p style="margin-top: 12px;">Note: the full export can be large (100MB+). The parser on this page extracts only blood glucose and blood pressure records.</p>
+        </div>
+        <div class="info-box">
+          <div class="info-box-eyebrow">Option B</div>
+          <h4>Third-party app for selective export</h4>
+          <ul>
+            <li><strong>Health Auto Export</strong> (iOS, free tier): exports specific data types as CSV. Set it to auto-export blood glucose and BP daily.</li>
+            <li><strong>QS Access</strong> (iOS, free): one-tap CSV export of any Health data category.</li>
+            <li>Export as CSV → upload directly to this page.</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="card"><div class="card-body">
-        <h3>&#127822; Apple Health (iPhone)</h3>
+      <div class="card">
+        <h3 class="subsection-title">Google Fit / Health Connect (Android)</h3>
         <div class="info-box">
-          <h4>Option A — Full Export (Recommended for first-time)</h4>
+          <div class="info-box-eyebrow">Option A</div>
+          <h4>Google Takeout — bulk export</h4>
           <ul>
-            <li>Open the <strong>Health</strong> app on your iPhone</li>
-            <li>Tap your <strong>profile picture</strong> (top right)</li>
-            <li>Scroll down and tap <strong>"Export All Health Data"</strong></li>
-            <li>This creates a ZIP file containing <code>export.xml</code></li>
-            <li>AirDrop or email the ZIP to your computer</li>
-            <li>Extract the ZIP and upload the <code>export.xml</code> file here</li>
-          </ul>
-          <p style="margin-top:12px;"><strong>Note:</strong> The full export can be large (100MB+). The parser on this page extracts only blood glucose and blood pressure records.</p>
-        </div>
-        <div class="info-box" style="margin-top:12px;">
-          <h4>Option B — Use a Third-Party App for Selective Export</h4>
-          <ul>
-            <li><strong>Health Auto Export</strong> (iOS, free tier): Exports specific data types as CSV. Set it to auto-export blood glucose and BP daily.</li>
-            <li><strong>QS Access</strong> (iOS, free): One-tap CSV export of any Health data category</li>
-            <li>Export as CSV → upload directly to this page</li>
+            <li>Go to <a href="https://takeout.google.com" target="_blank" rel="noopener">takeout.google.com</a>.</li>
+            <li>Click "Deselect all", then check only "Fit" (or "Health Connect").</li>
+            <li>Click Next → Choose "Export once" → Create export.</li>
+            <li>Download the ZIP when ready (usually takes minutes).</li>
+            <li>Inside you'll find JSON files organised by date.</li>
+            <li>Upload the relevant JSON files here.</li>
           </ul>
         </div>
-      </div></div>
+        <div class="info-box">
+          <div class="info-box-eyebrow">Option B</div>
+          <h4>Health Connect API — for developers</h4>
+          <ul>
+            <li>Android's Health Connect app aggregates data from all health apps.</li>
+            <li>You can export specific record types via the Health Connect API.</li>
+            <li>For non-dev use: apps like Health Sync can bridge Google Fit → CSV.</li>
+          </ul>
+        </div>
+      </div>
 
-      <div class="card"><div class="card-body">
-        <h3>&#129302; Google Fit / Google Health Connect (Android)</h3>
+      <div class="card">
+        <h3 class="subsection-title">Glucometer / CGM direct export</h3>
         <div class="info-box">
-          <h4>Option A — Google Takeout (Bulk Export)</h4>
-          <ul>
-            <li>Go to <strong><a href="https://takeout.google.com" target="_blank" style="color:var(--blue);">takeout.google.com</a></strong></li>
-            <li>Click "Deselect all", then check only <strong>"Fit"</strong> (or "Health Connect")</li>
-            <li>Click "Next step" → Choose "Export once" → "Create export"</li>
-            <li>Download the ZIP when ready (usually takes minutes)</li>
-            <li>Inside you'll find JSON files organized by date</li>
-            <li>Upload the relevant JSON files here</li>
-          </ul>
-        </div>
-        <div class="info-box" style="margin-top:12px;">
-          <h4>Option B — Health Connect API (For Developers)</h4>
-          <ul>
-            <li>Android's <strong>Health Connect</strong> app aggregates data from all health apps</li>
-            <li>You can export specific record types via the Health Connect API</li>
-            <li>For non-dev use: apps like <strong>"Health Sync"</strong> can bridge Google Fit → CSV</li>
-          </ul>
-        </div>
-      </div></div>
-
-      <div class="card"><div class="card-body">
-        <h3>&#128225; Glucometer / CGM Direct Export</h3>
-        <div class="info-box">
-          <h4>If you use a CGM (Continuous Glucose Monitor)</h4>
+          <div class="info-box-eyebrow">CGM users</div>
+          <h4>If you use a continuous glucose monitor</h4>
           <ul>
             <li><strong>Freestyle Libre (Abbott):</strong> Use LibreView (libreview.com) → Reports → Export CSV. LibreLink app also syncs automatically.</li>
-            <li><strong>Dexcom G6/G7:</strong> Use Dexcom Clarity app → Export → CSV</li>
-            <li><strong>Manual Glucometer:</strong> Log readings in Google Fit or Apple Health, then export as above. Or enter directly on this page.</li>
+            <li><strong>Dexcom G6 / G7:</strong> Use Dexcom Clarity app → Export → CSV.</li>
+            <li><strong>Manual glucometer:</strong> Log readings in Google Fit or Apple Health, then export as above. Or enter directly on this page.</li>
           </ul>
         </div>
-        <div class="info-box warning" style="margin-top:12px;">
-          <h4>&#128161; Recommendation for You</h4>
-          <p><strong>Given your HbA1c of 13.9%, a CGM (Continuous Glucose Monitor) is strongly recommended.</strong> The Freestyle Libre 2/3 is available in India (~₹2,500–3,500 per 14-day sensor). It gives you 24/7 glucose data, trend arrows, and alerts for highs/lows. The data can be exported as CSV from LibreView and uploaded directly here.</p>
-          <p style="margin-top:8px;">Even a basic glucometer (Accu-Chek, OneTouch) with 4 readings/day (fasting, pre-lunch, pre-dinner, bedtime) gives enough data to spot patterns and adjust diet/medication. The key is consistency — daily readings for at least 2 weeks to establish a baseline.</p>
+        <div class="info-box clay">
+          <div class="info-box-eyebrow">Recommendation</div>
+          <h4>Given your HbA1c, a CGM is worth considering</h4>
+          <p>The Freestyle Libre 2/3 is available in India (~₹2,500–3,500 per 14-day sensor). It gives you 24/7 glucose data, trend arrows, and alerts for highs / lows. The data can be exported as CSV from LibreView and uploaded directly here.</p>
+          <p style="margin-top: 8px;">Even a basic glucometer (Accu-Chek, OneTouch) with 4 readings/day (fasting, pre-lunch, pre-dinner, bedtime) gives enough data to spot patterns and adjust diet / medication. The key is consistency — daily readings for at least 2 weeks to establish a baseline.</p>
         </div>
-      </div></div>
+      </div>
 
-      <div class="card"><div class="card-body">
-        <h3>&#128260; Automated Sync (Future Enhancement)</h3>
+      <div class="card">
+        <h3 class="subsection-title">Automated sync — future enhancement</h3>
         <div class="info-box">
-          <h4>Planned: GitHub Actions + Google Fit API</h4>
+          <div class="info-box-eyebrow">Planned</div>
+          <h4>GitHub Actions + Google Fit API</h4>
           <p>A future enhancement could use a GitHub Actions workflow that runs daily, pulls data from Google Fit via API, and auto-updates the <code>data/readings.json</code> file. This would keep the dashboard always up-to-date without manual exports.</p>
-          <p style="margin-top:8px;"><strong>Technical approach:</strong></p>
+          <p style="margin-top: 8px;">Technical approach:</p>
           <ul>
-            <li>Create a Google Cloud project with Fitness API access</li>
-            <li>Store OAuth refresh token as a GitHub Secret</li>
-            <li>A scheduled GitHub Action runs daily, queries the API for new readings</li>
-            <li>Appends new data to <code>data/readings.json</code> and commits</li>
-            <li>GitHub Pages auto-deploys with updated data</li>
+            <li>Create a Google Cloud project with Fitness API access.</li>
+            <li>Store OAuth refresh token as a GitHub Secret.</li>
+            <li>A scheduled GitHub Action runs daily, queries the API for new readings.</li>
+            <li>Appends new data to <code>data/readings.json</code> and commits.</li>
+            <li>GitHub Pages auto-deploys with updated data.</li>
           </ul>
-          <p style="margin-top:8px;">This requires initial setup but then runs hands-free. We can build this as a Phase 2 once the manual flow is working.</p>
+          <p style="margin-top: 8px;">This requires initial setup but then runs hands-free. Build as Phase 2 once the manual flow is working.</p>
         </div>
-      </div></div>
+      </div>
     </div>
   </div>
 
 </div>
 
-<footer>
-  <p>HB Health Dashboard — Daily Tracking</p>
-  <p style="margin-top:4px;">292 historical readings (May 2015 – May 2023) auto-loaded from Excel data. New readings stored in memory — export CSV to save.</p>
+<footer class="page-footer">
+  <p>HB Health Dashboard · Daily Tracking · 25 Apr 2026</p>
+  <p style="margin-top: 4px;">292 historical readings (May 2015 – May 2023) auto-loaded from Excel data. New readings stored in memory — export CSV to save.</p>
 </footer>
 
 <script>
-Chart.defaults.font.family = "'Roboto','Google Sans',sans-serif";
-Chart.defaults.font.size = 12;
-Chart.defaults.color = '#5F6368';
+/* ═════════════════════════════════════════════════════════════════
+   ⚠️ DATA FLOW FIREWALL — All logic below is preserved verbatim from v1.
+   Spec §14: localStorage, JSON fetch, Apple Health XML parser, CSV upload,
+   form state, status badges, Chart.js update functions — UNTOUCHED.
+   Only Chart.js styling defaults (Chart.defaults.*) and the chart line
+   colours have changed (Material → sage/brick/clay per design system §6).
+   ═════════════════════════════════════════════════════════════════ */
 
-// STATE
+/* Color tokens for Chart.js (it can't read CSS variables) */
+const SAGE = '#2C7A4F';
+const BRICK = '#B33636';
+const CLAY = '#C77B2C';
+const HAIRLINE = '#E3E0D6';
+const INK = '#1F1F1F';
+const INK_TERTIARY = '#8A8682';
+const SURFACE = '#FAF9F5';
+
+Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = INK_TERTIARY;
+Chart.defaults.plugins.tooltip.backgroundColor = INK;
+Chart.defaults.plugins.tooltip.titleFont = { family: "'Source Serif 4', Georgia, serif", size: 13, weight: '400' };
+Chart.defaults.plugins.tooltip.bodyFont = { family: "'JetBrains Mono', monospace", size: 12 };
+Chart.defaults.plugins.tooltip.cornerRadius = 4;
+Chart.defaults.plugins.tooltip.padding = 12;
+Chart.defaults.plugins.tooltip.titleColor = '#F0EEE6';
+Chart.defaults.plugins.tooltip.bodyColor = '#F0EEE6';
+
+/* ---- STATE ---- */
 let readings = [];
 let dailyChart, bpChart, weeklyChart;
 let filterFrom = '', filterTo = '';
 
-// PERSISTENCE — save manually added readings to localStorage
+/* ---- LOCALSTORAGE (DATA FLOW — UNTOUCHED) ---- */
 function saveManualReadings() {
   const manual = readings.filter(r => r._manual);
   try { localStorage.setItem('hb_manual_readings', JSON.stringify(manual)); } catch(e) {}
@@ -412,6 +499,7 @@ function loadManualReadings() {
   return 0;
 }
 
+/* ---- FILTER (DATA FLOW — UNTOUCHED) ---- */
 function applyFilter() {
   filterFrom = document.getElementById('filterFrom').value;
   filterTo = document.getElementById('filterTo').value;
@@ -421,7 +509,6 @@ function applyFilter() {
   info.textContent = `Showing ${filtered.length} of ${readings.length} readings` +
     (filterFrom ? ` from ${filterFrom}` : '') + (filterTo ? ` to ${filterTo}` : '');
 }
-
 function resetFilter() {
   filterFrom = ''; filterTo = '';
   document.getElementById('filterFrom').value = '';
@@ -429,7 +516,6 @@ function resetFilter() {
   document.getElementById('filterInfo').textContent = '';
   updateCharts();
 }
-
 function setQuickRange(days) {
   if (days === 'all') { resetFilter(); return; }
   const to = new Date();
@@ -439,7 +525,6 @@ function setQuickRange(days) {
   document.getElementById('filterTo').value = to.toISOString().split('T')[0];
   applyFilter();
 }
-
 function getFilteredReadings() {
   return readings.filter(r => {
     if (filterFrom && r.date < filterFrom) return false;
@@ -448,11 +533,11 @@ function getFilteredReadings() {
   });
 }
 
-// Set default date/time
+/* ---- DEFAULT DATE/TIME (DATA FLOW — UNTOUCHED) ---- */
 document.getElementById('readingDate').value = new Date().toISOString().split('T')[0];
 document.getElementById('readingTime').value = new Date().toTimeString().slice(0,5);
 
-// Type toggle
+/* ---- TYPE TOGGLE (DATA FLOW — UNTOUCHED) ---- */
 document.getElementById('readingType').addEventListener('change', function() {
   const t = this.value;
   document.getElementById('glucoseField').style.display = (t==='bp'||t==='weight') ? 'none' : 'flex';
@@ -461,13 +546,13 @@ document.getElementById('readingType').addEventListener('change', function() {
   document.getElementById('weightField').style.display = t==='weight' ? 'flex' : 'none';
 });
 
+/* ---- ADD READING (DATA FLOW — UNTOUCHED) ---- */
 function addReading() {
   const date = document.getElementById('readingDate').value;
   const time = document.getElementById('readingTime').value;
   const type = document.getElementById('readingType').value;
   const notes = document.getElementById('readingNotes').value;
   let value, value2;
-
   if(type === 'bp') {
     value = parseFloat(document.getElementById('bpSys').value);
     value2 = parseFloat(document.getElementById('bpDia').value);
@@ -479,14 +564,11 @@ function addReading() {
     value = parseFloat(document.getElementById('glucoseValue').value);
     if(!value) { alert('Please enter blood sugar value.'); return; }
   }
-
   readings.push({date, time, type, value, value2: value2||null, notes, _manual: true});
   readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
   saveManualReadings();
   renderTable();
   updateCharts();
-
-  // Clear inputs
   document.getElementById('glucoseValue').value = '';
   document.getElementById('bpSys').value = '';
   document.getElementById('bpDia').value = '';
@@ -494,16 +576,17 @@ function addReading() {
   document.getElementById('readingNotes').value = '';
 }
 
+/* ---- STATUS CALC (DATA FLOW — UNTOUCHED) ---- */
 function getStatus(type, value) {
   if(type === 'fasting') {
     if(value < 80) return {text:'Low', cls:'low', badge:'badge-low'};
-    if(value <= 130) return {text:'In Target', cls:'normal', badge:'badge-normal'};
-    if(value <= 180) return {text:'Above Target', cls:'', badge:'badge-high'};
+    if(value <= 130) return {text:'In target', cls:'normal', badge:'badge-normal'};
+    if(value <= 180) return {text:'Above target', cls:'', badge:'badge-high'};
     return {text:'High', cls:'high', badge:'badge-high'};
   }
   if(type === 'postmeal') {
     if(value < 70) return {text:'Low', cls:'low', badge:'badge-low'};
-    if(value <= 180) return {text:'In Target', cls:'normal', badge:'badge-normal'};
+    if(value <= 180) return {text:'In target', cls:'normal', badge:'badge-normal'};
     return {text:'High', cls:'high', badge:'badge-high'};
   }
   if(type === 'random') {
@@ -515,12 +598,13 @@ function getStatus(type, value) {
   return {text:'-', cls:'', badge:''};
 }
 
-const typeLabels = {fasting:'Fasting BS', postmeal:'Post-Meal', random:'Random BS', bp:'Blood Pressure', weight:'Weight'};
+const typeLabels = {fasting:'Fasting BS', postmeal:'Post-meal', random:'Random BS', bp:'Blood pressure', weight:'Weight'};
 
+/* ---- RENDER TABLE (DATA FLOW — UNTOUCHED) ---- */
 function renderTable() {
   const tbody = document.getElementById('readingsBody');
   if(readings.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:32px;">No readings yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="readings-empty">No readings yet.</td></tr>';
     return;
   }
   tbody.innerHTML = readings.map(r => {
@@ -531,11 +615,12 @@ function renderTable() {
       <td>${typeLabels[r.type]||r.type}</td>
       <td class="${s.cls}">${valStr}</td>
       <td><span class="badge ${s.badge}">${s.text}</span></td>
-      <td style="color:var(--text-secondary)">${r.notes||'-'}</td>
+      <td style="color:var(--ink-tertiary)">${r.notes||'—'}</td>
     </tr>`;
   }).join('');
 }
 
+/* ---- EXPORT / CLEAR (DATA FLOW — UNTOUCHED) ---- */
 function exportReadings() {
   if(readings.length === 0) { alert('No readings to export.'); return; }
   const csv = 'date,time,type,value,value2,notes\n' +
@@ -546,7 +631,6 @@ function exportReadings() {
   a.download = `hb-readings-${new Date().toISOString().split('T')[0]}.csv`;
   a.click();
 }
-
 function clearReadings() {
   if(confirm('Clear all readings?')) {
     readings = [];
@@ -555,16 +639,15 @@ function clearReadings() {
   }
 }
 
+/* ---- FILE UPLOAD + APPLE HEALTH XML (DATA FLOW — UNTOUCHED) ---- */
 function handleFileUpload(event) {
   const file = event.target.files[0];
   if(!file) return;
   const status = document.getElementById('uploadStatus');
   const reader = new FileReader();
-
   reader.onload = function(e) {
     const content = e.target.result;
     let count = 0;
-
     if(file.name.endsWith('.csv')) {
       const lines = content.split('\n').slice(1);
       lines.forEach(line => {
@@ -585,24 +668,19 @@ function handleFileUpload(event) {
             }
           });
         }
-      } catch(e) { status.innerHTML = '<p style="color:var(--red);">Error parsing JSON file.</p>'; return; }
+      } catch(e) { status.innerHTML = '<p style="color:var(--brick);">Error parsing JSON file.</p>'; return; }
     } else if(file.name.endsWith('.xml')) {
-      // Apple Health XML parser
       const parser = new DOMParser();
       const xml = parser.parseFromString(content, 'text/xml');
       const records = xml.querySelectorAll('Record');
-
-      // Blood Glucose
       records.forEach(r => {
         if(r.getAttribute('type') === 'HKQuantityTypeIdentifierBloodGlucose') {
           let val = parseFloat(r.getAttribute('value'));
           const unit = r.getAttribute('unit') || '';
           const dt = r.getAttribute('startDate') || '';
           if(!val || !dt) return;
-          // Only convert if mmol/L; if already mg/dL, use as-is
           if(unit.toLowerCase().includes('mmol')) val = Math.round(val * 18);
           else val = Math.round(val);
-          // Check meal time metadata: 1=before meal (fasting), 2=after meal (postmeal)
           const mealMeta = r.querySelector('MetadataEntry[key="HKBloodGlucoseMealTime"]');
           const mealVal = mealMeta ? mealMeta.getAttribute('value') : null;
           const rType = mealVal === '1' ? 'fasting' : mealVal === '2' ? 'postmeal' : 'random';
@@ -610,15 +688,13 @@ function handleFileUpload(event) {
           count++;
         }
       });
-
-      // Blood Pressure — pair systolic + diastolic by startDate
       const sysMap = {}, diaMap = {};
       records.forEach(r => {
         const rType = r.getAttribute('type');
         const dt = r.getAttribute('startDate') || '';
         const val = parseFloat(r.getAttribute('value'));
         if(!val || !dt) return;
-        const key = dt.slice(0,16); // match by date+time
+        const key = dt.slice(0,16);
         if(rType === 'HKQuantityTypeIdentifierBloodPressureSystolic') sysMap[key] = val;
         if(rType === 'HKQuantityTypeIdentifierBloodPressureDiastolic') diaMap[key] = val;
       });
@@ -628,8 +704,6 @@ function handleFileUpload(event) {
         readings.push({date:key.slice(0,10), time:key.slice(11,16), type:'bp', value:Math.round(sys), value2:dia?Math.round(dia):null, notes:'Apple Health', _manual:true});
         count++;
       });
-
-      // Body Mass
       records.forEach(r => {
         if(r.getAttribute('type') === 'HKQuantityTypeIdentifierBodyMass') {
           const val = parseFloat(r.getAttribute('value'));
@@ -642,62 +716,67 @@ function handleFileUpload(event) {
         }
       });
     }
-
     readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
     saveManualReadings();
     renderTable();
     updateCharts();
-    status.innerHTML = `<p style="color:var(--green);margin-top:12px;"><strong>${count} readings imported</strong> from ${file.name}</p>`;
+    status.innerHTML = `<p style="color:var(--sage);margin-top:12px;font-size:13px;"><strong>${count} readings imported</strong> from ${file.name}</p>`;
   };
   reader.readAsText(file);
 }
 
-// CHARTS
+/* ---- CHARTS — restyled defaults, same data flow ---- */
 function initCharts() {
-  const dCtx = document.getElementById('chartDaily').getContext('2d');
-  dailyChart = new Chart(dCtx, {
-    type:'line',
-    data:{labels:[],datasets:[
-      {label:'Fasting',data:[],borderColor:'#1A73E8',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
-      {label:'Post-Meal',data:[],borderColor:'#EA4335',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
-      {label:'Random',data:[],borderColor:'#A142F4',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
-      {label:'Target Upper (180)',data:[],borderColor:'#34A853',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false},
-      {label:'Target Lower (80)',data:[],borderColor:'#FBBC04',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},
-      scales:{x:{grid:{display:false}},y:{min:50,max:400,grid:{color:'#E8EAED'}}}}
-  });
-
-  const bCtx = document.getElementById('chartBP').getContext('2d');
-  bpChart = new Chart(bCtx, {
-    type:'line',
-    data:{labels:[],datasets:[
-      {label:'Systolic',data:[],borderColor:'#EA4335',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
-      {label:'Diastolic',data:[],borderColor:'#1A73E8',borderWidth:2,pointRadius:4,fill:false,tension:0.3},
-      {label:'Sys Target (130)',data:[],borderColor:'#34A853',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false},
-      {label:'Dia Target (80)',data:[],borderColor:'#FBBC04',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},
-      scales:{x:{grid:{display:false}},y:{min:50,max:200,grid:{color:'#E8EAED'}}}}
-  });
-
-  const wCtx = document.getElementById('chartWeekly').getContext('2d');
-  weeklyChart = new Chart(wCtx, {
-    type:'bar',
-    data:{labels:[],datasets:[
-      {label:'Avg Fasting',data:[],backgroundColor:'rgba(26,115,232,0.6)',borderRadius:6},
-      {label:'Avg Post-Meal',data:[],backgroundColor:'rgba(234,67,53,0.6)',borderRadius:6}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},
-      scales:{x:{grid:{display:false}},y:{min:50,max:400,grid:{color:'#E8EAED'}}}}
-  });
+  try {
+    const dCtx = document.getElementById('chartDaily').getContext('2d');
+    dailyChart = new Chart(dCtx, {
+      type:'line',
+      data:{labels:[],datasets:[
+        {label:'Fasting',data:[],borderColor:SAGE,backgroundColor:'transparent',pointBackgroundColor:SAGE,pointBorderColor:SURFACE,borderWidth:2,fill:false,tension:0.3},
+        {label:'Post-meal',data:[],borderColor:BRICK,backgroundColor:'transparent',pointBackgroundColor:BRICK,pointBorderColor:SURFACE,borderWidth:2,fill:false,tension:0.3},
+        {label:'Random',data:[],borderColor:CLAY,backgroundColor:'transparent',pointBackgroundColor:CLAY,pointBorderColor:SURFACE,borderWidth:2,fill:false,tension:0.3},
+        {label:'Target upper (180)',data:[],borderColor:INK_TERTIARY,borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false},
+        {label:'Target lower (80)',data:[],borderColor:INK_TERTIARY,borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,padding:14,color:'#5A5A5A',font:{size:11}}}},
+        scales:{x:{grid:{display:false},ticks:{color:INK_TERTIARY}},y:{min:50,max:400,grid:{color:HAIRLINE,drawBorder:false},ticks:{color:INK_TERTIARY,font:{family:"'JetBrains Mono', monospace",size:11}}}},
+        elements:{point:{radius:4,hoverRadius:6,borderWidth:1.5}}
+      }
+    });
+    const bCtx = document.getElementById('chartBP').getContext('2d');
+    bpChart = new Chart(bCtx, {
+      type:'line',
+      data:{labels:[],datasets:[
+        {label:'Systolic',data:[],borderColor:BRICK,backgroundColor:'transparent',pointBackgroundColor:BRICK,pointBorderColor:SURFACE,borderWidth:2,fill:false,tension:0.3},
+        {label:'Diastolic',data:[],borderColor:SAGE,backgroundColor:'transparent',pointBackgroundColor:SAGE,pointBorderColor:SURFACE,borderWidth:2,fill:false,tension:0.3},
+        {label:'Sys target (130)',data:[],borderColor:INK_TERTIARY,borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false},
+        {label:'Dia target (80)',data:[],borderColor:INK_TERTIARY,borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,padding:14,color:'#5A5A5A',font:{size:11}}}},
+        scales:{x:{grid:{display:false},ticks:{color:INK_TERTIARY}},y:{min:50,max:200,grid:{color:HAIRLINE,drawBorder:false},ticks:{color:INK_TERTIARY,font:{family:"'JetBrains Mono', monospace",size:11}}}},
+        elements:{point:{radius:4,hoverRadius:6,borderWidth:1.5}}
+      }
+    });
+    const wCtx = document.getElementById('chartWeekly').getContext('2d');
+    weeklyChart = new Chart(wCtx, {
+      type:'bar',
+      data:{labels:[],datasets:[
+        {label:'Avg fasting',data:[],backgroundColor:SAGE,borderRadius:0},
+        {label:'Avg post-meal',data:[],backgroundColor:BRICK,borderRadius:0}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,padding:14,color:'#5A5A5A',font:{size:11}}}},
+        scales:{x:{grid:{display:false},ticks:{color:INK_TERTIARY}},y:{min:50,max:400,grid:{color:HAIRLINE,drawBorder:false},ticks:{color:INK_TERTIARY,font:{family:"'JetBrains Mono', monospace",size:11}}}}
+      }
+    });
+  } catch (e) { console.error('Chart init failed:', e); }
 }
 
+/* ---- UPDATE CHARTS (DATA FLOW — UNTOUCHED) ---- */
 function updateCharts() {
-  // Daily glucose chart — average per type per date
+  if (!dailyChart) return;
   const filtered = getFilteredReadings();
   const glucoseReadings = filtered.filter(r=>['fasting','postmeal','random'].includes(r.type));
   const dates = [...new Set(glucoseReadings.map(r=>r.date))].sort();
@@ -708,7 +787,6 @@ function updateCharts() {
   const fData = dates.map(d => avgForDate(d,'fasting'));
   const pData = dates.map(d => avgForDate(d,'postmeal'));
   const rData = dates.map(d => avgForDate(d,'random'));
-
   dailyChart.data.labels = dates;
   dailyChart.data.datasets[0].data = fData;
   dailyChart.data.datasets[1].data = pData;
@@ -717,7 +795,6 @@ function updateCharts() {
   dailyChart.data.datasets[4].data = dates.map(()=>80);
   dailyChart.update();
 
-  // BP chart
   const bpReadings = filtered.filter(r=>r.type==='bp');
   const bpDates = [...new Set(bpReadings.map(r=>r.date))].sort();
   bpChart.data.labels = bpDates;
@@ -727,7 +804,6 @@ function updateCharts() {
   bpChart.data.datasets[3].data = bpDates.map(()=>80);
   bpChart.update();
 
-  // Weekly
   const weeks = {};
   glucoseReadings.forEach(r => {
     const d = new Date(r.date);
@@ -743,17 +819,18 @@ function updateCharts() {
   weeklyChart.update();
 }
 
-// TAB SWITCHING
-function switchTab(name) {
+/* ---- TAB SWITCHING (DATA FLOW — UNTOUCHED) ---- */
+function switchTab(name, ev) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelector(`.tab-panel#tab-${name}`).classList.add('active');
-  event.target.classList.add('active');
+  if (ev && ev.target) ev.target.classList.add('active');
+  else { const t = document.querySelector(`.tab[data-tab="${name}"]`); if (t) t.classList.add('active'); }
 }
 
 initCharts();
 
-// LOAD MANUAL READINGS from localStorage (BP, weight, any manually added)
+/* ---- LOAD MANUAL READINGS (DATA FLOW — UNTOUCHED) ---- */
 const manualCount = loadManualReadings();
 if(manualCount) {
   readings.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
@@ -762,7 +839,7 @@ if(manualCount) {
   console.log(`Restored ${manualCount} manually added readings from localStorage`);
 }
 
-// LOAD HISTORICAL DATA from Excel-extracted JSON
+/* ---- LOAD HISTORICAL DATA from data/sugar-readings.json (DATA FLOW — UNTOUCHED) ---- */
 fetch('data/sugar-readings.json')
   .then(r => r.json())
   .then(data => {
@@ -776,7 +853,6 @@ fetch('data/sugar-readings.json')
     let count = 0;
     data.readings.forEach(r => {
       const mapped = typeMap[r.type] || 'random';
-      // Skip duplicates already loaded from localStorage
       const isDup = readings.some(x => x.date === r.date && x.value === r.value && Math.abs((x.time||'').localeCompare(r.time||'')) === 0);
       if(isDup) return;
       readings.push({

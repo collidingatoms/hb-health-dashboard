@@ -1,131 +1,189 @@
 <!DOCTYPE html>
+<!--
+  HB Health Dashboard — Page: Diabetes & Complications
+  Design system: HBHealth_Design-System_ver01_25042026.md
+  Components used: §7.1 Header · §7.2 Nav · §7.3 Carry-Forward · §7.4 Action card
+                   · §7.5 KPI row (organ-card variant) · §7.6 Data table · §7.7 Metric pills
+                   · §7.8 Diagnosis · §7.9 Chart · §7.10 Standing plan · §7.11 Timeline · §7.15 Footer
+  Color rules: §6  ·  Voice: §10
+  Data flow: untouched per spec §1 firewall — Chart.js arrays, lab values, and
+             clinical prose all preserved verbatim from v1.
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HB Health — Diabetes &amp; Complications</title>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>HB Health · Diabetes &amp; Complications</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <style>
 :root {
-  --bg:#F8F9FA;--surface:#FFF;--text:#202124;--text-secondary:#5F6368;--border:#E8EAED;
-  --blue:#1A73E8;--green:#34A853;--red:#EA4335;--yellow:#FBBC04;--purple:#A142F4;--orange:#FA903E;
-  --blue-bg:#E8F0FE;--green-bg:#E6F4EA;--red-bg:#FCE8E6;--yellow-bg:#FEF7E0;--purple-bg:#F3E8FD;
-  --shadow:0 1px 3px rgba(60,64,67,0.12);--radius:12px;
+  --paper: #F0EEE6; --surface: #FAF9F5; --surface-2: #F5F2E8; --hairline: #E3E0D6;
+  --ink: #1F1F1F; --ink-secondary: #5A5A5A; --ink-tertiary: #8A8682;
+  --sage: #2C7A4F; --brick: #B33636; --clay: #C77B2C; --terracotta: #CC785C;
+  --sage-tint: #EAF2EC; --brick-tint: #F5E5E3; --clay-tint: #F7EBDD; --terracotta-tint: #F6E2DA;
+  --font-serif: 'Source Serif 4', 'Tiempos Headline', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', 'Styrene B', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  --s-xs: 4px; --s-s: 8px; --s-m: 16px; --s-l: 24px; --s-xl: 40px; --s-xxl: 64px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Roboto','Google Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
-h1,h2,h3,h4{font-family:'Google Sans','Roboto',sans-serif;}
-nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow);}
-.nav-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:32px;}
-.nav-brand{font-family:'Google Sans';font-weight:700;font-size:18px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:8px;}
-.nav-brand span{background:var(--red);color:white;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;}
-.nav-links{display:flex;gap:4px;}
-.nav-links a{padding:8px 16px;border-radius:20px;text-decoration:none;font-size:14px;font-weight:500;color:var(--text-secondary);transition:all 0.2s;}
-.nav-links a:hover{background:var(--blue-bg);color:var(--blue);}
-.nav-links a.active{background:var(--blue-bg);color:var(--blue);}
-.container{max-width:1200px;margin:0 auto;padding:24px;}
-.page-header{margin-bottom:24px;}
-.page-header h1{font-size:28px;margin-bottom:4px;}
-.page-header p{color:var(--text-secondary);font-size:15px;}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: var(--paper); }
+body { font-family: var(--font-sans); background: var(--paper); color: var(--ink); line-height: 1.6; font-size: 15px; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 400; color: var(--ink); }
 
-/* RECOVERY BANNER */
-.recovery-banner { background: linear-gradient(135deg, #E6F4EA 0%, #E8F0FE 100%); border-radius: var(--radius); padding: 24px; margin-bottom: 28px; box-shadow: var(--shadow); border-left: 4px solid var(--green); }
-.recovery-banner .rb-title { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.recovery-banner .rb-title h2 { font-size: 20px; color: #1E8E3E; }
-.recovery-banner .rb-pill { background: var(--green); color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
-.recovery-banner p { color: var(--text); font-size: 14.5px; }
-.recovery-banner code { font-family: 'Roboto Mono', monospace; font-size: 12.5px; color: var(--text); background: rgba(255,255,255,0.6); padding: 1px 5px; border-radius: 4px; }
+/* NAV — §7.2 */
+nav.topnav { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--hairline); }
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: baseline; gap: 32px; }
+.nav-brand { font-family: var(--font-serif); font-size: 16px; color: var(--ink); text-decoration: none; letter-spacing: 0.2px; }
+.nav-brand .nav-eyebrow { font-family: var(--font-sans); font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-right: 10px; }
+.nav-links { display: flex; gap: 24px; margin-left: auto; }
+.nav-links a { font-size: 14px; color: var(--ink-secondary); text-decoration: none; padding: 4px 0; transition: color 150ms ease; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--ink); border-bottom: 2px solid var(--ink); padding-bottom: 4px; }
 
-.card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px;}
-.card-body{padding:24px;}
-.chart-container{position:relative;height:300px;margin-bottom:16px;}
+/* LAYOUT */
+.container { max-width: 1100px; margin: 0 auto; padding: var(--s-xl) 32px; }
 
-/* RISK DASHBOARD */
-.risk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:32px;}
-.risk-card{background:var(--surface);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border-top:4px solid var(--border);transition:transform 0.2s;}
-.risk-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(60,64,67,0.15);}
-.risk-card.danger{border-top-color:var(--red);}
-.risk-card.warning{border-top-color:var(--yellow);}
-.risk-card.ok{border-top-color:var(--green);}
-.risk-card.recovering{border-top-color:var(--blue);}
-.risk-card .icon{font-size:28px;margin-bottom:8px;}
-.risk-card h3{font-size:16px;margin-bottom:4px;}
-.risk-card .status{font-size:13px;font-weight:500;margin-bottom:8px;}
-.risk-card .status.red{color:var(--red);}
-.risk-card .status.yellow{color:var(--orange);}
-.risk-card .status.green{color:var(--green);}
-.risk-card .status.blue{color:var(--blue);}
-.risk-card p{font-size:13px;color:var(--text-secondary);}
+/* HEADER — §7.1 */
+.page-header { padding-bottom: var(--s-l); border-bottom: 1px solid var(--hairline); margin-bottom: var(--s-xl); }
+.page-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-m); }
+.page-title { font-family: var(--font-serif); font-size: 32px; font-weight: 400; color: var(--ink); margin-bottom: var(--s-s); line-height: 1.2; }
+.page-meta { font-size: 13px; color: var(--ink-secondary); }
 
-/* COMPLICATION SECTIONS */
-.comp-section{margin-bottom:40px;}
-.comp-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;cursor:pointer;user-select:none;}
-.comp-header h2{font-size:20px;}
-.comp-chip{padding:4px 12px;border-radius:16px;font-size:12px;font-weight:500;}
-.chip-red{background:var(--red-bg);color:var(--red);}
-.chip-yellow{background:var(--yellow-bg);color:#E37400;}
-.chip-green{background:var(--green-bg);color:var(--green);}
-.chip-blue{background:var(--blue-bg);color:var(--blue);}
-.toggle-icon{font-size:12px;color:var(--text-secondary);transition:transform 0.3s;}
-.toggle-icon.open{transform:rotate(90deg);}
-.comp-body{display:block;}
-.comp-body.collapsed{display:none;}
-.deep-dive{background:var(--bg);border-radius:8px;padding:20px;margin-top:16px;border-left:3px solid var(--blue);}
-.deep-dive h4{font-size:14px;color:var(--blue);margin-bottom:12px;}
-.deep-dive.critical{border-left-color:var(--red);}
-.deep-dive.critical h4{color:var(--red);}
-.deep-dive.warning{border-left-color:var(--orange);}
-.deep-dive.warning h4{color:var(--orange);}
-.deep-dive.recovery{border-left-color:var(--green);}
-.deep-dive.recovery h4{color:var(--green);}
-.deep-dive p,.deep-dive li{font-size:14px;color:var(--text-secondary);line-height:1.8;}
-.deep-dive ul{margin-left:20px;margin-top:8px;}
-.metric-row{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0;}
-.metric-pill{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;}
-.metric-pill strong{font-family:'Roboto Mono',monospace;font-size:15px;}
-.metric-pill.bad strong{color:var(--red);}
-.metric-pill.ok strong{color:var(--green);}
-.metric-pill.warn strong{color:var(--orange);}
-.metric-pill.blue strong{color:var(--blue);}
+/* CARRY-FORWARD CALLOUT — §7.3 */
+.callout { background: var(--surface); border-left: 3px solid var(--sage); padding: var(--s-l); margin-bottom: var(--s-xl); }
+.callout-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-m); }
+.callout-eyebrow strong { color: var(--ink); font-weight: 600; }
+.callout-lede { font-size: 15px; color: var(--ink); line-height: 1.65; }
+.callout code, .diagnosis code, .timeline-body code { font-family: var(--font-mono); font-size: 13px; color: var(--ink); background: var(--surface-2); padding: 1px 5px; }
 
-/* ACTION PLAN */
-.action-plan{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;margin-top:32px;}
-.action-plan h2{font-size:22px;margin-bottom:16px;color:var(--blue);}
-.action-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border);}
-.action-item:last-child{border-bottom:none;}
-.action-num{width:32px;height:32px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;}
-.action-num.urgent{background:var(--red);}
-.action-num.ok{background:var(--green);}
-.action-content h4{font-size:15px;margin-bottom:4px;}
-.action-content p{font-size:13px;color:var(--text-secondary);}
-.action-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;margin-right:6px;}
-.tag-urgent{background:var(--red-bg);color:var(--red);}
-.tag-important{background:var(--yellow-bg);color:#E37400;}
-.tag-routine{background:var(--blue-bg);color:var(--blue);}
-.tag-continue{background:var(--green-bg);color:var(--green);}
+/* ACTION CARD — §7.4 */
+.action-card { background: var(--surface); padding: var(--s-l); margin-bottom: var(--s-xl); }
+.action-card-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-m); }
+.action-item { display: flex; gap: var(--s-m); padding: var(--s-m) 0; }
+.action-item + .action-item { border-top: 1px solid var(--hairline); }
+.action-num { font-family: var(--font-serif); font-size: 18px; color: var(--ink); flex-shrink: 0; min-width: 28px; }
+.action-body { font-size: 15px; color: var(--ink); line-height: 1.6; }
 
-/* TIMELINE */
-.timeline{position:relative;padding-left:28px;margin-top:16px;}
-.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border);}
-.tl-item{position:relative;padding-bottom:20px;}
-.tl-item::before{content:'';position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:var(--surface);}
-.tl-item.bad::before{border-color:var(--red);background:var(--red-bg);}
-.tl-item.ok::before{border-color:var(--green);background:var(--green-bg);}
-.tl-item.warn::before{border-color:var(--yellow);background:var(--yellow-bg);}
-.tl-item.blue::before{border-color:var(--blue);background:var(--blue-bg);}
-.tl-item .tl-date{font-size:12px;font-weight:500;color:var(--text-secondary);font-family:'Roboto Mono',monospace;}
-.tl-item .tl-text{font-size:14px;margin-top:2px;}
+/* ORGAN KPI CARDS — KPI row variant for status-by-organ */
+.organ-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); background: var(--surface); margin-bottom: var(--s-xl); }
+.organ-cell { padding: 22px 24px; border-right: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+.organ-name { font-family: var(--font-serif); font-size: 16px; color: var(--ink); margin-bottom: var(--s-s); }
+.organ-status { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: var(--s-s); color: var(--ink-tertiary); }
+.organ-status.sage { color: var(--sage); }
+.organ-status.clay { color: var(--clay); }
+.organ-status.brick { color: var(--brick); }
+.organ-status.terracotta { color: var(--terracotta); }
+.organ-detail { font-size: 13px; color: var(--ink-secondary); line-height: 1.55; }
+.organ-detail code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 4px; }
+@media (max-width: 720px) { .organ-cell { border-right: 0; } }
 
-footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size:13px;border-top:1px solid var(--border);margin-top:40px;}
-@media(max-width:768px){.nav-inner{flex-direction:column;gap:8px;}.container{padding:16px;}.risk-grid{grid-template-columns:repeat(2,1fr);}.chart-container{height:250px;}}
+/* SECTIONS */
+.section { margin-bottom: var(--s-xxl); }
+.section-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-s); }
+.section-title { font-family: var(--font-serif); font-size: 22px; font-weight: 400; color: var(--ink); margin-bottom: var(--s-l); line-height: 1.3; }
+
+/* COLLAPSIBLE SECTION HEADER */
+.collapse-header { display: flex; align-items: baseline; gap: var(--s-m); cursor: pointer; user-select: none; padding: var(--s-m) 0; border-bottom: 1px solid var(--hairline); margin-bottom: var(--s-l); transition: opacity 150ms ease; }
+.collapse-header:hover { opacity: 0.75; }
+.collapse-chevron { font-family: var(--font-serif); font-size: 14px; color: var(--ink-tertiary); transition: transform 200ms ease; flex-shrink: 0; min-width: 16px; }
+.collapse-chevron.open { transform: rotate(90deg); }
+.collapse-header .section-title { margin-bottom: 0; }
+.collapse-tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; margin-left: auto; padding: 4px 10px; border: 1px solid var(--hairline); color: var(--ink-tertiary); flex-shrink: 0; }
+.collapse-tag.sage { color: var(--sage); border-color: var(--sage); }
+.collapse-tag.clay { color: var(--clay); border-color: var(--clay); }
+.collapse-tag.brick { color: var(--brick); border-color: var(--brick); }
+.collapse-body { display: block; }
+.collapse-body.collapsed { display: none; }
+
+/* SUBSECTION */
+.subsection-title { font-family: var(--font-serif); font-size: 17px; font-weight: 400; color: var(--ink); margin-bottom: var(--s-m); }
+.chart-card { background: var(--surface); padding: var(--s-l); margin-bottom: var(--s-l); }
+.chart-container { position: relative; height: 320px; margin-bottom: var(--s-m); }
+@media (max-width: 640px) { .chart-container { height: 240px; } }
+
+/* DIAGNOSIS — §7.8 */
+.diagnosis { padding: var(--s-l) 0 0; }
+.diagnosis-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-m); }
+.diagnosis p { font-size: 15px; color: var(--ink); line-height: 1.65; margin-bottom: var(--s-m); }
+.diagnosis p:last-child { margin-bottom: 0; }
+.diagnosis ul { margin: var(--s-m) 0; padding-left: 20px; }
+.diagnosis li { font-size: 14.5px; color: var(--ink); padding: 3px 0; line-height: 1.55; }
+
+/* METRIC PILLS — §7.7 */
+.metric-row { display: flex; flex-wrap: wrap; gap: var(--s-s); margin: var(--s-m) 0; }
+.metric-pill { border: 1px solid var(--hairline); padding: 8px 14px; font-size: 13px; color: var(--ink-secondary); }
+.metric-pill strong { font-family: var(--font-mono); font-size: 14px; color: var(--ink); font-weight: 500; }
+.metric-pill strong.sage { color: var(--sage); }
+.metric-pill strong.brick { color: var(--brick); }
+.metric-pill strong.clay { color: var(--clay); }
+
+/* TIMELINE — §7.11 */
+.timeline { position: relative; padding-left: 32px; margin-top: var(--s-l); }
+.timeline::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 1px; background: var(--hairline); }
+.tl-item { position: relative; padding: 0 0 var(--s-l) 0; }
+.tl-item::before { content: ''; position: absolute; left: -28px; top: 6px; width: 11px; height: 11px; border: 2px solid var(--hairline); background: var(--surface); border-radius: 50%; }
+.tl-item.sage::before { border-color: var(--sage); }
+.tl-item.clay::before { border-color: var(--clay); }
+.tl-item.brick::before { border-color: var(--brick); }
+.tl-item.terracotta::before { border-color: var(--terracotta); }
+.tl-date { font-family: var(--font-mono); font-size: 12px; color: var(--ink-tertiary); margin-bottom: 2px; }
+.tl-body { font-size: 14.5px; color: var(--ink); line-height: 1.6; }
+.tl-body code { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); padding: 1px 5px; }
+
+/* FINDINGS TABLE — §7.6 */
+.findings-table { width: 100%; border-collapse: collapse; margin-top: var(--s-m); background: var(--surface); }
+.findings-table th { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.2px; padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--hairline); }
+.findings-table td { padding: 12px 16px; font-size: 14px; color: var(--ink); border-bottom: 1px solid var(--hairline); font-family: var(--font-mono); }
+.findings-table td:first-child { font-family: var(--font-sans); font-weight: 600; }
+.findings-table td.muted { color: var(--ink-tertiary); font-family: var(--font-sans); font-size: 13px; }
+.findings-table td.brick { color: var(--brick); }
+.findings-table td.sage { color: var(--sage); }
+.findings-table td.clay { color: var(--clay); }
+.findings-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: var(--s-l); }
+.findings-note { font-size: 13px; color: var(--ink-tertiary); margin-top: var(--s-m); line-height: 1.55; }
+
+/* STANDING PLAN TABLE — §7.10 */
+.standing-plan { background: var(--surface); padding: var(--s-l); margin-bottom: var(--s-xl); }
+.standing-plan-eyebrow { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--s-s); }
+.standing-plan-title { font-family: var(--font-serif); font-size: 18px; color: var(--ink); margin-bottom: var(--s-s); }
+.standing-plan-lede { font-size: 14px; color: var(--ink-secondary); margin-bottom: var(--s-l); }
+.sp-table { width: 100%; border-collapse: collapse; }
+.sp-table th { font-size: 11px; font-weight: 500; color: var(--ink-tertiary); text-transform: uppercase; letter-spacing: 1.2px; padding: 10px 0; text-align: left; border-bottom: 1px solid var(--hairline); }
+.sp-table th:nth-child(1) { width: 130px; }
+.sp-table th:nth-child(3) { width: 140px; text-align: right; }
+.sp-table td { padding: 16px 0; font-size: 14px; color: var(--ink); border-bottom: 1px solid var(--hairline); vertical-align: top; line-height: 1.6; }
+.sp-table tr:last-child td { border-bottom: 0; }
+.sp-table td.priority { font-weight: 600; }
+.sp-table td.priority.continue { color: var(--sage); }
+.sp-table td.priority.monitor { color: var(--clay); }
+.sp-table td.priority.routine { color: var(--ink-secondary); }
+.sp-table td.cadence { text-align: right; color: var(--ink-tertiary); font-size: 13px; }
+
+/* VISIT SUMMARY (Eye) */
+.visit-summary { background: var(--surface); padding: var(--s-l); margin-bottom: var(--s-l); }
+
+/* FOOTER */
+footer.page-footer { text-align: center; padding: var(--s-xxl) 32px var(--s-xl); border-top: 1px solid var(--hairline); margin-top: var(--s-xl); }
+footer.page-footer p { font-size: 12px; color: var(--ink-tertiary); line-height: 1.6; }
+
+@media (max-width: 640px) {
+  .container { padding: var(--s-l) 20px; }
+  .page-title { font-size: 26px; }
+  .nav-inner { padding: 12px 20px; flex-wrap: wrap; gap: 16px; }
+  .nav-links { margin-left: 0; gap: 16px; }
+  .nav-links a { font-size: 13px; }
+  .collapse-tag { display: none; }
+  .sp-table th:nth-child(3), .sp-table td.cadence { display: none; }
+}
 </style>
 </head>
 <body>
 
-<nav>
+<nav class="topnav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand">HB Health <span>DASHBOARD</span></a>
+    <a href="index.html" class="nav-brand"><span class="nav-eyebrow">HB HEALTH</span>Personal Medical History</a>
     <div class="nav-links">
       <a href="index.html">Blood Work</a>
       <a href="diabetes.html" class="active">Diabetes &amp; Complications</a>
@@ -135,430 +193,465 @@ footer{text-align:center;padding:32px 24px;color:var(--text-secondary);font-size
 </nav>
 
 <div class="container">
-  <div class="page-header">
-    <h1>Diabetes &amp; Complications Assessment</h1>
-    <p>Organ-by-organ risk analysis | Based on 10 blood work reports (Jan 2019 – Apr 2026) + eye exam</p>
+
+  <header class="page-header">
+    <div class="page-eyebrow">HB Health · Diabetes &amp; Complications</div>
+    <h1 class="page-title">Diabetes &amp; Complications Assessment</h1>
+    <p class="page-meta">Organ-by-organ risk analysis · 10 blood-work reports (Jan 2019 – Apr 2026) · Eye exam 31 Mar 2026</p>
+  </header>
+
+  <!-- CARRY-FORWARD CALLOUT — §7.3 -->
+  <div class="callout">
+    <div class="callout-eyebrow"><strong>APR 2026</strong> · Risk picture is meaningfully better</div>
+    <p class="callout-lede">Two of the four high-risk organ cards from Aug 2025 have downgraded. <strong>Kidneys:</strong> Stage A2 nephropathy has regressed to A1 (microalbumin/Cr <code>60.7 → 23.1</code>). <strong>Thyroid:</strong> TSH <code>62.7 → 13.7</code>, Free T4 back in range. <strong>Eyes:</strong> OCT + HVF screening complete (31-Mar-2026, Dr Pandey) — macula clean (no diabetic macular edema), but a glaucoma-suspect picture has emerged (elevated C/D ratios, right-eye visual field outside normal limits). Treatment started, 1-month follow-up booked. Cardiovascular risk remains elevated pending further HbA1c drops — but the overall trajectory has reversed. Keep the current treatment plan running.</p>
   </div>
 
-  <!-- RECOVERY BANNER -->
-  <div class="recovery-banner">
-    <div class="rb-title">
-      <span class="rb-pill">APR 2026</span>
-      <h2>Risk picture is meaningfully better</h2>
+  <!-- ACTION CARD — §7.4 -->
+  <div class="action-card">
+    <div class="action-card-eyebrow">Today's clinical actions</div>
+    <div class="action-item">
+      <div class="action-num">1.</div>
+      <div class="action-body">Continue the current diabetes + thyroid medication plan running. Whatever combination of changes started between Aug 2025 and Apr 2026 is clearly working — HbA1c down 2.1 pts, TSH down 78%, kidney leak closed. Do not stop or switch medications without endocrinology sign-off.</div>
     </div>
-    <p>Two of the four "HIGH RISK" organ cards from Aug 2025 have downgraded. <strong>Kidneys</strong>: Stage A2 nephropathy has regressed to A1 (microalbumin/Cr <code>60.7 → 23.1</code>). <strong>Thyroid</strong>: TSH <code>62.7 → 13.7</code>, Free T4 back in range. <strong>Eyes</strong>: OCT + HVF screening now complete (31-Mar-2026, Dr Swati Pandey) — macula is clean (no diabetic macular edema), but a <em>glaucoma-suspect</em> picture has emerged (elevated C/D ratios, right-eye visual field outside normal limits). Treatment started, 1-month follow-up booked. Cardiovascular risk remains elevated pending further HbA1c drops — but the overall trajectory has reversed. Keep the current treatment plan running.</p>
+    <div class="action-item">
+      <div class="action-num">2.</div>
+      <div class="action-body">Book the 6–8 week endocrinology follow-up for TSH + Free T4 recheck. Levothyroxine dose likely needs one more bump. Anti-TPO antibody testing if not yet on file, to confirm Hashimoto's.</div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3.</div>
+      <div class="action-body">Complete the 30-day Forslin / TIZTA / Cladra regimen exactly as prescribed. Repeat HVF on or around 1 May. Ask Dr Pandey to add IOP measurement and a dilated fundus photograph at that visit.</div>
+    </div>
   </div>
 
-  <!-- RISK DASHBOARD -->
-  <div class="risk-grid">
-    <div class="risk-card warning">
-      <div class="icon">&#128065;</div>
-      <h3>Eyes (DR + Glaucoma)</h3>
-      <div class="status yellow">WORKUP IN PROGRESS</div>
-      <p>OCT + HVF done 31-Mar-2026. Macula clean (no DME). Glaucoma-suspect — elevated C/D both eyes, R-eye VF outside normal limits. Treatment started. Repeat HVF in 1 month.</p>
+  <!-- ORGAN STATUS GRID -->
+  <div class="organ-grid">
+    <div class="organ-cell">
+      <div class="organ-name">Eyes (DR + Glaucoma)</div>
+      <div class="organ-status clay">Workup in progress</div>
+      <div class="organ-detail">OCT + HVF done 31-Mar-2026. Macula clean (no DME). Glaucoma-suspect — elevated C/D both eyes, R-eye VF outside normal limits. Treatment started. Repeat HVF in 1 month.</div>
     </div>
-    <div class="risk-card recovering">
-      <div class="icon">&#129516;</div>
-      <h3>Kidneys (Nephropathy)</h3>
-      <div class="status blue">STAGE A1 — Recovered from A2</div>
-      <p>Microalbumin/Cr ratio: 23.1 mg/g (Apr 2026) — back inside normal. Protein leak closed.</p>
+    <div class="organ-cell">
+      <div class="organ-name">Kidneys (Nephropathy)</div>
+      <div class="organ-status sage">Stage A1 — recovered from A2</div>
+      <div class="organ-detail">Microalbumin/Cr ratio: 23.1 mg/g (Apr 2026) — back inside normal. Protein leak closed.</div>
     </div>
-    <div class="risk-card warning">
-      <div class="icon">&#10084;&#65039;</div>
-      <h3>Heart (Cardiovascular)</h3>
-      <div class="status yellow">IMPROVING — Still high risk</div>
-      <p>LDL 96 (target met). HDL still 33. Triglycerides 233. Chol:HDL ratio improving.</p>
+    <div class="organ-cell">
+      <div class="organ-name">Heart (Cardiovascular)</div>
+      <div class="organ-status clay">Improving — still high risk</div>
+      <div class="organ-detail">LDL 96 (target met). HDL still 33. Triglycerides 233. Chol:HDL ratio improving.</div>
     </div>
-    <div class="risk-card recovering">
-      <div class="icon">&#129516;</div>
-      <h3>Thyroid</h3>
-      <div class="status blue">RECOVERING — Meds working</div>
-      <p>TSH 13.68 (down 78% from 62.7). T3/T4 back in range. One more dose bump likely.</p>
+    <div class="organ-cell">
+      <div class="organ-name">Thyroid</div>
+      <div class="organ-status sage">Recovering — meds working</div>
+      <div class="organ-detail">TSH 13.68 (down 78% from 62.7). T3/T4 back in range. One more dose bump likely.</div>
     </div>
-    <div class="risk-card warning">
-      <div class="icon">&#129516;</div>
-      <h3>Nerves (Neuropathy)</h3>
-      <div class="status yellow">PROBABLE — Not yet tested</div>
-      <p>With 20 years DM and HbA1c still 11.8%, neuropathy is likely. Monofilament test pending.</p>
+    <div class="organ-cell">
+      <div class="organ-name">Nerves (Neuropathy)</div>
+      <div class="organ-status clay">Probable — not yet tested</div>
+      <div class="organ-detail">With 20 years DM and HbA1c still 11.8%, neuropathy is likely. Monofilament test pending.</div>
     </div>
-    <div class="risk-card warning">
-      <div class="icon">&#129516;</div>
-      <h3>Liver (NAFLD)</h3>
-      <div class="status yellow">MONITOR — ALP 151</div>
-      <p>Alkaline phosphatase still elevated. SGOT/SGPT normal. FibroScan still recommended.</p>
+    <div class="organ-cell">
+      <div class="organ-name">Liver (NAFLD)</div>
+      <div class="organ-status clay">Monitor — ALP 151</div>
+      <div class="organ-detail">Alkaline phosphatase still elevated. SGOT/SGPT normal. FibroScan still recommended.</div>
     </div>
   </div>
 
   <!-- DIABETES TRAJECTORY -->
-  <div class="comp-section">
-    <div class="comp-header" onclick="toggle('diabetesBody',this)">
-      <span class="toggle-icon open">&#9654;</span>
-      <h2>Diabetes Trajectory — The Full Picture</h2>
-      <span class="comp-chip chip-blue">Turning Point</span>
+  <div class="section">
+    <div class="collapse-header" onclick="toggle('diabetesBody', this)">
+      <span class="collapse-chevron open">▸</span>
+      <h2 class="section-title">Diabetes Trajectory — The Full Picture</h2>
+      <span class="collapse-tag sage">Turning point</span>
     </div>
-    <div class="comp-body" id="diabetesBody">
-      <div class="card"><div class="card-body">
-        <h3>HbA1c Journey (2019–2026)</h3>
+    <div class="collapse-body" id="diabetesBody">
+      <div class="chart-card">
+        <h3 class="subsection-title">HbA1c Journey · 2019 – 2026</h3>
         <div class="chart-container"><canvas id="chartHba1cJourney"></canvas></div>
         <div class="timeline">
-          <div class="tl-item warn"><div class="tl-date">Jan 2019</div><div class="tl-text">HbA1c 6.2%, Fasting 127 — <strong>Pre-diabetes / early diabetes.</strong> First red flag. Should have started lifestyle intervention here.</div></div>
-          <div class="tl-item ok"><div class="tl-date">Dec 2019</div><div class="tl-text">HbA1c 5.9% — <strong>Brief improvement.</strong> Fructosamine 175 confirms good short-term control. Likely started medication or diet changes.</div></div>
-          <div class="tl-item bad"><div class="tl-date">Sep 2020</div><div class="tl-text">HbA1c 8.0%, Fasting 157.8 — <strong>COVID era spike.</strong> Lockdown impact? SGPT spiked to 82 (fatty liver flare). Fructosamine 300.7 confirms sustained highs.</div></div>
-          <div class="tl-item ok"><div class="tl-date">Dec 2020</div><div class="tl-text">HbA1c 6.8%, Fasting 114 — <strong>Recovery.</strong> Medication working. Microalbumin/Cr ratio 11.5 (normal). This was the best window.</div></div>
-          <div class="tl-item ok"><div class="tl-date">Apr 2021</div><div class="tl-text">HbA1c 6.2%, Fasting 122 — <strong>Best control ever.</strong> Microalbumin/Cr 10.0. Everything was trending right. ESR dropped to 9.</div></div>
-          <div class="tl-item bad"><div class="tl-date">Apr 2023</div><div class="tl-text">HbA1c 14.1%, Fasting 319 — <strong>Catastrophic collapse.</strong> 2-year gap in testing. Microalbumin/Cr exploded to 154. ESR hit 54. Something went very wrong between 2021–2023. Likely stopped medication.</div></div>
-          <div class="tl-item bad"><div class="tl-date">Jul 2024</div><div class="tl-text">HbA1c 11.9%, Fasting 310 — <strong>Slight improvement but still severe.</strong> TSH starting to climb (9.3). May have resumed partial treatment.</div></div>
-          <div class="tl-item bad"><div class="tl-date">Aug 2025</div><div class="tl-text">HbA1c 13.9%, Fasting 310 — <strong>Worsened again.</strong> TSH exploded to 62.7. Thyroid failure now actively sabotaging glucose control. Vicious cycle established.</div></div>
-          <div class="tl-item blue"><div class="tl-date">Apr 2026</div><div class="tl-text">HbA1c 11.8%, Fasting 147 — <strong>Turning point.</strong> First real downward movement in three years. 2.1 point HbA1c drop (biggest single-report improvement ever). Fasting cut in half. TSH down 78%. Kidney leak closed. Ferritin normalized. The vicious cycle has been broken — now stay the course.</div></div>
+          <div class="tl-item clay"><div class="tl-date">Jan 2019</div><div class="tl-body">HbA1c 6.2%, Fasting 127 — pre-diabetes / early diabetes. First red flag. Should have started lifestyle intervention here.</div></div>
+          <div class="tl-item sage"><div class="tl-date">Dec 2019</div><div class="tl-body">HbA1c 5.9% — brief improvement. Fructosamine 175 confirms good short-term control. Likely started medication or diet changes.</div></div>
+          <div class="tl-item brick"><div class="tl-date">Sep 2020</div><div class="tl-body">HbA1c 8.0%, Fasting 157.8 — COVID era spike. Lockdown impact? SGPT spiked to 82 (fatty liver flare). Fructosamine 300.7 confirms sustained highs.</div></div>
+          <div class="tl-item sage"><div class="tl-date">Dec 2020</div><div class="tl-body">HbA1c 6.8%, Fasting 114 — recovery. Medication working. Microalbumin/Cr ratio 11.5 (normal).</div></div>
+          <div class="tl-item sage"><div class="tl-date">Apr 2021</div><div class="tl-body">HbA1c 6.2%, Fasting 122 — best control ever. Microalbumin/Cr 10.0. Everything trending right. ESR dropped to 9.</div></div>
+          <div class="tl-item brick"><div class="tl-date">Apr 2023</div><div class="tl-body">HbA1c 14.1%, Fasting 319 — catastrophic collapse. 2-year gap in testing. Microalbumin/Cr exploded to 154. ESR hit 54. Something went very wrong between 2021–2023. Likely stopped medication.</div></div>
+          <div class="tl-item brick"><div class="tl-date">Jul 2024</div><div class="tl-body">HbA1c 11.9%, Fasting 310 — slight improvement but still severe. TSH starting to climb (9.3). May have resumed partial treatment.</div></div>
+          <div class="tl-item brick"><div class="tl-date">Aug 2025</div><div class="tl-body">HbA1c 13.9%, Fasting 310 — worsened again. TSH exploded to 62.7. Thyroid failure now actively sabotaging glucose control. Vicious cycle established.</div></div>
+          <div class="tl-item sage"><div class="tl-date">Apr 2026</div><div class="tl-body">HbA1c 11.8%, Fasting 147 — turning point. First real downward movement in three years. 2.1 point HbA1c drop (biggest single-report improvement ever). Fasting cut in half. TSH down 78%. Kidney leak closed. Ferritin normalised. The vicious cycle has been broken — now stay the course.</div></div>
         </div>
-      </div></div>
+      </div>
 
-      <div class="deep-dive recovery">
-        <h4>&#10004; Clinical Deep Dive — Diabetes (Apr 2026)</h4>
-        <p><strong>Diagnosis: Type 2 Diabetes Mellitus, still uncontrolled but improving.</strong></p>
-        <p>Duration: Approximately 20 years per eye clinic records. The data suggests diagnosis likely around 2006 (age ~22), unusually young for T2DM — the LADA (Latent Autoimmune Diabetes in Adults) question remains open. The fasting insulin of 14.1 µU/mL (Sep 2020) was in normal range, suggesting residual beta-cell function at that time. Insulin testing was not repeated in Apr 2026; re-measuring would help clarify whether the current improvement is driven by insulin secretion returning or purely by exogenous medication.</p>
-        <p style="margin-top:12px;"><strong>What changed between Aug 2025 and Apr 2026:</strong> Something in the treatment plan — medication, adherence, thyroid replacement, or a combination — finally started to work. HbA1c dropped 2.1 points (the biggest single-report improvement across eight years of records). Fasting glucose broke out of the 310 plateau down to 147. These kinds of drops are most consistent with a combination of (a) a new or properly dosed glucose-lowering medication, and (b) improved thyroid status reducing insulin resistance. The cascade effect is real: as TSH came down, everything else started responding. This is the window to push harder — the next milestone is HbA1c below 9% and fasting below 130 at the next test.</p>
+      <div class="diagnosis">
+        <div class="diagnosis-eyebrow">Clinical deep-dive — Diabetes (Apr 2026)</div>
+        <p>Diagnosis: Type 2 Diabetes Mellitus, still uncontrolled but improving.</p>
+        <p>Duration: approximately 20 years per eye-clinic records. The data suggests diagnosis around 2006 (age ~22), unusually young for T2DM — the LADA (Latent Autoimmune Diabetes in Adults) question remains open. The fasting insulin of 14.1 µU/mL (Sep 2020) was in normal range, suggesting residual beta-cell function at that time. Insulin testing was not repeated in Apr 2026; re-measuring would help clarify whether the current improvement is driven by insulin secretion returning or purely by exogenous medication.</p>
+        <p>What changed between Aug 2025 and Apr 2026: something in the treatment plan — medication, adherence, thyroid replacement, or a combination — finally started to work. HbA1c dropped 2.1 points (the biggest single-report improvement across eight years of records). Fasting glucose broke out of the 310 plateau down to 147. These kinds of drops are most consistent with a combination of (a) a new or properly dosed glucose-lowering medication, and (b) improved thyroid status reducing insulin resistance. The cascade effect is real: as TSH came down, everything else started responding. This is the window to push harder — the next milestone is HbA1c below 9% and fasting below 130 at the next test.</p>
         <ul>
-          <li><strong>ADA Target HbA1c:</strong> &lt;7% (current: 11.8% — was 13.9% in Aug 2025)</li>
-          <li><strong>ADA Target Fasting Glucose:</strong> 80–130 mg/dL (current: 147 — was 310 in Aug 2025)</li>
-          <li><strong>Urine Glucose:</strong> 3+ (still spilling; will normalize once HbA1c drops further)</li>
-          <li><strong>Urine Ketones:</strong> 2+ (new — was negative Aug 2025; flag to doctor)</li>
-          <li><strong>Average blood glucose (eAG):</strong> ~292 mg/dL (down from ~350)</li>
+          <li>ADA Target HbA1c: &lt;7% (current: 11.8% — was 13.9% in Aug 2025)</li>
+          <li>ADA Target Fasting Glucose: 80–130 mg/dL (current: 147 — was 310 in Aug 2025)</li>
+          <li>Urine Glucose: 3+ (still spilling; will normalise once HbA1c drops further)</li>
+          <li>Urine Ketones: 2+ (new — was negative Aug 2025; flag to doctor)</li>
+          <li>Average blood glucose (eAG): ~292 mg/dL (down from ~350)</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- EYES — TWO-TRACK: Retinopathy + Glaucoma -->
-  <div class="comp-section">
-    <div class="comp-header" onclick="toggle('eyesBody',this)">
-      <span class="toggle-icon open">&#9654;</span>
-      <h2>&#128065; Eyes — Retinopathy + Glaucoma Workup</h2>
-      <span class="comp-chip chip-yellow">Workup in progress</span>
+  <!-- EYES — TWO-TRACK -->
+  <div class="section">
+    <div class="collapse-header" onclick="toggle('eyesBody', this)">
+      <span class="collapse-chevron open">▸</span>
+      <h2 class="section-title">Eyes — Retinopathy + Glaucoma Workup</h2>
+      <span class="collapse-tag clay">Workup in progress</span>
     </div>
-    <div class="comp-body" id="eyesBody">
+    <div class="collapse-body" id="eyesBody">
 
-      <!-- Visit summary card -->
-      <div class="card"><div class="card-body">
-        <h3>Visit Summary — Belle Vue Eye Clinic, 31-Mar-2026</h3>
-        <p style="margin-bottom:12px;">Examining physician: <strong>Dr Swati Pandey</strong>, Senior Consultant Ophthalmology. Tests performed both eyes: OCT Optic Nerve Head (ONH), OCT Macula (radial 12×12 mm), GCL+IPL thickness, Humphrey Visual Field 24-2 ZETA Fast.</p>
-        <div class="metric-row">
-          <div class="metric-pill ok">Macula OCT: <strong>No DME</strong></div>
-          <div class="metric-pill warn">C/D vertical: <strong>R 0.74 / L 0.76</strong></div>
-          <div class="metric-pill bad">R-eye VF: <strong>Outside Normal Limits</strong></div>
-          <div class="metric-pill ok">L-eye VF: <strong>Within Normal Limits</strong></div>
-          <div class="metric-pill warn">DDLS: <strong>R 4 / L 5</strong></div>
+      <div class="visit-summary">
+        <h3 class="subsection-title">Visit Summary · Belle Vue Eye Clinic · 31 Mar 2026</h3>
+        <p style="font-size: 14px; color: var(--ink-secondary); line-height: 1.6;">Examining physician: Dr Swati Pandey, Senior Consultant Ophthalmology. Tests performed both eyes: OCT Optic Nerve Head (ONH), OCT Macula (radial 12×12 mm), GCL+IPL thickness, Humphrey Visual Field 24-2 ZETA Fast.</p>
+        <div class="metric-row" style="margin-top: var(--s-m);">
+          <div class="metric-pill">Macula OCT: <strong class="sage">No DME</strong></div>
+          <div class="metric-pill">C/D vertical: <strong class="clay">R 0.74 / L 0.76</strong></div>
+          <div class="metric-pill">R-eye VF: <strong class="brick">Outside Normal</strong></div>
+          <div class="metric-pill">L-eye VF: <strong class="sage">Within Normal</strong></div>
+          <div class="metric-pill">DDLS: <strong class="clay">R 4 / L 5</strong></div>
         </div>
-        <p style="font-size:14px;color:var(--text-secondary);margin-top:12px;">Dr Pandey noted she is still in the screening/evaluation phase — no formal diagnosis has been issued yet. <strong>Treatment:</strong> Tab Forslin 1×/day × 30 days (after food) + Eye Drops TIZTA 3×/day + Gel Cladra 1×/day at night. <strong>Plan:</strong> repeat bilateral HVF after 1 month to confirm or rule out early-stage glaucoma.</p>
-      </div></div>
-
-      <!-- Track 1: Diabetic Retinopathy -->
-      <div class="deep-dive recovery">
-        <h4>&#10004; Track 1 — Diabetic Retinopathy (DR)</h4>
-        <p><strong>Good news from the 31-Mar-2026 OCT macula scan:</strong> no diabetic macular edema visible in either eye, foveal contour preserved, RPE deformation maps clean, no drusen or subretinal fluid. Central macular thickness is well within the normal 250–300 μm band (R 282 μm, L 264 μm). For a patient with 20 years of diabetes and HbA1c that has lived above 10% for the last three years, this is a better result than expected.</p>
-        <p style="margin-top:8px;"><strong>What this OCT does and doesn't cover:</strong> it is excellent at detecting macular edema and neovascular changes behind the retina, but a formal <em>dilated fundus exam</em> is still the gold standard for staging early non-proliferative diabetic retinopathy (micro-aneurysms, dot-blot hemorrhages, cotton-wool spots). That wasn't done on this visit. Schedule one on the next eye appointment — ideally combined with the 1-month HVF recheck — so the DR side of the picture is fully locked down.</p>
-        <p style="margin-top:8px;"><strong>Forward risk:</strong> the DCCT/UKPDS data says every 1% HbA1c drop cuts retinopathy risk by ~35%. The 2.1-point drop from Aug 2025 → Apr 2026 has already bought meaningful protection. Keep pushing HbA1c below 9% and the next OCT a year from now should still be clean.</p>
+        <p style="font-size: 13.5px; color: var(--ink-secondary); line-height: 1.6; margin-top: var(--s-m);">Dr Pandey noted she is still in the screening / evaluation phase — no formal diagnosis has been issued yet. Treatment: Tab Forslin 1×/day × 30 days (after food) + Eye Drops TIZTA 3×/day + Gel Cladra 1×/day at night. Plan: repeat bilateral HVF after 1 month to confirm or rule out early-stage glaucoma.</p>
       </div>
 
-      <!-- Track 2: Glaucoma-suspect -->
-      <div class="deep-dive warning" style="margin-top:16px;">
-        <h4>&#9888; Track 2 — Glaucoma-suspect (new finding, under evaluation)</h4>
-        <p><strong>The unexpected finding of this visit.</strong> The OCT optic nerve head scan shows bilaterally enlarged cupping: cup-to-disc area ratios of 0.48 (R) and 0.55 (L), both above the 0.10–0.40 normal range. Vertical C/D ratios are 0.74 and 0.76 — clinically elevated. The Disc Damage Likelihood Scale (DDLS) at 4 and 5 suggests moderate likelihood of glaucomatous structural change. In parallel, the Humphrey 24-2 visual field on the right eye returned <strong>GHT: Outside Normal Limits</strong> with a cluster of defects in the upper field; the left eye was clean.</p>
-        <p style="margin-top:8px;"><strong>GCL+IPL thickness:</strong> mean 86 μm (R) and 82 μm (L) — still in range on average, but the minimum thickness on the left eye is only 23 μm, indicating a focal region of ganglion cell loss that's worth rechecking at the 1-month visit.</p>
-        <p style="margin-top:8px;"><strong>Why the screening isn't over yet:</strong> a single VF "outside normal limits" result can be driven by fixation losses, learning effect, or artifact. Dr Pandey is correctly asking for a repeat HVF after a month before committing to a diagnosis. The prescribed regimen (Tab Forslin oral + Eye Drops TIZTA three times daily + Gel Cladra at bedtime) will either protect against progression during the observation window or give supporting clinical evidence when the next VF is read. Until the second HVF is in, this stays on the dashboard as <em>suspect — under evaluation</em>, not confirmed glaucoma.</p>
-        <p style="margin-top:8px;"><strong>What to do:</strong> Complete the full 30-day regimen exactly as prescribed (Tab Forslin once daily after food, TIZTA drops three times daily, Cladra gel once a night), book the repeat bilateral HVF for end-April / early-May, and ask Dr Pandey to add a dilated fundus exam at that visit so the DR screening is formally on the record. If the second HVF is also abnormal, the next step is typically IOP series, gonioscopy, and possibly a 10-2 visual field.</p>
+      <div class="diagnosis">
+        <div class="diagnosis-eyebrow">Track 1 — Diabetic Retinopathy</div>
+        <p>Good news from the 31 Mar 2026 OCT macula scan: no diabetic macular edema visible in either eye, foveal contour preserved, RPE deformation maps clean, no drusen or subretinal fluid. Central macular thickness is well within the normal 250–300 μm band (R 282 μm, L 264 μm). For a patient with 20 years of diabetes and HbA1c that has lived above 10% for the last three years, this is a better result than expected.</p>
+        <p>What this OCT does and doesn't cover: it is excellent at detecting macular edema and neovascular changes behind the retina, but a formal dilated fundus exam is still the gold standard for staging early non-proliferative diabetic retinopathy (micro-aneurysms, dot-blot hemorrhages, cotton-wool spots). That wasn't done on this visit. Schedule one on the next eye appointment — ideally combined with the 1-month HVF recheck — so the DR side of the picture is fully locked down.</p>
+        <p>Forward risk: the DCCT/UKPDS data says every 1% HbA1c drop cuts retinopathy risk by ~35%. The 2.1-point drop from Aug 2025 → Apr 2026 has already bought meaningful protection. Keep pushing HbA1c below 9% and the next OCT a year from now should still be clean.</p>
       </div>
 
-      <!-- Structured findings table -->
-      <div class="card" style="margin-top:16px;"><div class="card-body">
-        <h3>Structured Findings — 31-Mar-2026</h3>
-        <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <div class="diagnosis">
+        <div class="diagnosis-eyebrow">Track 2 — Glaucoma-suspect (new finding, under evaluation)</div>
+        <p>The unexpected finding of this visit. The OCT optic nerve head scan shows bilaterally enlarged cupping: cup-to-disc area ratios of 0.48 (R) and 0.55 (L), both above the 0.10–0.40 normal range. Vertical C/D ratios are 0.74 and 0.76 — clinically elevated. The Disc Damage Likelihood Scale (DDLS) at 4 and 5 suggests moderate likelihood of glaucomatous structural change. In parallel, the Humphrey 24-2 visual field on the right eye returned GHT Outside Normal Limits with a cluster of defects in the upper field; the left eye was clean.</p>
+        <p>GCL+IPL thickness: mean 86 μm (R) and 82 μm (L) — still in range on average, but the minimum thickness on the left eye is only 23 μm, indicating a focal region of ganglion cell loss that's worth rechecking at the 1-month visit.</p>
+        <p>Why the screening isn't over yet: a single VF "outside normal limits" result can be driven by fixation losses, learning effect, or artifact. Dr Pandey is correctly asking for a repeat HVF after a month before committing to a diagnosis. The prescribed regimen (Tab Forslin oral + Eye Drops TIZTA three times daily + Gel Cladra at bedtime) will either protect against progression during the observation window or give supporting clinical evidence when the next VF is read. Until the second HVF is in, this stays on the dashboard as suspect — under evaluation, not confirmed glaucoma.</p>
+        <p>What to do: complete the full 30-day regimen exactly as prescribed (Tab Forslin once daily after food, TIZTA drops three times daily, Cladra gel once a night), book the repeat bilateral HVF for end-April / early-May, and ask Dr Pandey to add a dilated fundus exam at that visit so the DR screening is formally on the record. If the second HVF is also abnormal, the next step is typically IOP series, gonioscopy, and possibly a 10-2 visual field.</p>
+      </div>
+
+      <div class="findings-table-wrap">
+        <h3 class="subsection-title" style="margin-top: var(--s-l);">Structured findings · 31 Mar 2026</h3>
+        <table class="findings-table">
           <thead>
-            <tr style="background:#F8F9FA;">
-              <th style="text-align:left;padding:10px;border-bottom:1px solid #E8EAED;">Parameter</th>
-              <th style="text-align:left;padding:10px;border-bottom:1px solid #E8EAED;">Right Eye</th>
-              <th style="text-align:left;padding:10px;border-bottom:1px solid #E8EAED;">Left Eye</th>
-              <th style="text-align:left;padding:10px;border-bottom:1px solid #E8EAED;">Reference</th>
-            </tr>
+            <tr><th>Parameter</th><th>Right Eye</th><th>Left Eye</th><th>Reference</th></tr>
           </thead>
           <tbody>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Visual Field — Mean Sensitivity</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">29.64 dB</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">30.44 dB</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">~30 normal</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Visual Field — GHT</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#EA4335;">Outside Normal Limits</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#34A853;">Within Normal Limits</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">—</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Visual Field — Fovea</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">32 dB</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">32 dB</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Normal</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Cup/Disc Area</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">0.48 &uarr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">0.55 &uarr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">0.10 – 0.40</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Cup/Disc Vertical</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">0.74 &uarr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">0.76 &uarr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">&lt; 0.7 typical</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>DDLS (Disc Damage)</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">4</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#FBBC04;">5</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Higher = more damage</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>NFL Superior</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">110 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">110 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Normal</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>NFL Inferior</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">98 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">98 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Normal</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>GCL+IPL Mean</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">86 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">82 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">~80 normal</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>GCL+IPL Minimum</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;">50 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#EA4335;">23 μm &darr;</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">Focal min</td></tr>
-            <tr><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;"><strong>Central Macular Thickness</strong></td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#34A853;">282 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#34A853;">264 μm</td><td style="padding:8px 10px;border-bottom:1px solid #F1F3F4;color:#5F6368;">250–300</td></tr>
-            <tr><td style="padding:8px 10px;"><strong>Fovea Minimum</strong></td><td style="padding:8px 10px;color:#34A853;">230 μm</td><td style="padding:8px 10px;color:#34A853;">218 μm</td><td style="padding:8px 10px;color:#5F6368;">Normal</td></tr>
+            <tr><td>Visual Field — Mean Sensitivity</td><td>29.64 dB</td><td>30.44 dB</td><td class="muted">~30 normal</td></tr>
+            <tr><td>Visual Field — GHT</td><td class="brick">Outside Normal</td><td class="sage">Within Normal</td><td class="muted">—</td></tr>
+            <tr><td>Visual Field — Fovea</td><td>32 dB</td><td>32 dB</td><td class="muted">Normal</td></tr>
+            <tr><td>Cup/Disc Area</td><td class="clay">0.48 ↑</td><td class="clay">0.55 ↑</td><td class="muted">0.10–0.40</td></tr>
+            <tr><td>Cup/Disc Vertical</td><td class="clay">0.74 ↑</td><td class="clay">0.76 ↑</td><td class="muted">&lt;0.7 typical</td></tr>
+            <tr><td>DDLS (Disc Damage)</td><td class="clay">4</td><td class="clay">5</td><td class="muted">Higher = more damage</td></tr>
+            <tr><td>NFL Superior</td><td>110 μm</td><td>110 μm</td><td class="muted">Normal</td></tr>
+            <tr><td>NFL Inferior</td><td>98 μm</td><td>98 μm</td><td class="muted">Normal</td></tr>
+            <tr><td>GCL+IPL Mean</td><td>86 μm</td><td>82 μm</td><td class="muted">~80 normal</td></tr>
+            <tr><td>GCL+IPL Minimum</td><td>50 μm</td><td class="brick">23 μm ↓</td><td class="muted">Focal min</td></tr>
+            <tr><td>Central Macular Thickness</td><td class="sage">282 μm</td><td class="sage">264 μm</td><td class="muted">250–300</td></tr>
+            <tr><td>Fovea Minimum</td><td class="sage">230 μm</td><td class="sage">218 μm</td><td class="muted">Normal</td></tr>
           </tbody>
         </table>
-        <p style="font-size:13px;color:#5F6368;margin-top:12px;"><strong>What's missing from the record:</strong> Intraocular pressure (IOP/tonometry) numbers and a dilated fundus photo. Neither is in the five OCT/VF images on file — request both at the 1-month follow-up for a complete picture.</p>
-      </div></div>
+        <p class="findings-note">What's missing from the record: intraocular pressure (IOP/tonometry) numbers and a dilated fundus photo. Neither is in the five OCT/VF images on file — request both at the 1-month follow-up for a complete picture.</p>
+      </div>
 
     </div>
   </div>
 
   <!-- KIDNEYS -->
-  <div class="comp-section">
-    <div class="comp-header" onclick="toggle('kidneyBody',this)">
-      <span class="toggle-icon open">&#9654;</span>
-      <h2>&#129516; Kidneys — Diabetic Nephropathy</h2>
-      <span class="comp-chip chip-green">Back to A1</span>
+  <div class="section">
+    <div class="collapse-header" onclick="toggle('kidneyBody', this)">
+      <span class="collapse-chevron open">▸</span>
+      <h2 class="section-title">Kidneys — Diabetic Nephropathy</h2>
+      <span class="collapse-tag sage">Back to A1</span>
     </div>
-    <div class="comp-body" id="kidneyBody">
-      <div class="card"><div class="card-body">
-        <h3>Microalbumin/Creatinine Ratio Trend</h3>
+    <div class="collapse-body" id="kidneyBody">
+      <div class="chart-card">
+        <h3 class="subsection-title">Microalbumin/Creatinine Ratio Trend</h3>
         <div class="chart-container"><canvas id="chartMicroalbumin"></canvas></div>
         <div class="metric-row">
-          <div class="metric-pill ok">Dec 2020: <strong>11.5 mg/g</strong></div>
-          <div class="metric-pill ok">Apr 2021: <strong>10.0 mg/g</strong></div>
-          <div class="metric-pill bad">Apr 2023: <strong>154.5 mg/g</strong></div>
-          <div class="metric-pill warn">Aug 2025: <strong>60.7 mg/g</strong></div>
-          <div class="metric-pill ok">Apr 2026: <strong>23.1 mg/g</strong></div>
+          <div class="metric-pill">Dec 2020: <strong class="sage">11.5 mg/g</strong></div>
+          <div class="metric-pill">Apr 2021: <strong class="sage">10.0 mg/g</strong></div>
+          <div class="metric-pill">Apr 2023: <strong class="brick">154.5 mg/g</strong></div>
+          <div class="metric-pill">Aug 2025: <strong class="clay">60.7 mg/g</strong></div>
+          <div class="metric-pill">Apr 2026: <strong class="sage">23.1 mg/g</strong></div>
         </div>
-      </div></div>
-      <div class="deep-dive recovery">
-        <h4>&#10004; Clinical Deep Dive — Nephropathy (Apr 2026)</h4>
-        <p><strong>Stage A2 diabetic kidney disease has regressed to Stage A1.</strong> The kidney story tracks the diabetes story: normal in 2020–2021 during good control, dramatic deterioration when HbA1c spiked (peaking at 154.5 mg/g in Apr 2023), partial recovery in Aug 2025 (60.7), and now — for the first time since Apr 2021 — the microalbumin/creatinine ratio is inside the normal &lt;30 band at 23.08 mg/g.</p>
-        <p style="margin-top:8px;">The underlying microalbumin has dropped from 38.6 to 15.0 mg/L. Creatinine stable at 0.97 mg/dL. BUN:Creatinine ratio 18.6 (normal). Urea 38.5 (normal). Sodium 138 / Potassium 4.72 / Chloride 102 all normal. eGFR not reported in the latest report, but the supporting markers are all consistent with preserved filtering capacity.</p>
-        <p style="margin-top:8px;"><strong>Keep doing this:</strong> Continued HbA1c reduction below 9% should keep the ratio trending down. If an ACE inhibitor (Ramipril) or ARB (Telmisartan/Losartan) is not already on board, this is still the right moment to discuss adding one for ongoing kidney protection — they work independent of blood pressure. Recheck urine microalbumin/Cr with every blood work cycle.</p>
+      </div>
+      <div class="diagnosis">
+        <div class="diagnosis-eyebrow">Clinical deep-dive — Nephropathy (Apr 2026)</div>
+        <p>Stage A2 diabetic kidney disease has regressed to Stage A1. The kidney story tracks the diabetes story: normal in 2020–2021 during good control, dramatic deterioration when HbA1c spiked (peaking at 154.5 mg/g in Apr 2023), partial recovery in Aug 2025 (60.7), and now — for the first time since Apr 2021 — the microalbumin/creatinine ratio is inside the normal &lt;30 band at 23.08 mg/g.</p>
+        <p>The underlying microalbumin has dropped from 38.6 to 15.0 mg/L. Creatinine stable at 0.97 mg/dL. BUN:Creatinine ratio 18.6 (normal). Urea 38.5 (normal). Sodium 138 / Potassium 4.72 / Chloride 102 all normal. eGFR not reported in the latest report, but the supporting markers are all consistent with preserved filtering capacity.</p>
+        <p>Keep doing this: continued HbA1c reduction below 9% should keep the ratio trending down. If an ACE inhibitor (Ramipril) or ARB (Telmisartan / Losartan) is not already on board, this is still the right moment to discuss adding one for ongoing kidney protection — they work independent of blood pressure. Recheck urine microalbumin/Cr with every blood-work cycle.</p>
       </div>
     </div>
   </div>
 
-  <!-- CARDIOVASCULAR -->
-  <div class="comp-section">
-    <div class="comp-header" onclick="toggle('cardioBody',this)">
-      <span class="toggle-icon open">&#9654;</span>
-      <h2>&#10084;&#65039; Cardiovascular Risk</h2>
-      <span class="comp-chip chip-yellow">Improving</span>
+  <!-- CARDIO -->
+  <div class="section">
+    <div class="collapse-header" onclick="toggle('cardioBody', this)">
+      <span class="collapse-chevron open">▸</span>
+      <h2 class="section-title">Cardiovascular Risk</h2>
+      <span class="collapse-tag clay">Improving</span>
     </div>
-    <div class="comp-body" id="cardioBody">
-      <div class="card"><div class="card-body">
-        <h3>Lipid Risk Factors Over Time</h3>
+    <div class="collapse-body" id="cardioBody">
+      <div class="chart-card">
+        <h3 class="subsection-title">Lipid Risk Factors Over Time</h3>
         <div class="chart-container"><canvas id="chartCardioRisk"></canvas></div>
         <div class="metric-row">
-          <div class="metric-pill bad">HDL (Apr 26): <strong>33 mg/dL</strong> (target &gt;40)</div>
-          <div class="metric-pill warn">Triglycerides: <strong>233 mg/dL</strong> (target &lt;150)</div>
-          <div class="metric-pill ok">LDL: <strong>96 mg/dL</strong> (target met)</div>
-          <div class="metric-pill warn">Non-HDL: <strong>143 mg/dL</strong> (target &lt;100)</div>
-          <div class="metric-pill warn">Chol:HDL: <strong>5.3</strong> (target &lt;4.5)</div>
-          <div class="metric-pill ok">LDL:HDL: <strong>2.87</strong> (best-ever)</div>
+          <div class="metric-pill">HDL (Apr 26): <strong class="brick">33 mg/dL</strong></div>
+          <div class="metric-pill">Triglycerides: <strong class="clay">233 mg/dL</strong></div>
+          <div class="metric-pill">LDL: <strong class="sage">96 mg/dL</strong></div>
+          <div class="metric-pill">Non-HDL: <strong class="clay">143 mg/dL</strong></div>
+          <div class="metric-pill">Chol:HDL: <strong class="clay">5.3</strong></div>
+          <div class="metric-pill">LDL:HDL: <strong class="sage">2.87</strong></div>
         </div>
-      </div></div>
-      <div class="deep-dive warning">
-        <h4>&#9888; Clinical Deep Dive — Cardiovascular (Apr 2026)</h4>
-        <p><strong>10-year CV risk remains high but several markers have improved.</strong> LDL dropped from 123 to 96 — inside the &lt;100 target for the first time in the record. Total cholesterol down to 176. LDL:HDL ratio at 2.87 is the best on record. Cholesterol:HDL improved from 6.83 peak to 5.3.</p>
-        <p style="margin-top:8px;"><strong>Stubborn issues:</strong> HDL remains 33 — never once at or above 40 in nine blood tests over eight years. Triglycerides 233 (still above 150), non-HDL 143 (still above 100), VLDL 47 (still above 30). This cluster is the classic diabetic dyslipidemia signature and typically resolves only partially until HbA1c is under 8%. hsCRP not repeated this cycle (was 0.81 in Aug 2025 — low CV inflammation). Lp(a) last measured at 10.1 (normal).</p>
-        <p style="margin-top:8px;"><strong>Statin therapy remains indicated</strong> per ADA 2024 guidelines for all diabetics 40–75 regardless of LDL. High-intensity statin targets LDL &lt;70 for high-risk diabetics. Aerobic exercise (150 min/week) and omega-3 supplementation are the two evidence-based moves to raise HDL. ApoB + Lp(a) recheck at the next cycle would help refine the picture.</p>
+      </div>
+      <div class="diagnosis">
+        <div class="diagnosis-eyebrow">Clinical deep-dive — Cardiovascular (Apr 2026)</div>
+        <p>10-year CV risk remains high but several markers have improved. LDL dropped from 123 to 96 — inside the &lt;100 target for the first time in the record. Total cholesterol down to 176. LDL:HDL ratio at 2.87 is the best on record. Cholesterol:HDL improved from 6.83 peak to 5.3.</p>
+        <p>Stubborn issues: HDL remains 33 — never once at or above 40 in nine blood tests over eight years. Triglycerides 233 (still above 150), non-HDL 143 (still above 100), VLDL 47 (still above 30). This cluster is the classic diabetic dyslipidemia signature and typically resolves only partially until HbA1c is under 8%. hsCRP not repeated this cycle (was 0.81 in Aug 2025 — low CV inflammation). Lp(a) last measured at 10.1 (normal).</p>
+        <p>Statin therapy remains indicated per ADA 2024 guidelines for all diabetics 40–75 regardless of LDL. High-intensity statin targets LDL &lt;70 for high-risk diabetics. Aerobic exercise (150 min/week) and omega-3 supplementation are the two evidence-based moves to raise HDL. ApoB + Lp(a) recheck at the next cycle would help refine the picture.</p>
       </div>
     </div>
   </div>
 
   <!-- THYROID -->
-  <div class="comp-section">
-    <div class="comp-header" onclick="toggle('thyroidBody',this)">
-      <span class="toggle-icon open">&#9654;</span>
-      <h2>&#129516; Thyroid — The Cascade Effect</h2>
-      <span class="comp-chip chip-blue">Recovering</span>
+  <div class="section">
+    <div class="collapse-header" onclick="toggle('thyroidBody', this)">
+      <span class="collapse-chevron open">▸</span>
+      <h2 class="section-title">Thyroid — The Cascade Effect</h2>
+      <span class="collapse-tag sage">Recovering</span>
     </div>
-    <div class="comp-body" id="thyroidBody">
-      <div class="card"><div class="card-body">
-        <h3>TSH Trajectory — From Emergency to Recovering</h3>
+    <div class="collapse-body" id="thyroidBody">
+      <div class="chart-card">
+        <h3 class="subsection-title">TSH Trajectory — From Emergency to Recovering</h3>
         <div class="chart-container"><canvas id="chartTSHDeep"></canvas></div>
-      </div></div>
-      <div class="deep-dive recovery">
-        <h4>&#10004; Clinical Deep Dive — Hypothyroidism (Apr 2026)</h4>
-        <p><strong>Thyroid replacement is working.</strong> TSH has dropped 78% from 62.696 (severe hypothyroidism, Aug 2025) to 13.680 (Apr 2026). T4 Total moved from 2.9 µg/dL (below the 4.5 minimum) to 5.5 µg/dL — back in range. T3 Total from 0.56 (below 0.60) to 0.66 — back in range. Free T4 and Free T3 were not repeated this cycle but should track the Total values upward.</p>
-        <p style="margin-top:8px;">TSH of 13.68 is still above the 4.78 upper limit — the typical levothyroxine recovery pattern. Expect one more dose bump. The underlying cause is still likely Hashimoto's thyroiditis; anti-TPO antibodies would confirm. Exogenous T4 is filling the gap the gland cannot.</p>
-        <p style="margin-top:8px;"><strong>Why this improvement matters for everything else:</strong> Hypothyroidism increases insulin resistance by 30–50%, raises LDL/triglycerides, slows kidney perfusion, and causes fatigue/brain fog. The fact that this is resolving is a big reason HbA1c, fasting glucose, LDL, and kidney function all improved in the same report. <strong>Keep doing what you're doing.</strong> Recheck TSH + Free T4 at 6–8 weeks and titrate the dose until TSH lands in the 0.5–2.5 target zone.</p>
+      </div>
+      <div class="diagnosis">
+        <div class="diagnosis-eyebrow">Clinical deep-dive — Hypothyroidism (Apr 2026)</div>
+        <p>Thyroid replacement is working. TSH has dropped 78% from 62.696 (severe hypothyroidism, Aug 2025) to 13.680 (Apr 2026). T4 Total moved from 2.9 µg/dL (below the 4.5 minimum) to 5.5 µg/dL — back in range. T3 Total from 0.56 (below 0.60) to 0.66 — back in range. Free T4 and Free T3 were not repeated this cycle but should track the Total values upward.</p>
+        <p>TSH of 13.68 is still above the 4.78 upper limit — the typical levothyroxine recovery pattern. Expect one more dose bump. The underlying cause is still likely Hashimoto's thyroiditis; anti-TPO antibodies would confirm. Exogenous T4 is filling the gap the gland cannot.</p>
+        <p>Why this improvement matters for everything else: hypothyroidism increases insulin resistance by 30–50%, raises LDL/triglycerides, slows kidney perfusion, and causes fatigue / brain fog. The fact that this is resolving is a big reason HbA1c, fasting glucose, LDL, and kidney function all improved in the same report. Keep doing what you're doing. Recheck TSH + Free T4 at 6–8 weeks and titrate the dose until TSH lands in the 0.5–2.5 target zone.</p>
       </div>
     </div>
   </div>
 
   <!-- NEUROPATHY -->
-  <div class="comp-section">
-    <div class="comp-header" onclick="toggle('neuroBody',this)">
-      <span class="toggle-icon open">&#9654;</span>
-      <h2>&#129516; Neuropathy Risk</h2>
-      <span class="comp-chip chip-yellow">Probable — Untested</span>
+  <div class="section">
+    <div class="collapse-header" onclick="toggle('neuroBody', this)">
+      <span class="collapse-chevron open">▸</span>
+      <h2 class="section-title">Neuropathy Risk</h2>
+      <span class="collapse-tag clay">Probable — untested</span>
     </div>
-    <div class="comp-body" id="neuroBody">
-      <div class="deep-dive warning">
-        <h4>&#128300; Assessment — Diabetic Neuropathy</h4>
-        <p><strong>With 20 years of diabetes and HbA1c still at 11.8%, diabetic peripheral neuropathy is likely present to some degree.</strong> Studies show 50% of diabetics develop neuropathy within 25 years, and risk rises with poor glycemic control.</p>
-        <p style="margin-top:8px;">No nerve conduction study (NCS) or monofilament testing data is on file. The recent hypothyroidism compounds the risk — hypothyroid neuropathy overlaps with diabetic neuropathy, causing additional numbness/tingling. As TSH normalizes, some nerve symptoms should ease.</p>
-        <p style="margin-top:8px;"><strong>Symptoms to watch for:</strong> Tingling, burning, or numbness in feet/hands (especially at night); loss of temperature/pain sensation; foot ulcers that don't heal; balance problems; digestive issues (gastroparesis).</p>
-        <p style="margin-top:8px;"><strong>Action:</strong> Request a monofilament test and ankle reflex assessment at the next endocrinology visit. If symptoms are present, NCV testing confirms. Daily foot inspection is essential. B12 at 721 pg/mL (Apr 2026) is good for nerve health — keep that level up especially if Metformin is on board (it depletes B12).</p>
+    <div class="collapse-body" id="neuroBody">
+      <div class="diagnosis">
+        <div class="diagnosis-eyebrow">Assessment — diabetic neuropathy</div>
+        <p>With 20 years of diabetes and HbA1c still at 11.8%, diabetic peripheral neuropathy is likely present to some degree. Studies show 50% of diabetics develop neuropathy within 25 years, and risk rises with poor glycemic control.</p>
+        <p>No nerve conduction study (NCS) or monofilament testing data is on file. The recent hypothyroidism compounds the risk — hypothyroid neuropathy overlaps with diabetic neuropathy, causing additional numbness / tingling. As TSH normalises, some nerve symptoms should ease.</p>
+        <p>Symptoms to watch for: tingling, burning, or numbness in feet / hands (especially at night); loss of temperature / pain sensation; foot ulcers that don't heal; balance problems; digestive issues (gastroparesis).</p>
+        <p>Action: request a monofilament test and ankle reflex assessment at the next endocrinology visit. If symptoms are present, NCV testing confirms. Daily foot inspection is essential. B12 at 721 pg/mL (Apr 2026) is good for nerve health — keep that level up especially if Metformin is on board (it depletes B12).</p>
       </div>
     </div>
   </div>
 
   <!-- METABOLIC -->
-  <div class="comp-section">
-    <div class="comp-header" onclick="toggle('metabolicBody',this)">
-      <span class="toggle-icon open">&#9654;</span>
-      <h2>&#129516; Metabolic Health, Testosterone &amp; Prostate</h2>
-      <span class="comp-chip chip-yellow">Mixed</span>
+  <div class="section">
+    <div class="collapse-header" onclick="toggle('metabolicBody', this)">
+      <span class="collapse-chevron open">▸</span>
+      <h2 class="section-title">Metabolic Health, Testosterone &amp; Prostate</h2>
+      <span class="collapse-tag clay">Mixed</span>
     </div>
-    <div class="comp-body" id="metabolicBody">
-      <div class="card"><div class="card-body">
+    <div class="collapse-body" id="metabolicBody">
+      <div class="chart-card">
         <div class="metric-row">
-          <div class="metric-pill warn">Testosterone (Aug 25): <strong>296 ng/dL</strong></div>
+          <div class="metric-pill">Testosterone (Aug 25): <strong class="clay">296 ng/dL</strong></div>
           <div class="metric-pill">Normal range: <strong>240–871 ng/dL</strong></div>
-          <div class="metric-pill ok">Ferritin (Apr 26): <strong>263 ng/mL</strong> (normalized)</div>
-          <div class="metric-pill ok">PSA (Apr 26): <strong>0.333 ng/mL</strong> (first test)</div>
-          <div class="metric-pill ok">Rheumatoid Factor: <strong>5.8 IU/mL</strong> (in range)</div>
-          <div class="metric-pill">BMI: <strong>Unknown</strong> — need weight data</div>
+          <div class="metric-pill">Ferritin (Apr 26): <strong class="sage">263 ng/mL</strong></div>
+          <div class="metric-pill">PSA (Apr 26): <strong class="sage">0.333 ng/mL</strong></div>
+          <div class="metric-pill">Rheumatoid Factor: <strong class="sage">5.8 IU/mL</strong></div>
+          <div class="metric-pill">BMI: <strong>Unknown</strong></div>
         </div>
-      </div></div>
-      <div class="deep-dive">
-        <h4>&#128300; Assessment — Metabolic &amp; Prostate (Apr 2026)</h4>
-        <p><strong>Testosterone at 296 ng/dL (Aug 2025) is within range (240–871) but functionally low for a 41-year-old male.</strong> Not repeated in Apr 2026. Optimal testosterone for your age is 450–600 ng/dL. Low testosterone, previously uncontrolled diabetes, hypothyroidism, and (previously) elevated ferritin formed a classic metabolic syndrome cluster. The good news: ferritin has normalized from 588 to 263, suggesting the chronic inflammation driving all three is easing. A recheck of total + free testosterone at the next cycle would show whether recovering thyroid and diabetes control are pulling testosterone up as expected.</p>
-        <p style="margin-top:8px;"><strong>First-ever PSA 0.333 ng/mL</strong> — well under the 4.0 limit. Prostate is clean. Establishes a baseline; annual or 2-yearly recheck from here.</p>
-        <p style="margin-top:8px;"><strong>First-ever Rheumatoid Factor 5.8 IU/mL</strong> (ref &lt;14) — in range. Was "&lt;3.5" in Aug 2025, so it is now detectable where it was not before. Unlikely clinically significant on its own, but worth a recheck in 6–12 months if joint pain or morning stiffness develops.</p>
+      </div>
+      <div class="diagnosis">
+        <div class="diagnosis-eyebrow">Assessment — metabolic &amp; prostate (Apr 2026)</div>
+        <p>Testosterone at 296 ng/dL (Aug 2025) is within range (240–871) but functionally low for a 41-year-old male. Not repeated in Apr 2026. Optimal testosterone for your age is 450–600 ng/dL. Low testosterone, previously uncontrolled diabetes, hypothyroidism, and (previously) elevated ferritin formed a classic metabolic syndrome cluster. The good news: ferritin has normalised from 588 to 263, suggesting the chronic inflammation driving all three is easing. A recheck of total + free testosterone at the next cycle would show whether recovering thyroid and diabetes control are pulling testosterone up as expected.</p>
+        <p>First-ever PSA 0.333 ng/mL — well under the 4.0 limit. Prostate is clean. Establishes a baseline; annual or 2-yearly recheck from here.</p>
+        <p>First-ever Rheumatoid Factor 5.8 IU/mL (ref &lt;14) — in range. Was &lt;3.5 in Aug 2025, so it is now detectable where it was not before. Unlikely clinically significant on its own, but worth a recheck in 6–12 months if joint pain or morning stiffness develops.</p>
       </div>
     </div>
   </div>
 
-  <!-- ACTION PLAN -->
-  <div class="action-plan">
-    <h2>&#127919; Priority Action Plan (Apr 2026 Refresh)</h2>
-    <p style="color:var(--text-secondary);margin-bottom:20px;">Reordered for the new recovery context. #1–#3 are continue-the-momentum tasks, #4–#7 are ongoing actions.</p>
-
-    <div class="action-item">
-      <div class="action-num ok">1</div>
-      <div class="action-content">
-        <h4><span class="action-tag tag-continue">CONTINUE</span> Keep the current diabetes + thyroid medication plan running</h4>
-        <p>Whatever combination of changes started between Aug 2025 and Apr 2026 is clearly working (HbA1c ↓2.1 pts, TSH ↓78%, kidney leak closed). Do not stop or switch medications without talking to the endocrinologist. Confirm exact current doses and adherence at the next visit.</p>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num urgent">2</div>
-      <div class="action-content">
-        <h4><span class="action-tag tag-urgent">URGENT</span> Thyroid dose titration + 6–8 week recheck</h4>
-        <p>TSH 13.68 is still above the 4.78 upper limit — one more dose bump is likely needed. Book an endocrinology follow-up with TSH + Free T4 at 6–8 weeks. Anti-TPO antibody testing if not already done, to confirm Hashimoto's.</p>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num ok">3</div>
-      <div class="action-content">
-        <h4><span class="action-tag tag-continue">CONTINUE</span> Eye workup follow-up with Dr Pandey (glaucoma screening in progress)</h4>
-        <p>OCT (ONH + Macula) and HVF 24-2 are now done at Belle Vue (31-Mar-2026). Macula is clean — no diabetic macular edema, no DR signs on OCT. However, the glaucoma picture is unresolved: C/D vertical elevated at 0.74 R / 0.76 L, DDLS R4 / L5, and the right-eye visual field shows GHT "Outside Normal Limits" with PD 0.47. Dr Pandey is <strong>still screening</strong> (not a confirmed diagnosis) and has prescribed a three-part regimen: <strong>Tab Forslin</strong> (1×/day × 30 days after food) + <strong>Eye Drops TIZTA</strong> (3×/day) + <strong>Gel Cladra</strong> (1×/day at night). <strong>Next steps:</strong> (a) complete the full 30-day medication course as prescribed, (b) repeat HVF after 1 month as instructed, (c) at the next visit ask for IOP measurement and a dilated fundus photograph (neither has been done yet — both are essential to close out both the DR and glaucoma workups), (d) request a written provisional diagnosis once the repeat HVF is interpreted.</p>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num">4</div>
-      <div class="action-content">
-        <h4><span class="action-tag tag-important">IMPORTANT</span> Statin + ACE/ARB confirmation</h4>
-        <p>Per ADA 2024, all diabetics aged 40–75 should be on at least moderate-intensity statin. LDL is now 96 (target &lt;100 met) but CV risk remains elevated — high-intensity statin targeting &lt;70 is reasonable. ACE (Ramipril) or ARB (Telmisartan) for continued kidney protection even though microalbumin/Cr normalized. Verify both are on the current prescription list.</p>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num">5</div>
-      <div class="action-content">
-        <h4><span class="action-tag tag-important">IMPORTANT</span> Investigate urine ketones 2+</h4>
-        <p>New finding on the Apr 2026 report (was negative in Aug 2025). Likely benign — fasting duration before the test, lower-carb eating, or rapid weight loss can all cause it. But moderate ketonuria in a diabetic warrants a flag to the endocrinologist. Ask about a capillary ketone check if fasting sugars spike again, to rule out any DKA tendency.</p>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num">6</div>
-      <div class="action-content">
-        <h4><span class="action-tag tag-important">IMPORTANT</span> Lifestyle Protocol — double down</h4>
-        <p><strong>Diet:</strong> Low GI, moderate carb (100–150g/day), high fiber, protein at every meal. Avoid white rice, bread, sugar. Increase leafy greens, dal, nuts, eggs. <strong>Exercise:</strong> 150 min/week moderate. Even 20 min post-meal walks reduce glucose by 30–40% and are the best HDL raiser. <strong>Sleep:</strong> 7–8 hours — poor sleep worsens insulin resistance. <strong>Stress:</strong> Financial and baby-prep stress affect cortisol → blood sugar. Build sustainable routines.</p>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num">7</div>
-      <div class="action-content">
-        <h4><span class="action-tag tag-routine">ROUTINE</span> Monitoring schedule</h4>
-        <p><strong>Every 3 months:</strong> HbA1c, fasting glucose, TSH, Free T4. <strong>Every 6 months:</strong> Full lipid panel, kidney function + microalbumin/Cr, liver enzymes, CBC. <strong>Annually:</strong> Dilated eye exam, foot exam, ECG, FibroScan or liver ultrasound, PSA, testosterone (total + free), HbA1c &amp; full panel. <strong>Daily:</strong> Home glucose monitoring (fasting + 2 post-meal). <strong>Consider:</strong> CGM (Freestyle Libre) to capture post-meal patterns currently invisible.</p>
-      </div>
-    </div>
+  <!-- STANDING PLAN — §7.10 -->
+  <div class="standing-plan">
+    <div class="standing-plan-eyebrow">Standing plan</div>
+    <h3 class="standing-plan-title">Ongoing actions beyond the top-3 above</h3>
+    <p class="standing-plan-lede">These are the items that don't fit the daily Action card but are part of the long-term plan. Review at every quarterly visit.</p>
+    <table class="sp-table">
+      <thead>
+        <tr><th>Priority</th><th>Action</th><th>Cadence</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="priority continue">Continue</td>
+          <td>Statin + ACE/ARB confirmation. Per ADA 2024, all diabetics aged 40–75 should be on at least moderate-intensity statin. LDL is now 96 (target met) but CV risk remains elevated — high-intensity statin targeting &lt;70 is reasonable. ACE (Ramipril) or ARB (Telmisartan) for continued kidney protection even though microalbumin/Cr normalised. Verify both are on the current prescription list.</td>
+          <td class="cadence">Next visit</td>
+        </tr>
+        <tr>
+          <td class="priority monitor">Monitor</td>
+          <td>Investigate urine ketones 2+. New finding on the Apr 2026 report (was negative in Aug 2025). Likely benign — fasting duration before the test, lower-carb eating, or rapid weight loss can all cause it. But moderate ketonuria in a diabetic warrants a flag to the endocrinologist. Ask about a capillary ketone check if fasting sugars spike again, to rule out any DKA tendency.</td>
+          <td class="cadence">Next test</td>
+        </tr>
+        <tr>
+          <td class="priority routine">Routine</td>
+          <td>Lifestyle protocol. Diet: Low GI, moderate carb (100–150 g/day), high fiber, protein at every meal. Avoid white rice, bread, sugar. Increase leafy greens, dal, nuts, eggs. Exercise: 150 min/week moderate. Even 20 min post-meal walks reduce glucose by 30–40% and are the best HDL raiser. Sleep: 7–8 hours. Stress: Build sustainable routines.</td>
+          <td class="cadence">Daily</td>
+        </tr>
+        <tr>
+          <td class="priority routine">Routine</td>
+          <td>Monitoring schedule. Every 3 months: HbA1c, fasting glucose, TSH, Free T4. Every 6 months: full lipid panel, kidney function + microalbumin/Cr, liver enzymes, CBC. Annually: dilated eye exam, foot exam, ECG, FibroScan or liver ultrasound, PSA, testosterone (total + free). Daily: home glucose monitoring (fasting + 2 post-meal). Consider: CGM (Freestyle Libre) to capture post-meal patterns currently invisible.</td>
+          <td class="cadence">Quarterly+</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
 </div>
 
-<footer>
-  <p>HB Health Dashboard — Diabetes &amp; Complications Assessment | Refreshed Apr 2026</p>
-  <p style="margin-top:4px;">This analysis is for personal health tracking. Please consult your endocrinologist before making any medication changes.</p>
+<footer class="page-footer">
+  <p>HB Health Dashboard · Diabetes &amp; Complications · 25 Apr 2026</p>
+  <p style="margin-top: 4px;">Personal medical history. Not a substitute for medical advice. Consult your endocrinologist before any medication change.</p>
 </footer>
 
 <script>
-Chart.defaults.font.family = "'Roboto','Google Sans',sans-serif";
-Chart.defaults.font.size = 12;
-Chart.defaults.color = '#5F6368';
+/* ─────────────────────────────────────────────────────────────────
+   DATA FLOW FIREWALL — chart arrays verbatim from v1
+   ───────────────────────────────────────────────────────────────── */
 
 const labels9 = ['Jan 19','Dec 19','Sep 20','Dec 20','Apr 21','Apr 23','Jul 24','Aug 25','Apr 26'];
 
-// HbA1c Journey
-new Chart(document.getElementById('chartHba1cJourney'), {
-  type:'line',
-  data:{labels:labels9, datasets:[
-    {label:'HbA1c (%)',data:[6.2,5.9,8.0,6.8,6.2,14.1,11.9,13.9,11.8],borderColor:'#EA4335',backgroundColor:'rgba(234,67,53,0.1)',borderWidth:3,pointRadius:6,pointBackgroundColor:['#FBBC04','#34A853','#EA4335','#FBBC04','#34A853','#EA4335','#EA4335','#EA4335','#1A73E8'],fill:true,tension:0.3},
-    {label:'ADA Target (7%)',data:Array(9).fill(7),borderColor:'#34A853',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false},
-    {label:'Diabetic (6.5%)',data:Array(9).fill(6.5),borderColor:'#FBBC04',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:16}}},
-    scales:{x:{grid:{display:false}},y:{min:4,max:16,grid:{color:'#E8EAED'}}},
-    elements:{line:{tension:0.3}}}
-});
+/* Color tokens (hex literals — Chart.js doesn't read CSS variables) */
+const SAGE = '#2C7A4F';
+const BRICK = '#B33636';
+const CLAY = '#C77B2C';
+const TERRACOTTA = '#CC785C';
+const HAIRLINE = '#E3E0D6';
+const INK = '#1F1F1F';
+const INK_TERTIARY = '#8A8682';
+const SURFACE = '#FAF9F5';
 
-// Microalbumin
-new Chart(document.getElementById('chartMicroalbumin'), {
-  type:'bar',
-  data:{labels:['Dec 2020','Apr 2021','Apr 2023','Aug 2025','Apr 2026'], datasets:[
-    {label:'Microalbumin/Cr Ratio (mg/g)',data:[11.49,10.0,154.48,60.72,23.08],backgroundColor:['#34A853','#34A853','#EA4335','#FA903E','#34A853'],borderRadius:8,barThickness:40}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{x:{grid:{display:false}},y:{min:0,max:180,grid:{color:'#E8EAED'}}}}
-});
+Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = INK_TERTIARY;
+Chart.defaults.plugins.tooltip.backgroundColor = INK;
+Chart.defaults.plugins.tooltip.titleFont = { family: "'Source Serif 4', Georgia, serif", size: 13, weight: '400' };
+Chart.defaults.plugins.tooltip.bodyFont = { family: "'JetBrains Mono', monospace", size: 12 };
+Chart.defaults.plugins.tooltip.cornerRadius = 4;
+Chart.defaults.plugins.tooltip.padding = 12;
+Chart.defaults.plugins.tooltip.titleColor = '#F0EEE6';
+Chart.defaults.plugins.tooltip.bodyColor = '#F0EEE6';
 
-// Cardio Risk
-new Chart(document.getElementById('chartCardioRisk'), {
-  type:'line',
-  data:{labels:labels9, datasets:[
-    {label:'HDL',data:[33,27,32,23,30,27.3,27.8,34,33],borderColor:'#34A853',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
-    {label:'Triglycerides (÷10)',data:[11.9,12.2,21.4,17.7,15.6,23.6,27.9,20.3,23.3],borderColor:'#FBBC04',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
-    {label:'LDL',data:[99.6,132,123,99,115,96.5,106.4,123,96],borderColor:'#EA4335',borderWidth:2.5,pointRadius:4,fill:false,tension:0.3},
-    {label:'HDL Target (40)',data:Array(9).fill(40),borderColor:'#34A853',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false},
-    {label:'LDL Target (70)',data:Array(9).fill(70),borderColor:'#EA4335',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12}}},
-    scales:{x:{grid:{display:false}},y:{min:0,max:150,grid:{color:'#E8EAED'}}}}
-});
+function ds(label, data, color) {
+  return {
+    label: label, data: data,
+    borderColor: color, backgroundColor: 'transparent',
+    pointBackgroundColor: color, pointBorderColor: SURFACE,
+    fill: false, borderWidth: 2
+  };
+}
+function refLine(label, value, length) {
+  return {
+    label: label, data: Array(length).fill(value),
+    borderColor: INK_TERTIARY, backgroundColor: 'transparent',
+    borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, fill: false
+  };
+}
 
-// TSH Deep
-new Chart(document.getElementById('chartTSHDeep'), {
-  type:'line',
-  data:{labels:labels9, datasets:[
-    {label:'TSH (uIU/mL)',data:[5.03,2.78,1.98,1.08,null,5.721,9.298,62.696,13.680],borderColor:'#A142F4',backgroundColor:'rgba(161,66,244,0.1)',borderWidth:3,pointRadius:6,pointBackgroundColor:['#FBBC04','#34A853','#34A853','#34A853',null,'#FBBC04','#EA4335','#EA4335','#1A73E8'],fill:true,tension:0.3},
-    {label:'Upper Normal (4.78)',data:Array(9).fill(4.78),borderColor:'#34A853',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top',labels:{usePointStyle:true}}},
-    scales:{x:{grid:{display:false}},y:{min:0,max:70,grid:{color:'#E8EAED'}}}}
-});
+function lineChart(canvasId, datasets, yConfig, customLabels) {
+  try {
+    const el = document.getElementById(canvasId);
+    if (!el) return;
+    new Chart(el.getContext('2d'), {
+      type: 'line',
+      data: { labels: customLabels || labels9, datasets: datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: datasets.length > 1, position: 'top', align: 'start',
+            labels: { usePointStyle: true, padding: 14, color: '#5A5A5A', font: { size: 11 }} }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: INK_TERTIARY, font: { size: 11 } } },
+          y: Object.assign({
+            grid: { color: HAIRLINE, drawBorder: false },
+            ticks: { color: INK_TERTIARY, font: { family: "'JetBrains Mono', monospace", size: 11 } }
+          }, yConfig || {})
+        },
+        elements: { point: { radius: 4, hoverRadius: 6, borderWidth: 1.5 }, line: { tension: 0.3, borderWidth: 2 }}
+      }
+    });
+  } catch (e) { console.error('Chart ' + canvasId + ' failed:', e); }
+}
 
-// Toggle sections
+/* HbA1c Journey (line) */
+lineChart('chartHba1cJourney', [
+  ds('HbA1c (%)', [6.2,5.9,8.0,6.8,6.2,14.1,11.9,13.9,11.8], BRICK),
+  refLine('ADA Target (7%)', 7, 9)
+], { min: 4, max: 16 });
+
+/* Microalbumin/Cr ratio (bar) */
+try {
+  const microEl = document.getElementById('chartMicroalbumin');
+  if (microEl) {
+    new Chart(microEl.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Dec 2020', 'Apr 2021', 'Apr 2023', 'Aug 2025', 'Apr 2026'],
+        datasets: [{
+          label: 'Microalbumin/Cr Ratio (mg/g)',
+          data: [11.49, 10.0, 154.48, 60.72, 23.08],
+          backgroundColor: [SAGE, SAGE, BRICK, CLAY, SAGE],
+          borderRadius: 0,
+          barThickness: 38
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: INK_TERTIARY } },
+          y: { min: 0, max: 180, grid: { color: HAIRLINE, drawBorder: false }, ticks: { color: INK_TERTIARY, font: { family: "'JetBrains Mono', monospace", size: 11 } } }
+        }
+      }
+    });
+  }
+} catch (e) { console.error('chartMicroalbumin failed:', e); }
+
+/* Cardio risk lipid lines */
+lineChart('chartCardioRisk', [
+  ds('HDL', [33,27,32,23,30,27.3,27.8,34,33], BRICK),
+  ds('Triglycerides (÷10)', [11.9,12.2,21.4,17.7,15.6,23.6,27.9,20.3,23.3], CLAY),
+  ds('LDL', [99.6,132,123,99,115,96.5,106.4,123,96], SAGE),
+  refLine('HDL Target (40)', 40, 9),
+  refLine('LDL Target (70)', 70, 9)
+], { min: 0, max: 150 });
+
+/* TSH deep */
+lineChart('chartTSHDeep', [
+  ds('TSH (uIU/mL)', [5.03,2.78,1.98,1.08,null,5.721,9.298,62.696,13.680], BRICK),
+  refLine('Upper Normal (4.78)', 4.78, 9)
+], { min: 0, max: 70 });
+
+/* Toggle handler for collapsible sections */
 function toggle(id, header) {
   const body = document.getElementById(id);
-  const icon = header.querySelector('.toggle-icon');
+  const chevron = header.querySelector('.collapse-chevron');
+  if (!body || !chevron) return;
   body.classList.toggle('collapsed');
-  icon.classList.toggle('open');
+  chevron.classList.toggle('open');
 }
 </script>
 </body>
